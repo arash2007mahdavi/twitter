@@ -4,3 +4,23 @@ Server:
 Logger:
   Type: zerologger
   Level: Info
+Postgres:
+  Host: localhost
+  Port: 5432
+  User: arash2007mahdavi
+  Password: "@rash2007"
+  Dbname: twitterDB
+  Sslmode: disable
+  MaxIdleConns: 10
+  MaxOpenConns: 10
+  ConnMaxLifeTime: 5
+Redis:
+  WriteTimeOut: 10
+  ReadTimeOut: 10
+  DialTimeOut: 10
+  Host: localhost
+  Port: 6379
+  DB: 0
+  Password: "@rash2007"
+  Poolsize: 10
+  PoolTimeOut: 500
