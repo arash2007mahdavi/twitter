@@ -1,9 +1,9 @@
 package dtos
 
 type UserCreate struct {
-	Username     string `json:"username" binding:"username"`
-	Password     string `json:"password" binding:"password"`
-	MobileNumber string `json:"mobileNumber" binding:"mobile"`
+	Username     string `json:"username" binding:"username,required"`
+	Password     string `json:"password" binding:"password,required"`
+	MobileNumber string `json:"mobileNumber" binding:"mobile,required"`
 }
 
 type UserUpdate struct {

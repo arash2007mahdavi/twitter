@@ -5,7 +5,6 @@ import (
 	"twitter/src/configs"
 	"twitter/src/logger"
 	"twitter/src/routers"
-	"twitter/src/services"
 	"twitter/src/validations"
 
 	"github.com/gin-gonic/gin"
