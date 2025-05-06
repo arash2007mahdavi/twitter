@@ -67,7 +67,7 @@ func Get(redisClient *redis.Client, key string) (*RedisValue, error) {
 func Set(redisClient *redis.Client, key string, value *RedisValue, expiretime time.Duration) error {
 	_, err := Get(redisClient, key)
 	if err == nil {
-		fmt.Errorf("this key exists")
+		return fmt.Errorf("this key exists")
 	}
 	err = redisClient.Set(context.Background(), key, value, expiretime).Err()
 	if err != nil {
