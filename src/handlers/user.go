@@ -66,5 +66,29 @@ func (h *UserHelper) NewUser(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "error in creating new user"))
 		return
 	}
+	h.Logger.Info(logger.User, logger.New, "new user added", nil)
 	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, res, "new user created successfuly"))
+}
+
+func (h *UserHelper) GetUsers(ctx *gin.Context) {
+	users, err := h.Service.GetUsers(ctx)
+	if err != nil || len(*users) == 0 {
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "error in get users"))
+		return
+	}
+	h.Logger.Info(logger.Admin, logger.See, "admin saw users", nil)
+	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, users, "users list"))
+}
+
+func (h *UserHelper) GetProfile(ctx *gin.Context) {
+	username := ctx.Query("username")
+	password := ctx.Query("password")
+	ctx.Set("Username", username)
+	ctx.Set("Password", password)
+	user, err := h.Service.GetProfile(ctx)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "error in get user"))
+		return
+	}
+	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, user, "your profile"))
 }

@@ -48,3 +48,9 @@ func (service *BaseService[T, Tc, Tu, Tr]) Create(ctx context.Context, req *Tc) 
 	tx.Commit()
 	return TypeComverter[Tr](data)
 }
+
+func (service *BaseService[T, Tc, Tu, Tr]) GetAll(ctx context.Context) (*[]T, error) {
+	slice := make([]T, 0)
+	service.DB.Where("enabled = ?", true).Find(&slice)
+	return &slice, nil
+}

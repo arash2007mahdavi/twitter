@@ -24,4 +24,5 @@ const (
 	Update  SubCategory = "Update"
 	Enter   SubCategory = "Enter"
 	Edit    SubCategory = "Edit"
+	See     SubCategory = "See"
 )
