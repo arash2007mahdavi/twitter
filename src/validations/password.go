@@ -11,7 +11,7 @@ func ValidatePassword(fld validator.FieldLevel) bool {
 	if !ok {
 		return false
 	}
-	res, err := regexp.MatchString(`^[a-zA-Z@$#!&]{5,40}$`, val)
+	res, err := regexp.MatchString(`^[a-zA-Z0-9]{5,40}$`, val)
 	if err != nil {
 		panic("error in match string")
 	}

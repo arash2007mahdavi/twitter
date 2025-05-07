@@ -26,7 +26,7 @@ func loadConfig(filename string, filetype string) *viper.Viper {
 	v := viper.New()
 	v.SetConfigName(filename)
 	v.SetConfigType(filetype)
-	v.AddConfigPath("*")
+	v.AddConfigPath(".")
 	v.AutomaticEnv()
 
 	err := v.ReadInConfig()

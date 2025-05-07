@@ -12,7 +12,7 @@ type BaseModel struct {
 	ModifiedBy sql.NullInt64 `gorm:"null"`
 	DeletedBy  sql.NullInt64 `gorm:"null"`
 
-	CreatedAt  time.Time    `gorm:"type:TIMWSTAMP with time zone;not null"`
+	CreatedAt  time.Time    `gorm:"type:TIMESTAMP with time zone;not null"`
 	ModifiedAt sql.NullTime `gorm:"type:TIMESTAMP with time zone;null"`
 	DeletedAt  sql.NullTime `gorm:"type:TIMESTAMP with time zone;null"`
 }

@@ -16,14 +16,14 @@ var RedisClient *redis.Client
 
 func InitRedis(cfg *configs.Config) error {
 	RedisClient = redis.NewClient(&redis.Options{
-		WriteTimeout: cfg.Redis.WriteTimeOut,
-		ReadTimeout:  cfg.Redis.ReadTimeOut,
-		DialTimeout:  cfg.Redis.DialTimeOut,
 		Addr:         fmt.Sprintf("%v:%v", cfg.Redis.Host, cfg.Redis.Port),
+		WriteTimeout: cfg.Redis.WriteTimeOut * time.Second,
+		ReadTimeout:  cfg.Redis.ReadTimeOut * time.Second,
+		DialTimeout:  cfg.Redis.DialTimeOut * time.Second,
 		Password:     cfg.Redis.Password,
 		DB:           cfg.Redis.DB,
 		PoolSize:     cfg.Redis.Poolsize,
-		PoolTimeout:  cfg.Redis.PoolTimeOut,
+		PoolTimeout:  cfg.Redis.PoolTimeOut * time.Millisecond,
 	})
 
 	err := RedisClient.Ping(context.Background()).Err()
@@ -69,7 +69,11 @@ func Set(redisClient *redis.Client, key string, value *RedisValue, expiretime ti
 	if err == nil {
 		return fmt.Errorf("this key exists")
 	}
-	err = redisClient.Set(context.Background(), key, value, expiretime).Err()
+	json_value, err := json.Marshal(value)
+	if err != nil {
+		return fmt.Errorf("error in marshaling value")
+	}
+	err = redisClient.Set(context.Background(), key, json_value, expiretime*time.Minute).Err()
 	if err != nil {
 		return fmt.Errorf("error in set new key")
 	}
