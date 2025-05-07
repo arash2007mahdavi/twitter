@@ -80,15 +80,17 @@ func (service *BaseService[T, Tc, Tu, Tr]) Update(ctx context.Context, req *Tu) 
 	return service.GetById(ctx, int_id)
 }
 
-func (service *BaseService[T, Tc, Tu, Tr]) Delete(ctx context.Context, id int) error {
+func (service *BaseService[T, Tc, Tu, Tr]) Delete(ctx context.Context) error {
 	data := map[string]interface{}{}
-	(data)["deleted_by"] = sql.NullInt64{Int64: ctx.Value("deleted_by").(int64), Valid: true}
+	int_d, _:= strconv.Atoi(ctx.Value("deleted_by").(string))
+	int_id, _:= strconv.Atoi(ctx.Value("id").(string))
+	(data)["deleted_by"] = sql.NullInt64{Int64: int64(int_d), Valid: true}
 	(data)["deleted_at"] = sql.NullTime{Time: time.Now().UTC(), Valid: true}
 	(data)["enabled"] = false
 	tx := service.DB.WithContext(ctx).Begin()
 	model := new(T)
 	err := tx.Model(&model).
-		Where("id = ? AND deleted_by is null", id).
+		Where("id = ? AND deleted_by is null", int_id).
 		Updates(data).Error
 	if err != nil {
 		tx.Rollback()

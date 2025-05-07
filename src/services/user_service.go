@@ -28,6 +28,16 @@ func (s *UserService) Create(ctx context.Context, req *dtos.UserCreate) (*dtos.U
 	return res, err
 }
 
+func (s *UserService) Update(ctx context.Context, req *dtos.UserUpdate) (*dtos.UserResponse, error) {
+	res, err := s.Base.Update(ctx, req)
+	return res, err
+}
+
+func (s *UserService) Delete(ctx context.Context) error {
+	err := s.Base.Delete(ctx)
+	return err
+}
+
 func (s *UserService) GetUsers(ctx context.Context) (*[]models.User, error) {
 	return s.Base.GetAll(ctx)
 }

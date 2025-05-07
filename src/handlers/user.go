@@ -109,10 +109,27 @@ func (h *UserHelper) UpdateUser(ctx *gin.Context) {
 	}
 	ctx.Set("id", id)
 	ctx.Set("modified_by", modified_by)
-	res, err := h.Service.Base.Update(ctx, &req)
+	res, err := h.Service.Update(ctx, &req)
 	if err != nil {
-		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "error in updating model"))
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "error in updating user"))
 		return
 	}
-	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, res, "model updated successfuly"))
+	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, res, "user updated successfuly"))
+}
+
+func (h *UserHelper) DeleteUser(ctx *gin.Context) {
+	id := ctx.Query("id")
+	deleted_by := ctx.Query("deleted_by")
+	if len(id) == 0 || len(deleted_by) == 0 {
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, fmt.Errorf("invalid id and deleted_by"), "invalid id and deleted_by"))
+		return
+	}
+	ctx.Set("id", id)
+	ctx.Set("deleted_by", deleted_by)
+	err := h.Service.Delete(ctx)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "error in deleting user"))
+		return
+	}
+	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, nil, "user deleted successfuly"))
 }
