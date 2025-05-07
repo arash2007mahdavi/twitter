@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	"strconv"
 	"time"
 	"twitter/src/logger"
 
@@ -59,22 +60,24 @@ func (service *BaseService[T, Tc, Tu, Tr]) GetAll(ctx context.Context) (*[]T, er
 
 func (service *BaseService[T, Tc, Tu, Tr]) Update(ctx context.Context, req *Tu) (*Tr, error) {
 	data, err := TypeComverter[map[string]interface{}](req)
-	(*data)["modified_by"] = sql.NullInt64{Int64: ctx.Value("modified_by").(int64), Valid: true}
+	int_m, _:= strconv.Atoi(ctx.Value("modified_by").(string))
+	int_id, _:= strconv.Atoi(ctx.Value("id").(string))
+	(*data)["modified_by"] = sql.NullInt64{Int64: int64(int_m), Valid: true}
 	(*data)["modified_at"] = sql.NullTime{Time: time.Now().UTC(), Valid: true}
 	if err != nil {
 		return nil, fmt.Errorf("error in comverting model")
 	}
 	tx := service.DB.WithContext(ctx).Begin()
 	model := new(T)
-	err = tx.Model(&model).
-		Where("id = ? AND deleted_by in null", ctx.Value("id").(int)).
+	err = tx.Model(model).
+		Where("id = ? AND deleted_by is null", int_id).
 		Updates(*data).Error
 	if err != nil {
 		tx.Rollback()
 		return nil, fmt.Errorf("error in updating model")
 	}
 	tx.Commit()
-	return service.GetById(ctx, ctx.Value("id").(int))
+	return service.GetById(ctx, int_id)
 }
 
 func (service *BaseService[T, Tc, Tu, Tr]) Delete(ctx context.Context, id int) error {
