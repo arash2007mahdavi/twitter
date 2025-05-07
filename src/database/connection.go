@@ -2,8 +2,10 @@ package database
 
 import (
 	"context"
+	"database/sql"
 	"encoding/json"
 	"fmt"
+	"time"
 	"twitter/src/logger"
 
 	"gorm.io/gorm"
@@ -53,4 +55,50 @@ func (service *BaseService[T, Tc, Tu, Tr]) GetAll(ctx context.Context) (*[]T, er
 	slice := make([]T, 0)
 	service.DB.Where("enabled = ?", true).Find(&slice)
 	return &slice, nil
+}
+
+func (service *BaseService[T, Tc, Tu, Tr]) Update(ctx context.Context, req *Tu) (*Tr, error) {
+	data, err := TypeComverter[map[string]interface{}](req)
+	(*data)["modified_by"] = sql.NullInt64{Int64: ctx.Value("modified_by").(int64), Valid: true}
+	(*data)["modified_at"] = sql.NullTime{Time: time.Now().UTC(), Valid: true}
+	if err != nil {
+		return nil, fmt.Errorf("error in comverting model")
+	}
+	tx := service.DB.WithContext(ctx).Begin()
+	model := new(T)
+	err = tx.Model(&model).
+		Where("id = ? AND deleted_by in null", ctx.Value("id").(int)).
+		Updates(*data).Error
+	if err != nil {
+		tx.Rollback()
+		return nil, fmt.Errorf("error in updating model")
+	}
+	tx.Commit()
+	return service.GetById(ctx, ctx.Value("id").(int))
+}
+
+func (service *BaseService[T, Tc, Tu, Tr]) Delete(ctx context.Context, id int) error {
+	data := map[string]interface{}{}
+	(data)["deleted_by"] = sql.NullInt64{Int64: ctx.Value("deleted_by").(int64), Valid: true}
+	(data)["deleted_at"] = sql.NullTime{Time: time.Now().UTC(), Valid: true}
+	(data)["enabled"] = false
+	tx := service.DB.WithContext(ctx).Begin()
+	model := new(T)
+	err := tx.Model(&model).
+		Where("id = ? AND deleted_by is null", id).
+		Updates(data).Error
+	if err != nil {
+		tx.Rollback()
+		return fmt.Errorf("error in deleting model")
+	}
+	tx.Commit()
+	return nil
+}
+
+func (service *BaseService[T, Tc, Tu, Tr]) GetById(ctx context.Context, id int) (*Tr, error) {
+	model := new(T)
+	service.DB.Model(model).
+		Where("id = ? AND deleted_by is null", id).
+		First(model)
+	return TypeComverter[Tr](model)
 }

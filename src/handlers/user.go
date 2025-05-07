@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 	"twitter/src/dtos"
 	"twitter/src/logger"
@@ -91,4 +92,27 @@ func (h *UserHelper) GetProfile(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, user, "your profile"))
+}
+
+func (h *UserHelper) UpdateUser(ctx *gin.Context) {
+	req := dtos.UserUpdate{}
+	err := ctx.ShouldBindJSON(&req)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, responses.GenerateResponseWithValidationError(http.StatusBadRequest, err, ""))
+		return
+	}
+	id := ctx.Query("id")
+	modified_by := ctx.Query("modified_by")
+	if len(id) == 0 || len(modified_by) == 0 {
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, fmt.Errorf("invalid id and modified_by"), "invalid id and modified_by"))
+		return
+	}
+	ctx.Set("id", id)
+	ctx.Set("modified_by", modified_by)
+	res, err := h.Service.Base.Update(ctx, &req)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "error in updating model"))
+		return
+	}
+	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, res, "model updated successfuly"))
 }
