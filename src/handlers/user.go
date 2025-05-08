@@ -26,14 +26,14 @@ func GetUserHelper() *UserHelper {
 }
 
 type OtpDto struct {
-	MobileNumber string `json:"mobileNumber" binding:"required,mobile"`
+	MobileNumber string `json:"mobile_number" binding:"required,mobile"`
 }
 
 func (h *UserHelper) GetOtp(ctx *gin.Context) {
 	req := OtpDto{}
 	err := ctx.ShouldBindJSON(&req)
 	if err != nil {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, responses.GenerateResponseWithValidationError(http.StatusBadRequest, err, ""))
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, responses.GenerateResponseWithValidationError(http.StatusBadRequest, err, "validation error"))
 		return
 	}
 	otp := services.MakeOtp()
@@ -42,6 +42,7 @@ func (h *UserHelper) GetOtp(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "error in seting otp"))
 		return
 	}
+	h.Logger.Info(logger.Otp, logger.Set, "new otp set in redis", nil)
 	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, map[string]string{"otp": otp}, "otp set successfuly"))
 }
 
@@ -49,12 +50,12 @@ func (h *UserHelper) NewUser(ctx *gin.Context) {
 	req := dtos.UserCreate{}
 	err := ctx.ShouldBindJSON(&req)
 	if err != nil {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, responses.GenerateResponseWithValidationError(http.StatusBadRequest, err, ""))
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, responses.GenerateResponseWithValidationError(http.StatusBadRequest, err, "validation error"))
 		return
 	}
 	test_otp := ctx.Query("otp")
 	if len(test_otp) == 0 {
-		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "otp doesnt entered"))
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "otp didnt enter"))
 		return
 	}
 	err = h.Otp.ValidateOtp(req.MobileNumber, test_otp)
@@ -73,7 +74,7 @@ func (h *UserHelper) NewUser(ctx *gin.Context) {
 
 func (h *UserHelper) GetUsers(ctx *gin.Context) {
 	users, err := h.Service.GetUsers(ctx)
-	if err != nil || len(*users) == 0 {
+	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "error in get users"))
 		return
 	}
@@ -91,11 +92,13 @@ func (h *UserHelper) GetProfile(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "error in get user"))
 		return
 	}
+	h.Logger.Info(logger.User, logger.See, "user saw profile", nil)
 	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, user, "your profile"))
 }
 
 func (h *UserHelper) UpdateUser(ctx *gin.Context) {
 	req := dtos.UserUpdate{}
+	req.Enabled = true
 	err := ctx.ShouldBindJSON(&req)
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, responses.GenerateResponseWithValidationError(http.StatusBadRequest, err, ""))
@@ -114,6 +117,7 @@ func (h *UserHelper) UpdateUser(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "error in updating user"))
 		return
 	}
+	h.Logger.Info(logger.User, logger.Update, "user updated successfuly", nil)
 	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, res, "user updated successfuly"))
 }
 
@@ -131,5 +135,6 @@ func (h *UserHelper) DeleteUser(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "error in deleting user"))
 		return
 	}
+	h.Logger.Info(logger.User, logger.Delete, "user deleted successfuly", nil)
 	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, nil, "user deleted successfuly"))
 }

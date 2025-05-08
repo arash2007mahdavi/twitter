@@ -3,7 +3,7 @@ package dtos
 type UserCreate struct {
 	Username     string `json:"username" binding:"username,required"`
 	Password     string `json:"password" binding:"password,required"`
-	MobileNumber string `json:"mobileNumber" binding:"mobile,required"`
+	MobileNumber string `json:"mobile_number" binding:"mobile,required"`
 }
 
 type UserUpdate struct {
@@ -20,7 +20,7 @@ type UserResponse struct {
 	Username     string `json:"username"`
 	Firstname    string `json:"firstname,omitempty"`
 	Lastname     string `json:"lastname,omitempty"`
-	MobileNumber string `json:"mobileNumber"`
+	MobileNumber string `json:"mobile_number"`
 	Password     string `json:"password"`
 	Enabled      bool   `json:"enabled"`
 }
