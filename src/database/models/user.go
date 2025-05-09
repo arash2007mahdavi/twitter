@@ -9,7 +9,7 @@ type User struct {
     Password     string  `gorm:"size:50;not null"`
     Followers    []int   `gorm:"type:integer[];default:'{}'"`
     Following    []int   `gorm:"type:integer[];default:'{}'"`
-    Tweets       []Tweet `gorm:"foreignKey:UserID"` // ارتباط کاربر به توییت‌ها از طریق فیلد UserID
+    Tweets       []Tweet `gorm:"foreignKey:UserID"`
     Enabled      bool    `gorm:"default:true"`
 }
 
