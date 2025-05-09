@@ -13,8 +13,12 @@ func Up1() {
 	tables := []interface{}{}
 
 	user := &models.User{}
+	tweet := &models.Tweet{}
+	comment := &models.Comment{}
 
 	checkTable(db, user, &tables)
+	checkTable(db, tweet, &tables)
+	checkTable(db, comment, &tables)
 
 	err := db.Migrator().CreateTable(tables...)
 	if err != nil {
