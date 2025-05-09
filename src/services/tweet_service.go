@@ -35,7 +35,7 @@ func (s *TweetService) NewTweet(ctx context.Context, req *dtos.TweetCreate) (*dt
 		return nil, err
 	}
 	tweet.CreatedBy = user.Id
-	tweet.UserID = uint(user.Id)
+	tweet.UserId = user.Id
 	err = tx.Model(&models.User{}).Where("username = ?", username).Association("Tweets").Append(tweet)
 	if err != nil {
 		tx.Rollback()
