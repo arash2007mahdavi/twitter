@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 	"twitter/src/dtos"
 	"twitter/src/logger"
@@ -12,16 +11,16 @@ import (
 )
 
 type UserHelper struct {
-	Logger logger.Logger
+	Logger  logger.Logger
 	Service *services.UserService
-	Otp *services.OtpService
+	Otp     *services.OtpService
 }
 
 func GetUserHelper() *UserHelper {
 	return &UserHelper{
-		Logger: logger.NewLogger(),
+		Logger:  logger.NewLogger(),
 		Service: services.NewUserService(),
-		Otp: services.NewOtpService(),
+		Otp:     services.NewOtpService(),
 	}
 }
 
@@ -104,14 +103,6 @@ func (h *UserHelper) UpdateUser(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, responses.GenerateResponseWithValidationError(http.StatusBadRequest, err, ""))
 		return
 	}
-	id := ctx.Query("id")
-	modified_by := ctx.Query("modified_by")
-	if len(id) == 0 || len(modified_by) == 0 {
-		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, fmt.Errorf("invalid id and modified_by"), "invalid id and modified_by"))
-		return
-	}
-	ctx.Set("id", id)
-	ctx.Set("modified_by", modified_by)
 	res, err := h.Service.Update(ctx, &req)
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "error in updating user"))
@@ -122,14 +113,6 @@ func (h *UserHelper) UpdateUser(ctx *gin.Context) {
 }
 
 func (h *UserHelper) DeleteUser(ctx *gin.Context) {
-	id := ctx.Query("id")
-	deleted_by := ctx.Query("deleted_by")
-	if len(id) == 0 || len(deleted_by) == 0 {
-		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, fmt.Errorf("invalid id and deleted_by"), "invalid id and deleted_by"))
-		return
-	}
-	ctx.Set("id", id)
-	ctx.Set("deleted_by", deleted_by)
 	err := h.Service.Delete(ctx)
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "error in deleting user"))

@@ -61,7 +61,7 @@ func (service *BaseService[T, Tc, Tu, Tr]) GetAll(ctx context.Context) (*[]T, er
 func (service *BaseService[T, Tc, Tu, Tr]) Update(ctx context.Context, req *Tu) (*Tr, error) {
 	data, err := TypeComverter[map[string]interface{}](req)
 	int_m, _:= strconv.Atoi(ctx.Value("modified_by").(string))
-	int_id, _:= strconv.Atoi(ctx.Value("id").(string))
+	int_id, _:= strconv.Atoi(ctx.Value("user_id").(string))
 	(*data)["modified_by"] = sql.NullInt64{Int64: int64(int_m), Valid: true}
 	(*data)["modified_at"] = sql.NullTime{Time: time.Now().UTC(), Valid: true}
 	if err != nil {
@@ -83,7 +83,7 @@ func (service *BaseService[T, Tc, Tu, Tr]) Update(ctx context.Context, req *Tu) 
 func (service *BaseService[T, Tc, Tu, Tr]) Delete(ctx context.Context) error {
 	data := map[string]interface{}{}
 	int_d, _:= strconv.Atoi(ctx.Value("deleted_by").(string))
-	int_id, _:= strconv.Atoi(ctx.Value("id").(string))
+	int_id, _:= strconv.Atoi(ctx.Value("user_id").(string))
 	(data)["deleted_by"] = sql.NullInt64{Int64: int64(int_d), Valid: true}
 	(data)["deleted_at"] = sql.NullTime{Time: time.Now().UTC(), Valid: true}
 	(data)["enabled"] = false
