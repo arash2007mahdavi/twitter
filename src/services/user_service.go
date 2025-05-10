@@ -46,6 +46,6 @@ func (s *UserService) GetProfile(ctx context.Context) (*models.User, error) {
 	user := models.User{}
 	username := ctx.Value("Username")
 	password := ctx.Value("Password")
-	s.DB.Model(&user).Where("username = ? AND password = ?", username, password).First(&user)
+	s.DB.Model(&user).Preload("Tweets").Preload("Comments").Preload("Followers").Preload("Followings").Where("username = ? AND password = ?", username, password).First(&user)
 	return &user, nil
 }

@@ -26,7 +26,9 @@ func UserCheck(ctx *gin.Context) {
 		db.Model(&models.User{}).
 			Where("username = ? AND password = ? AND deleted_by is null", username, password).Count(&count1)
 		if count1 > 0 {
-			ctx.Set("username", username)
+			user := models.User{}
+			db.Model(&models.User{}).Where("username = ? AND password = ? AND deleted_by is null", username, password).First(&user)
+			ctx.Set("id", user.Id)
 			ctx.Next()
 		} else {
 			ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, fmt.Errorf("wrong password"), "wrong password"))

@@ -23,25 +23,25 @@ func NewTweetService() *TweetService {
 }
 
 func (s *TweetService) NewTweet(ctx context.Context, req *dtos.TweetCreate) (*dtos.TweetResponse, error) {
-	username := ctx.Value("username")
+	id_creator := ctx.Value("id")
 	tx := s.Database.WithContext(ctx).Begin()
 	tweet, err := database.TypeComverter[models.Tweet](req)
 	if err != nil {
 		return nil, err
 	}
 	user := models.User{}
-	err = tx.Model(&models.User{}).Where("username = ?", username).First(&user).Error
+	err = tx.Model(&models.User{}).Where("id = ?", id_creator).First(&user).Error
 	if err != nil {
 		return nil, err
 	}
 	tweet.CreatedBy = user.Id
 	tweet.UserId = user.Id
-	err = tx.Model(&models.User{}).Where("username = ?", username).Association("Tweets").Append(tweet)
+	err = tx.Model(&models.User{}).Where("id = ?", id_creator).Association("Tweets").Append(&tweet)
 	if err != nil {
 		tx.Rollback()
 		return nil, err
 	}
-	err = tx.Model(&models.Tweet{}).Create(tweet).Error
+	err = tx.Model(&models.Tweet{}).Create(&tweet).Error
 	if err != nil {
 		tx.Rollback()
 		return nil, err
