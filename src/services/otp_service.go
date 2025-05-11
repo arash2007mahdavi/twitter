@@ -11,6 +11,8 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
+var log = logger.NewLogger()
+
 type OtpService struct {
 	Redis *redis.Client
 	Logger logger.Logger
@@ -37,6 +39,7 @@ func (s *OtpService) SetOtp(mobileNumber string, otp string) error {
 	if err != nil {
 		return err
 	}
+	log.Info(logger.Otp, logger.Set, "new otp set", map[logger.ExtraCategory]interface{}{logger.MobileNumber: mobileNumber})
 	return nil
 }
 
@@ -49,5 +52,6 @@ func (s *OtpService) ValidateOtp(mobileNumber string, test_otp string) error {
 	} else if res.Value != test_otp {
 		return fmt.Errorf("invalid otp")
 	}
+	log.Info(logger.Otp, logger.Validate, "otp validated successfuly", map[logger.ExtraCategory]interface{}{logger.MobileNumber: mobileNumber})
 	return nil
 }

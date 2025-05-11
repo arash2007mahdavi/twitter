@@ -9,5 +9,7 @@ import (
 
 func TweetRouter(r *gin.RouterGroup) {
 	h := handlers.NewTweetHelper()
-	r.POST("/post", middlewares.UserCheck, h.PostTweet)
+	r.POST("/post", middlewares.GetIdFromUsernameAndPassword, h.PostTweet)
+	r.GET("/get/tweet", h.GetTweet)
+	r.GET("/get/tweets", middlewares.GetIdFromUsername, h.GetTweets)
 }

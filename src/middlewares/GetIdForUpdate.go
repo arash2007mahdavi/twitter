@@ -8,19 +8,24 @@ import (
 	"twitter/src/responses"
 
 	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/bcrypt"
 )
 
-func CheckForUpdate(ctx *gin.Context) {
+func GetIdForUpdate(ctx *gin.Context) {
 	username := ctx.Query("username")
 	password := ctx.Query("password")
 	modified_by := ctx.Query("modified_by")
-	if len(username)==0 || len(password)==0 || len(modified_by)==0 {
-		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, fmt.Errorf("invalid query"), "enter username, password and modified_by"))
+	if len(modified_by) == 0 {
+		modified_by = "0"
+	}
+	if len(username)==0 || len(password)==0 {
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, fmt.Errorf("invalid query"), "enter username, password"))
 		return
 	}
 	db := database.GetDB()
 	user := models.User{}
-	err := db.Model(&models.User{}).Where("username = ? AND password = ? AND deleted_at is null", username, password).First(&user).Error
+	db.Model(&models.User{}).Where("username = ? AND deleted_at is null", username).First(&user)
+	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "invalid User"))
 		return
