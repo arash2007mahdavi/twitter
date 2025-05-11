@@ -12,4 +12,6 @@ func TweetRouter(r *gin.RouterGroup) {
 	r.POST("/post", middlewares.GetIdFromUsernameAndPassword, h.PostTweet)
 	r.GET("/get/tweet", h.GetTweet)
 	r.GET("/get/tweets", middlewares.GetIdFromUsername, h.GetTweets)
+	r.PUT("/update", middlewares.CheckTweetOwner, h.UpdateTweet)
+	r.DELETE("/delete", )
 }

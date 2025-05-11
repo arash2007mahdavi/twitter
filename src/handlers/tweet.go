@@ -68,3 +68,19 @@ func (h *TweetHelper) GetTweets(ctx *gin.Context) {
 	h.Logger.Info(logger.Tweet, logger.Get, "tweets got", map[logger.ExtraCategory]interface{}{logger.Userid: id})
 	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, tweets, "users tweets"))
 }
+
+func (h *TweetHelper) UpdateTweet(ctx *gin.Context) {
+	req := dtos.TweetUpdate{}
+	err := ctx.ShouldBindJSON(&req)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithValidationError(http.StatusNotAcceptable, err, "validation error"))
+		return
+	}
+	res, err := h.Service.Update(ctx, &req)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusNotFound, responses.GenerateResponseWithError(http.StatusNotFound, err, "updating tweet failed"))
+		return
+	}
+	h.Logger.Info(logger.Tweet, logger.Update, "tweet updated", map[logger.ExtraCategory]interface{}{logger.Tweetid: ctx.Value("tweet_id")})
+	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, res, "tweet updated successfuly"))
+}

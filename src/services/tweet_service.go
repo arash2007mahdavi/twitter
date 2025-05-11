@@ -2,7 +2,9 @@ package services
 
 import (
 	"context"
+	"database/sql"
 	"strconv"
+	"time"
 	"twitter/src/database"
 	"twitter/src/database/models"
 	"twitter/src/dtos"
@@ -75,3 +77,21 @@ func (s *TweetService) GetTweets(ctx context.Context) ([]dtos.TweetResponse, err
 	}
 	return tweets_response, nil
 }
+
+func (s *TweetService) Update(ctx context.Context, req *dtos.TweetUpdate) (*dtos.TweetResponse, error) {
+	data, _:= TypeComverter[map[string]interface{}](req)
+	modified_by := ctx.Value("modified_by").(int)
+	tweet_id := ctx.Value("tweet_id")
+	(*data)["modified_by"] = sql.NullInt64{Int64: int64(modified_by), Valid: true}
+	(*data)["modified_at"] = sql.NullTime{Time: time.Now().UTC(), Valid: true}
+	tx := s.Database.WithContext(ctx).Begin()
+	err := tx.Model(&models.Tweet{}).Where("id = ? AND deleted_by is null", tweet_id).Updates(*data).Error
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+	tweet := models.Tweet{}
+	tx.Model(&models.Tweet{}).Where("id = ? AND deleted_by is null", tweet_id).First(&tweet)
+	tx.Commit()
+	return TypeComverter[dtos.TweetResponse](tweet)
+} 

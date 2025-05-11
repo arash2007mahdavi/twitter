@@ -34,3 +34,5 @@ func GetIdForDelete(ctx *gin.Context) {
 	ctx.Set("deleted_by", deleted_by)
 	ctx.Next()
 }
+
+func CheckForDeleteTweet(ctx *gin.Context)

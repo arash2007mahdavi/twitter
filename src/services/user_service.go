@@ -57,17 +57,17 @@ func (s *UserService) Create(ctx context.Context, req *dtos.UserCreate) (*dtos.U
 
 func (s *UserService) Update(ctx context.Context, req *dtos.UserUpdate) (*dtos.UserResponse, error) {
 	data, err := TypeComverter[map[string]interface{}](req)
+	if err != nil {
+		return nil, fmt.Errorf("error in comverting model")
+	}
 	int_m, _:= strconv.Atoi(ctx.Value("modified_by").(string))
 	int_id := ctx.Value("user_id").(int)
 	(*data)["modified_by"] = sql.NullInt64{Int64: int64(int_m), Valid: true}
 	(*data)["modified_at"] = sql.NullTime{Time: time.Now().UTC(), Valid: true}
-	if err != nil {
-		return nil, fmt.Errorf("error in comverting model")
-	}
 	tx := s.DB.WithContext(ctx).Begin()
 	model := new(models.User)
 	err = tx.Model(model).
-		Where("id = ? AND deleted_by is null", int_id).
+		Where("id = ? AND deleted_by is null", ctx.Value("user_id")).
 		Updates(*data).Error
 	if err != nil {
 		tx.Rollback()
@@ -75,6 +75,7 @@ func (s *UserService) Update(ctx context.Context, req *dtos.UserUpdate) (*dtos.U
 	}
 	user := models.User{}
 	tx.Model(&models.User{}).Where("id = ?", int_id).First(&user)
+	tx.Commit()
 	return TypeComverter[dtos.UserResponse](user)
 }
 
