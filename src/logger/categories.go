@@ -31,6 +31,7 @@ const (
 	See             SubCategory = "See"
 	Set             SubCategory = "Set"
 	Validate        SubCategory = "Validate"
+	Follow          SubCategory = "Follow"
 )
 
 const (
@@ -40,5 +41,5 @@ const (
 	StatusCode   ExtraCategory = "StatusCode"
 	Err          ExtraCategory = "Err"
 	MobileNumber ExtraCategory = "MobileNumber"
-	Adminname ExtraCategory = "Admin"
+	Adminname    ExtraCategory = "Admin"
 )

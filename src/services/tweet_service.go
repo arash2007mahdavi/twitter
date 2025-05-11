@@ -3,6 +3,7 @@ package services
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"strconv"
 	"time"
 	"twitter/src/database"
@@ -35,14 +36,6 @@ func (s *TweetService) NewTweet(ctx context.Context, req *dtos.TweetCreate) (*dt
 	tweet.UserId = id_creator
 	tweet.CreatedBy = id_creator
 	err = tx.Model(&models.Tweet{}).Create(&tweet).Error
-	if err != nil {
-		tx.Rollback()
-		return nil, err
-	}
-	user_tweet := models.UserTweet{
-		UserId: id_creator, TweetId: tweet.Id,
-	}
-	err = tx.Model(&models.UserTweet{}).Create(&user_tweet).Error
 	if err != nil {
 		tx.Rollback()
 		return nil, err
@@ -95,3 +88,19 @@ func (s *TweetService) Update(ctx context.Context, req *dtos.TweetUpdate) (*dtos
 	tx.Commit()
 	return TypeComverter[dtos.TweetResponse](tweet)
 } 
+
+func (s *TweetService) Delete(ctx context.Context) error {
+	tweet_id := ctx.Value("tweet_id")
+	deleted_by := ctx.Value("deleted_by").(int)
+	data := map[string]interface{}{}
+	(data)["deleted_by"] = sql.NullInt64{Int64: int64(deleted_by), Valid: true}
+	(data)["deleted_at"] = sql.NullTime{Time: time.Now().UTC(), Valid: true}
+	tx := s.Database.WithContext(ctx).Begin()
+	err := tx.Model(&models.Tweet{}).Where("id = ? AND deleted_by is null", tweet_id).Updates(data).Error
+	if err != nil {
+		tx.Rollback()
+		return fmt.Errorf("user doesnt exists")
+	}
+	tx.Commit()
+	return nil
+}

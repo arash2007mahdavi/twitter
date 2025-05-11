@@ -84,3 +84,13 @@ func (h *TweetHelper) UpdateTweet(ctx *gin.Context) {
 	h.Logger.Info(logger.Tweet, logger.Update, "tweet updated", map[logger.ExtraCategory]interface{}{logger.Tweetid: ctx.Value("tweet_id")})
 	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, res, "tweet updated successfuly"))
 }
+
+func (h *TweetHelper) DeleteTweet(ctx *gin.Context) {
+	err := h.Service.Delete(ctx)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusNotFound, responses.GenerateResponseWithError(http.StatusNotFound, err, "deleting tweet failed"))
+		return
+	}
+	h.Logger.Info(logger.Tweet, logger.Delete, "tweet deleted", map[logger.ExtraCategory]interface{}{logger.Tweetid: ctx.Value("tweet_id")})
+	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, nil, "tweet deleted successfuly"))
+}

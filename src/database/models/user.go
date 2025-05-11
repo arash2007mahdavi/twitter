@@ -18,14 +18,6 @@ type UserFollowers struct {
 	Follower   User `gorm:"foreignKey:FollowerId"`
 }
 
-type UserFollowings struct {
-	BaseModel
-	UserId      int
-	User        User `gorm:"foreignKey:UserId"`
-	FollowingId int
-	Following   User `gorm:"foreignKey:FollowingId"`
-}
-
 type Tweet struct {
 	BaseModel
 	Title    string    `gorm:"size:50;not null"`
@@ -35,14 +27,6 @@ type Tweet struct {
 	Comments []Comment `gorm:"foreignKey:TweetId"`
 }
 
-type UserTweet struct {
-	BaseModel
-	UserId  int
-	User    User `gorm:"foreignKey:UserId"`
-	TweetId int
-	Tweet   Tweet `gorm:"foreignKey:TweetId"`
-}
-
 type Comment struct {
 	BaseModel
 	TweetId int    `gorm:"not null"`
@@ -50,20 +34,4 @@ type Comment struct {
 	UserId  int    `gorm:"not null"`
 	User    User   `gorm:"foreignKey:UserId"`
 	Message string `gorm:"size:1000;not null"`
-}
-
-type UserComment struct {
-	BaseModel
-	UserId    int
-	User      User `gorm:"foreignKey:UserId"`
-	CommentId int
-	Comment   Comment `gorm:"foreignKey:CommentId"`
-}
-
-type TweetComment struct {
-	BaseModel
-	TweetId   int
-	Tweet     Tweet `gorm:"foreignKey:TweetId"`
-	CommentId int
-	Comment   Comment `gorm:"foreignKey:CommentId"`
 }

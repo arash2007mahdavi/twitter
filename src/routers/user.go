@@ -15,4 +15,5 @@ func UserRouter(r *gin.RouterGroup) {
 	r.DELETE("/delete", middlewares.GetIdForDelete, h.DeleteUser)
 	r.GET("/get/users", middlewares.CheckAdmin, h.GetUsers)
 	r.GET("/get/profile", middlewares.GetIdFromUsername, h.GetProfile)
+	r.POST("/follow", h.Follow)
 }

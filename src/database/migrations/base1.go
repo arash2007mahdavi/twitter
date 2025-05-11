@@ -14,10 +14,6 @@ func Up1() {
 
 	user := &models.User{}
 	user_followers := &models.UserFollowers{}
-	user_following := &models.UserFollowings{}
-	user_tweet := &models.UserTweet{}
-	user_comment := &models.UserComment{}
-	tweet_comment := &models.TweetComment{}
 	tweet := &models.Tweet{}
 	comment := &models.Comment{}
 
@@ -25,10 +21,6 @@ func Up1() {
 	checkTable(db, tweet, &tables)
 	checkTable(db, comment, &tables)
 	checkTable(db, user_followers, &tables)
-	checkTable(db, user_following, &tables)
-	checkTable(db, user_tweet, &tables)
-	checkTable(db, user_comment, &tables)
-	checkTable(db, tweet_comment, &tables)
 
 	err := db.Migrator().CreateTable(tables...)
 	if err != nil {
