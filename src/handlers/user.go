@@ -172,3 +172,12 @@ func (h *UserHelper) Follow(ctx *gin.Context) {
 	h.Logger.Info(logger.User, logger.Follow, "user followed other one", nil)
 	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, nil, "followed successfuly"))
 }
+
+func (h *UserHelper) GetFollowers(ctx *gin.Context) {
+	followers, err := h.Service.GetFollowers(ctx)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusAccepted, responses.GenerateResponseWithError(http.StatusAccepted, err, "error in getting followers"))
+		return
+	}
+	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, followers, "followers list"))
+}

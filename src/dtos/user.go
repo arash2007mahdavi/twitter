@@ -21,6 +21,4 @@ type UserResponse struct {
 	Firstname    string `json:"firstname,omitempty"`
 	Lastname     string `json:"lastname,omitempty"`
 	MobileNumber string `json:"mobile_number"`
-	Password     string `json:"password"`
-	Enabled      bool   `json:"enabled"`
 }

@@ -101,3 +101,47 @@
 {"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-11T23:51:55+03:30","message":"started successfuly"}
 {"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-11T23:51:55+03:30","message":"started successfuly"}
 {"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-11T23:52:02+03:30","message":"user followed other one"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-12T21:20:52+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-12T21:20:52+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-12T21:20:52+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Username":"arash2007mahdavi","time":"2025-05-12T21:21:09+03:30","message":"admin entered"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Admin":"arash2007mahdavi","time":"2025-05-12T21:21:09+03:30","message":"admin saw users"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Err":null,"StatusCode":404,"time":"2025-05-12T21:21:41+03:30","message":"username didnt entered"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Err":"record not found","StatusCode":202,"time":"2025-05-12T21:22:03+03:30","message":"error in getting followers"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Err":"record not found","StatusCode":202,"time":"2025-05-12T21:22:17+03:30","message":"error in getting followers"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Err":"record not found","StatusCode":202,"time":"2025-05-12T21:22:58+03:30","message":"error in getting followers"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","MobileNumber":"09193178797","time":"2025-05-12T21:24:25+03:30","message":"new otp set"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","MobileNumber":"09193178797","time":"2025-05-12T21:25:10+03:30","message":"otp validated successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Username":"ashraf1357","time":"2025-05-12T21:25:10+03:30","message":"new user added"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-12T21:25:59+03:30","message":"user followed other one"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Err":"record not found","StatusCode":202,"time":"2025-05-12T21:26:28+03:30","message":"error in getting followers"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-12T21:32:05+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-12T21:32:05+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-12T21:32:05+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-12T21:45:06+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-12T21:45:06+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-12T21:45:07+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Username":"arash2007mahdavi","time":"2025-05-12T21:45:57+03:30","message":"admin entered"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Admin":"arash2007mahdavi","time":"2025-05-12T21:45:57+03:30","message":"admin saw users"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-12T21:49:51+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-12T21:49:51+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-12T21:49:51+03:30","message":"started successfuly"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Err":"Key: 'TweetCreate.Title' Error:Field validation for 'Title' failed on the 'required' tag\nKey: 'TweetCreate.Message' Error:Field validation for 'Message' failed on the 'required' tag","StatusCode":406,"time":"2025-05-12T21:50:29+03:30","message":"validation error"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Tweetid":3,"Userid":3,"time":"2025-05-12T21:51:11+03:30","message":"new tweet posted"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Userid":3,"time":"2025-05-12T21:51:32+03:30","message":"tweets got"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Err":null,"StatusCode":400,"time":"2025-05-12T21:52:33+03:30","message":"tweet id is required"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Tweetid":"3","time":"2025-05-12T21:52:36+03:30","message":"tweet got"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-12T21:56:32+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-12T21:56:32+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-12T21:56:32+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Tweetid":"3","time":"2025-05-12T21:57:11+03:30","message":"tweet got"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Tweetid":"2","time":"2025-05-12T21:57:21+03:30","message":"tweet got"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-12T23:37:49+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-12T23:37:49+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-12T23:37:49+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-12T23:41:27+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-12T23:41:27+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-12T23:41:27+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-12T23:43:45+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-12T23:43:45+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-12T23:43:45+03:30","message":"started successfuly"}

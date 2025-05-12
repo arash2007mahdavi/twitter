@@ -1,0 +1,13 @@
+package routers
+
+import (
+	"twitter/src/handlers"
+	"twitter/src/middlewares"
+
+	"github.com/gin-gonic/gin"
+)
+
+func CommentRouter(r *gin.RouterGroup) {
+	h := handlers.NewCommentHelper()
+	r.POST("/post", middlewares.GetIdForComment, h.PostComment)
+}

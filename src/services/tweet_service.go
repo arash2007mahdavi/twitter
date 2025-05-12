@@ -44,14 +44,21 @@ func (s *TweetService) NewTweet(ctx context.Context, req *dtos.TweetCreate) (*dt
 	return TypeComverter[dtos.TweetResponse](tweet)
 }
 
-func (s *TweetService) GetTweetByID(ctx context.Context) (*dtos.TweetResponse, error) {
+func (s *TweetService) GetTweetByID(ctx context.Context) (*models.Tweet, error) {
 	tweet_id, _:= strconv.Atoi(ctx.Value("tweet_id").(string))
 	var tweet models.Tweet
 	err := s.Database.WithContext(ctx).Model(&models.Tweet{}).Where("id = ? AND deleted_by is null", tweet_id).First(&tweet).Error
 	if err != nil {
 		return nil, err
 	}
-	return TypeComverter[dtos.TweetResponse](tweet)
+	user_id := tweet.UserId
+	user := models.User{}
+	err = s.Database.WithContext(ctx).Model(&models.User{}).Where("id = ?", user_id).First(&user).Error
+	if err != nil {
+		return nil, err
+	}
+	tweet.User = user
+	return &tweet, nil
 }
 
 func (s *TweetService) GetTweets(ctx context.Context) ([]dtos.TweetResponse, error) {

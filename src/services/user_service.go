@@ -99,10 +99,15 @@ func (s *UserService) Delete(ctx context.Context) error {
 	return nil
 }
 
-func (s *UserService) GetUsers(ctx context.Context) (*[]models.User, error) {
+func (s *UserService) GetUsers(ctx context.Context) (*[]dtos.UserResponse, error) {
 	slice := make([]models.User, 0)
 	s.DB.Where("enabled = ?", true).Find(&slice)
-	return &slice, nil
+	res := make([]dtos.UserResponse, 0)
+	for _, user := range slice {
+		response, _:= TypeComverter[dtos.UserResponse](user)
+		res = append(res, *response)
+	}
+	return &res, nil
 }
 
 func (s *UserService) GetProfile(ctx context.Context) (*models.User, error) {
@@ -110,4 +115,28 @@ func (s *UserService) GetProfile(ctx context.Context) (*models.User, error) {
 	id := ctx.Value("user_id")
 	s.DB.Model(&user).Where("id = ?", id).First(&user)
 	return &user, nil
+}
+
+func (s *UserService) GetFollowers(ctx context.Context) (*[]dtos.UserResponse, error) {
+	user_id := ctx.Value("user_id")
+	tx := s.DB.WithContext(ctx).Begin()
+	user_followers := []models.UserFollowers{}
+	err := tx.Model(&models.UserFollowers{}).Where("user_id = ? AND deleted_at is null", user_id).Find(&user_followers).Error
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+	follower := []dtos.UserResponse{}
+	for _, user_follower := range user_followers {
+		follower_id := user_follower.FollowerId
+		follower_profile := models.User{}
+		err = tx.Model(&models.User{}).Where("id = ? AND deleted_at is null", follower_id).First(&follower_profile).Error
+		if err != nil {
+			return nil, err
+		}
+		follower_res, _:= TypeComverter[dtos.UserResponse](follower_profile)
+		follower = append(follower, *follower_res)
+	}
+	tx.Commit()
+	return &follower, nil
 }

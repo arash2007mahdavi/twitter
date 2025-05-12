@@ -31,6 +31,8 @@ func Init_Server(cfg *configs.Config) {
 		routers.UserRouter(user)
 		tweet := twitter.Group("/tweet")
 		routers.TweetRouter(tweet)
+		comment := twitter.Group("/comment")
+		routers.CommentRouter(comment)
 	}
 	log.Info(logger.Server, logger.Start, "started successfuly", nil)
 	engine.Run(fmt.Sprintf("%v:%v", cfg.Server.Host, cfg.Server.Port))

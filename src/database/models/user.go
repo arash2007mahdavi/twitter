@@ -29,9 +29,9 @@ type Tweet struct {
 
 type Comment struct {
 	BaseModel
-	TweetId int    `gorm:"not null"`
+	TweetId int    `json:"tweet_id" gorm:"not null"`
 	Tweet   Tweet  `gorm:"foreignKey:TweetId"`
-	UserId  int    `gorm:"not null"`
+	UserId  int    `json:"user_id" gorm:"not null"`
 	User    User   `gorm:"foreignKey:UserId"`
 	Message string `gorm:"size:1000;not null"`
 }
