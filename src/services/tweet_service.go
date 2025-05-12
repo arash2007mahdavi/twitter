@@ -46,18 +46,28 @@ func (s *TweetService) NewTweet(ctx context.Context, req *dtos.TweetCreate) (*dt
 
 func (s *TweetService) GetTweetByID(ctx context.Context) (*models.Tweet, error) {
 	tweet_id, _:= strconv.Atoi(ctx.Value("tweet_id").(string))
+	tx := s.Database.WithContext(ctx).Begin()
 	var tweet models.Tweet
-	err := s.Database.WithContext(ctx).Model(&models.Tweet{}).Where("id = ? AND deleted_by is null", tweet_id).First(&tweet).Error
+	err := tx.Model(&models.Tweet{}).Where("id = ? AND deleted_by is null", tweet_id).First(&tweet).Error
 	if err != nil {
+		tx.Rollback()
 		return nil, err
 	}
 	user_id := tweet.UserId
 	user := models.User{}
-	err = s.Database.WithContext(ctx).Model(&models.User{}).Where("id = ?", user_id).First(&user).Error
+	err = tx.Model(&models.User{}).Where("id = ?", user_id).First(&user).Error
 	if err != nil {
+		tx.Rollback()
 		return nil, err
 	}
 	tweet.User = user
+	comments := []models.Comment{}
+	tx.Model(&models.Comment{}).Where("tweet_id = ? AND deleted_at is null", tweet_id).Find(&comments)
+	for _, comment := range comments {
+		res, _:= TypeComverter[dtos.CommentResponse](comment)
+		tweet.Comments = append(tweet.Comments, *res)
+	}
+	tx.Commit()
 	return &tweet, nil
 }
 

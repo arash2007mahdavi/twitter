@@ -1,7 +1,5 @@
 package dtos
 
-import "twitter/src/database/models"
-
 type TweetCreate struct {
 	Title   string `json:"title" binding:"required,min=2,max=50"`
 	Message string `json:"message" binding:"required,min=10,max=1000"`
@@ -13,9 +11,9 @@ type TweetUpdate struct {
 }
 
 type TweetResponse struct {
-	Id       int              `json:"id"`
-	UserId   int              `json:"user_id"`
-	Title    string           `json:"title"`
-	Message  string           `json:"message"`
-	Comments []models.Comment `json:"comments"`
+	Id       int               `json:"id"`
+	UserId   int               `json:"user_id"`
+	Title    string            `json:"title"`
+	Message  string            `json:"message"`
+	Comments []CommentResponse `json:"comments"`
 }
