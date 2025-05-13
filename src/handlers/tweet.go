@@ -95,3 +95,12 @@ func (h *TweetHelper) DeleteTweet(ctx *gin.Context) {
 	h.Logger.Info(logger.Tweet, logger.Delete, "tweet deleted", map[logger.ExtraCategory]interface{}{logger.Tweetid: ctx.Value("tweet_id")})
 	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, nil, "tweet deleted successfuly"))
 }
+
+func (h *TweetHelper) GetFollowingsTweets(ctx *gin.Context) {
+	tweets, err := h.Service.GetFollowingsTweets(ctx)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusNotFound, responses.GenerateResponseWithError(http.StatusNotFound, err, "error in get followers tweets"))
+		return
+	}
+	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, tweets, "followers tweets show"))
+}

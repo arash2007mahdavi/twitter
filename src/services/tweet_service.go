@@ -134,3 +134,45 @@ func (s *TweetService) Delete(ctx context.Context) error {
 	tx.Commit()
 	return nil
 }
+
+func (s *TweetService) GetFollowingsTweets(ctx context.Context) ([]dtos.TweetResponse, error) {
+	user_id := ctx.Value("user_id")
+	tx := s.Database.WithContext(ctx).Begin()
+	followings := []models.UserFollowers{}
+	err := tx.Model(&models.UserFollowers{}).Where("follower_id = ? AND deleted_at is null", user_id).Find(&followings).Error
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+	followings_tweets := []dtos.TweetResponse{}
+	for _, userFollower := range followings {
+		tweets := []models.Tweet{}
+		err = tx.Model(&models.Tweet{}).Where("user_id = ? AND deleted_at is null", userFollower.UserId).Find(&tweets).Error
+		if err != nil {
+			tx.Rollback()
+			return nil, err
+		}
+		tweets_res := []dtos.TweetResponse{}
+		for _, tweet:= range tweets {
+			tweet_res, _:= TypeComverter[dtos.TweetResponse](tweet)
+			tweets_res = append(tweets_res, *tweet_res)
+		}
+		for _, tweet := range tweets_res {
+			comments := []models.Comment{}
+			err = tx.Model(&models.Comment{}).Where("tweet_id = ? AND deleted_at is null", tweet.Id).Find(&comments).Error
+			if err != nil {
+				tx.Rollback()
+				return nil, err
+			}
+			comments_res := []dtos.CommentResponse{}
+			for _, comment := range comments {
+				comment_res, _:= TypeComverter[dtos.CommentResponse](comment)
+				comments_res = append(comments_res, *comment_res)
+			}
+			tweet.Comments = comments_res
+			followings_tweets = append(followings_tweets, tweet)
+		}
+	} 
+	tx.Commit()
+	return followings_tweets, nil
+}
