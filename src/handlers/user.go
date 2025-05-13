@@ -158,6 +158,13 @@ func (h *UserHelper) Follow(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "invalid target user"))
 		return
 	}
+	try_sample := models.UserFollowers{}
+	err = tx.Model(&models.UserFollowers{}).Where("user_id = ? AND follower_id = ? AND deleted_at is null", target_user.Id, user.Id).First(&try_sample).Error
+	if err == nil {
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, fmt.Errorf("already following"), "user is already a follower"))
+		tx.Rollback()
+		return
+	}
 	user_follower := models.UserFollowers{
 		UserId: target_user.Id,
 		FollowerId: user.Id,

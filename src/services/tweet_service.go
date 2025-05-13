@@ -83,8 +83,21 @@ func (s *TweetService) GetTweets(ctx context.Context) ([]dtos.TweetResponse, err
 	tweets_response := []dtos.TweetResponse{}
 	for _, tweet := range tweets {
 		res, _:= TypeComverter[dtos.TweetResponse](tweet)
+		tweets_comments := []models.Comment{}
+		err = tx.Model(&models.Comment{}).Where("tweet_id = ? AND deleted_at is null", tweet.Id).Find(&tweets_comments).Error
+		if err != nil {
+			tx.Rollback()
+			return nil, err
+		}
+		comments_response := []dtos.CommentResponse{}
+		for _, comment := range tweets_comments {
+			res, _:= TypeComverter[dtos.CommentResponse](comment)
+			comments_response = append(comments_response, *res)
+		}
+		res.Comments = comments_response
 		tweets_response = append(tweets_response, *res)
 	}
+	tx.Commit()
 	return tweets_response, nil
 }
 

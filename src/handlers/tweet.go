@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 	"twitter/src/database"
 	"twitter/src/dtos"
@@ -45,7 +46,7 @@ func (h *TweetHelper) PostTweet(ctx *gin.Context) {
 func (h *TweetHelper) GetTweet(ctx *gin.Context) {
 	tweet_id := ctx.Query("tweet_id")
 	if tweet_id == "" {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, responses.GenerateResponseWithError(http.StatusBadRequest, nil, "tweet id is required"))
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, responses.GenerateResponseWithError(http.StatusBadRequest, fmt.Errorf("error in query"), "tweet id is required"))
 		return
 	}
 	ctx.Set("tweet_id", tweet_id)
