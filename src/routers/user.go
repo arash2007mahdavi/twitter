@@ -17,4 +17,5 @@ func UserRouter(r *gin.RouterGroup) {
 	r.GET("/get/profile", middlewares.GetIdFromUsername, h.GetProfile)
 	r.POST("/follow", h.Follow)
 	r.GET("/get/followers", middlewares.GetIdFromUsername, h.GetFollowers)
+	r.GET("/get/followings", middlewares.GetIdFromUsername, h.GetFollowings)
 }

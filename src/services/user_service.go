@@ -140,3 +140,32 @@ func (s *UserService) GetFollowers(ctx context.Context) (*[]dtos.UserResponse, e
 	tx.Commit()
 	return &follower, nil
 }
+
+func (s *UserService) GetFollowings(ctx context.Context) (*[]dtos.UserResponse, error) {
+	user_id := ctx.Value("user_id")
+	tx := s.DB.WithContext(ctx).Begin()
+	user_followings := []models.UserFollowers{}
+	err := tx.Model(&models.UserFollowers{}).Where("follower_id = ? AND deleted_at is null", user_id).Find(&user_followings).Error
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+	followings := []models.User{}
+	for _, user_following := range user_followings {
+		following_id := user_following.UserId
+		user := models.User{}
+		err = tx.Model(&models.User{}).Where("id = ? AND deleted_at is null", following_id).First(&user).Error
+		if err != nil {
+			tx.Rollback()
+			return nil, err
+		}
+		followings = append(followings, user)
+	}
+	followings_res := []dtos.UserResponse{}
+	for _, following := range followings {
+		res, _:= TypeComverter[dtos.UserResponse](following)
+		followings_res = append(followings_res, *res)
+	}
+	tx.Commit()
+	return &followings_res, nil
+}

@@ -188,3 +188,12 @@ func (h *UserHelper) GetFollowers(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, followers, "followers list"))
 }
+
+func (h *UserHelper) GetFollowings(ctx *gin.Context) {
+	followings, err := h.Service.GetFollowings(ctx)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "error in get followings"))
+		return
+	}
+	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, followings, "followings get"))
+}
