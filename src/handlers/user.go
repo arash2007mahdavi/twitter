@@ -60,7 +60,7 @@ func (h *UserHelper) NewUser(ctx *gin.Context) {
 	req.Password = string(HashPassword)
 	test_otp := ctx.Query("otp")
 	if len(test_otp) == 0 {
-		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "otp didnt enter"))
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, fmt.Errorf("enter otp"), "otp didnt enter"))
 		return
 	}
 	err = h.Otp.ValidateOtp(req.MobileNumber, test_otp)
