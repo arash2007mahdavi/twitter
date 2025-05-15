@@ -192,3 +192,30 @@ func (s *UserService) Follow(ctx context.Context) error {
 	tx.Commit()
 	return nil
 }
+
+func (s *UserService) UnFollow(ctx context.Context) error {
+	user_id := ctx.Value("user_id")
+	target_id := ctx.Value("target_id")
+	tx := s.DB.WithContext(ctx).Begin()
+	user_follower := models.UserFollowers{}
+	err := tx.Model(&models.UserFollowers{}).Where("follower_id = ? AND user_id = ?", user_id, target_id).First(&user_follower).Error
+	if err != nil {
+		tx.Rollback()
+		return fmt.Errorf("there is no follower or following like that")
+	}
+	if user_follower.DeletedAt.Valid {
+		tx.Rollback()
+		return fmt.Errorf("you unfollow target username")
+	}
+	user_id_int := user_id.(int)
+	data := map[string]interface{}{}
+	(data)["deleted_at"] = sql.NullTime{Valid: true, Time: time.Now().UTC()}
+	(data)["deleted_by"] = sql.NullInt64{Valid: true, Int64: int64(user_id_int)}
+	err = tx.Model(&models.UserFollowers{}).Where("follower_id = ? AND user_id = ? AND deleted_at is null", user_id, target_id).Updates(data).Error
+	if err != nil {
+		tx.Rollback()
+		return fmt.Errorf("error in unfollow target")
+	}
+	tx.Commit()
+	return nil
+}

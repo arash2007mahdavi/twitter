@@ -131,6 +131,15 @@ func (h *UserHelper) Follow(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, nil, "followed successfuly"))
 }
 
+func (h *UserHelper) UnFollow(ctx *gin.Context) {
+	err := h.Service.UnFollow(ctx)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "error in unfollowing target"))
+		return
+	}
+	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, nil, "target unfollowed successfuly"))
+}
+
 func (h *UserHelper) GetFollowers(ctx *gin.Context) {
 	followers, err := h.Service.GetFollowers(ctx)
 	if err != nil {
