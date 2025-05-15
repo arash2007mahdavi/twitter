@@ -104,3 +104,12 @@ func (h *TweetHelper) GetFollowingsTweets(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, tweets, "followers tweets show"))
 }
+
+func (h *TweetHelper) TweetExplore(ctx *gin.Context) {
+	res, err := h.Service.TweetExplore(ctx)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "error in load explore"))
+		return
+	}
+	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, res, "explore loaded"))
+}

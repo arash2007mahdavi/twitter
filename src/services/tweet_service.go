@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"math/rand"
 	"strconv"
 	"time"
 	"twitter/src/database"
@@ -175,4 +176,42 @@ func (s *TweetService) GetFollowingsTweets(ctx context.Context) ([]dtos.TweetRes
 	} 
 	tx.Commit()
 	return followings_tweets, nil
+}
+
+func selectRandomTweets(slice []models.Tweet, count int) []models.Tweet {
+    if count > len(slice) {
+        count = len(slice)
+    }
+
+    rand.Shuffle(len(slice), func(i, j int) { slice[i], slice[j] = slice[j], slice[i] })
+    return slice[:count]
+}
+func (s *TweetService) TweetExplore(ctx context.Context) (*[]dtos.TweetResponse, error) {
+	tx := s.Database.WithContext(ctx).Begin()
+	tweets := []models.Tweet{}
+	err := tx.Model(&models.Tweet{}).Where("deleted_at is null").Find(&tweets).Error
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+	five_tweets := selectRandomTweets(tweets, 5)
+	tweets_res := []dtos.TweetResponse{}
+	for _, tweet := range five_tweets {
+		res, _:= TypeComverter[dtos.TweetResponse](tweet)
+		comments := []models.Comment{}
+		err = tx.Model(&models.Comment{}).Where("tweet_id = ? AND deleted_at is null", res.Id).Find(&comments).Error
+		if err != nil {
+			tx.Rollback()
+			return nil, err
+		}
+		comments_res := []dtos.CommentResponse{}
+		for _, comment := range comments {
+			res, _:= TypeComverter[dtos.CommentResponse](comment)
+			comments_res = append(comments_res, *res)
+		}
+		res.Comments = comments_res
+		tweets_res = append(tweets_res, *res)
+	}
+	tx.Commit()
+	return &tweets_res, nil
 }
