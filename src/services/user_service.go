@@ -169,3 +169,26 @@ func (s *UserService) GetFollowings(ctx context.Context) (*[]dtos.UserResponse, 
 	tx.Commit()
 	return &followings_res, nil
 }
+
+func (s *UserService) Follow(ctx context.Context) error {
+	user_id := ctx.Value("user_id")
+	target_id := ctx.Value("target_id")
+	tx := s.DB.WithContext(ctx).Begin()
+	try_sample := models.UserFollowers{}
+	err := tx.Model(&models.UserFollowers{}).Where("user_id = ? AND follower_id = ? AND deleted_at is null", target_id, user_id).First(&try_sample).Error
+	if err == nil {
+		tx.Rollback()
+		return err
+	}
+	user_follower := models.UserFollowers{
+		UserId: target_id.(int),
+		FollowerId: user_id.(int),
+	}
+	err = tx.Model(&models.UserFollowers{}).Create(&user_follower).Error
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+	tx.Commit()
+	return nil
+}

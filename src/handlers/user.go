@@ -3,8 +3,6 @@ package handlers
 import (
 	"fmt"
 	"net/http"
-	"twitter/src/database"
-	"twitter/src/database/models"
 	"twitter/src/dtos"
 	"twitter/src/logger"
 	"twitter/src/responses"
@@ -93,7 +91,7 @@ func (h *UserHelper) GetProfile(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "error in get user"))
 		return
 	}
-	h.Logger.Info(logger.User, logger.See, "user saw profile", map[logger.ExtraCategory]interface{}{logger.Userid: ctx.Value("user_id")})
+	h.Logger.Info(logger.User, logger.Profile, "get profile", map[logger.ExtraCategory]interface{}{logger.Userid: ctx.Value("user_id")})
 	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, user, "your profile"))
 }
 
@@ -125,58 +123,11 @@ func (h *UserHelper) DeleteUser(ctx *gin.Context) {
 }
 
 func (h *UserHelper) Follow(ctx *gin.Context) {
-	db := database.GetDB()
-	username := ctx.Query("username")
-	password := ctx.Query("password")
-	target_username := ctx.Query("target_username")
-	if len(username)==0 || len(password)==0 || len(target_username)==0 {
-		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, fmt.Errorf("error in query"), "enter username, password and target_username"))
-		return
-	}
-	if username == target_username {
-		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, fmt.Errorf("error in request"), "invalid query"))
-		return
-	}
-	user := models.User{}
-	tx := db.WithContext(ctx).Begin()
-	err := tx.Model(&models.User{}).Where("username = ? AND deleted_by is null", username).First(&user).Error
+	err := h.Service.Follow(ctx)
 	if err != nil {
-		tx.Rollback()
-		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "invalid user"))
-		return
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "error in follow"))
 	}
-	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
-	if err != nil {
-		tx.Rollback()
-		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "invalid password"))
-		return
-	}
-	target_user := models.User{}
-	err = tx.Model(&models.User{}).Where("username = ? AND deleted_by is null", target_username).First(&target_user).Error
-	if err != nil {
-		tx.Rollback()
-		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "invalid target user"))
-		return
-	}
-	try_sample := models.UserFollowers{}
-	err = tx.Model(&models.UserFollowers{}).Where("user_id = ? AND follower_id = ? AND deleted_at is null", target_user.Id, user.Id).First(&try_sample).Error
-	if err == nil {
-		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, fmt.Errorf("already following"), "user is already a follower"))
-		tx.Rollback()
-		return
-	}
-	user_follower := models.UserFollowers{
-		UserId: target_user.Id,
-		FollowerId: user.Id,
-	}
-	err = tx.Model(&models.UserFollowers{}).Create(&user_follower).Error
-	if err != nil {
-		tx.Rollback()
-		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "error in add follower"))
-		return
-	}
-	tx.Commit()
-	h.Logger.Info(logger.User, logger.Follow, "user followed other one", nil)
+	h.Logger.Info(logger.User, logger.Follow, "user followed other one", map[logger.ExtraCategory]interface{}{logger.Userid: ctx.Value("user_id"), logger.Targetid: ctx.Value("target_id")})
 	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, nil, "followed successfuly"))
 }
 
@@ -186,6 +137,7 @@ func (h *UserHelper) GetFollowers(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(http.StatusAccepted, responses.GenerateResponseWithError(http.StatusAccepted, err, "error in getting followers"))
 		return
 	}
+	h.Logger.Info(logger.User, logger.Follower, "get followers", map[logger.ExtraCategory]interface{}{logger.Userid: ctx.Value("user_id")})
 	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, followers, "followers list"))
 }
 
@@ -195,5 +147,6 @@ func (h *UserHelper) GetFollowings(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "error in get followings"))
 		return
 	}
+	h.Logger.Info(logger.User, logger.Following, "get followings", map[logger.ExtraCategory]interface{}{logger.Userid: ctx.Value("user_id")})
 	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, followings, "followings get"))
 }

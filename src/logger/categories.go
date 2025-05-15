@@ -32,11 +32,16 @@ const (
 	Set             SubCategory = "Set"
 	Validate        SubCategory = "Validate"
 	Follow          SubCategory = "Follow"
+	UnFollow        SubCategory = "UnFollow"
+	Follower        SubCategory = "Follower"
+	Following       SubCategory = "Following"
+	Profile         SubCategory = "Profile"
 )
 
 const (
 	Username     ExtraCategory = "Username"
 	Userid       ExtraCategory = "Userid"
+	Targetid     ExtraCategory = "Targetid"
 	Tweetid      ExtraCategory = "Tweetid"
 	StatusCode   ExtraCategory = "StatusCode"
 	Err          ExtraCategory = "Err"
