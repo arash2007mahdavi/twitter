@@ -205,7 +205,7 @@ func (s *UserService) UnFollow(ctx context.Context) error {
 	}
 	if user_follower.DeletedAt.Valid {
 		tx.Rollback()
-		return fmt.Errorf("you unfollow target username")
+		return fmt.Errorf("you unfollowed target username")
 	}
 	user_id_int := user_id.(int)
 	data := map[string]interface{}{}
