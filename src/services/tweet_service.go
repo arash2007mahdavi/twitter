@@ -36,13 +36,21 @@ func (s *TweetService) NewTweet(ctx context.Context, req *dtos.TweetCreate) (*dt
 	}
 	tweet.UserId = id_creator
 	tweet.CreatedBy = id_creator
+	user := dtos.UserResponse{}
+	err = tx.Model(&models.User{}).Where("id = ?", id_creator).First(&user).Error
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
 	err = tx.Model(&models.Tweet{}).Create(&tweet).Error
 	if err != nil {
 		tx.Rollback()
 		return nil, err
 	}
 	tx.Commit()
-	return TypeComverter[dtos.TweetResponse](tweet)
+	tweet_res, _:= TypeComverter[dtos.TweetResponse](tweet)
+	tweet_res.User = user
+	return tweet_res, nil
 }
 
 func (s *TweetService) GetTweetByID(ctx context.Context) (*dtos.TweetResponse, error) {

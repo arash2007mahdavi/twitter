@@ -32,12 +32,28 @@ func (s *CommentService) PostComment(ctx context.Context, req *dtos.CommentCreat
 	comment, _:= TypeComverter[models.Comment](req)
 	comment.CreatedBy = user_id.(int)
 	comment.UserId = user_id.(int)
+	user := dtos.UserResponse{}
+	err := tx.Model(&models.User{}).Where("id = ?", comment.UserId).First(&user).Error
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
 	comment.TweetId = tweet_id1
-	err := tx.Model(&models.Comment{}).Create(&comment).Error
+	tweet := dtos.TweetResponse{}
+	err = tx.Model(&models.Tweet{}).Where("id = ?", comment.TweetId).First(&tweet).Error
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+	user_tweet :=
+	err = tx.Model(&models.Comment{}).Create(&comment).Error
 	if err != nil {
 		tx.Rollback()
 		return nil, fmt.Errorf("error in creating comment")
 	}
 	tx.Commit()
-	return TypeComverter[dtos.CommentResponse](comment)
+	comment_res, _:= TypeComverter[dtos.CommentResponse](comment)
+	comment_res.User = user
+	comment_res.Tweet = tweet
+	return comment_res, nil
 }
