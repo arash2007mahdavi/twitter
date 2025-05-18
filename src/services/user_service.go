@@ -100,14 +100,9 @@ func (s *UserService) Delete(ctx context.Context) error {
 }
 
 func (s *UserService) GetUsers(ctx context.Context) (*[]dtos.UserResponse, error) {
-	slice := make([]models.User, 0)
-	s.DB.Where("enabled = ?", true).Find(&slice)
-	res := make([]dtos.UserResponse, 0)
-	for _, user := range slice {
-		response, _:= TypeComverter[dtos.UserResponse](user)
-		res = append(res, *response)
-	}
-	return &res, nil
+	users := []dtos.UserResponse{}
+	s.DB.Table("users").Where("enabled = ?", true).Scan(&users)
+	return &users, nil
 }
 
 func (s *UserService) GetProfile(ctx context.Context) (*models.User, error) {
@@ -130,54 +125,20 @@ func (s *UserService) GetFollowers(ctx context.Context) (*[]dtos.UserResponse, e
 		return nil, err
 	}
 	return &followers, nil
-	// user_followers := []models.UserFollowers{}
-	// err := tx.Model(&models.UserFollowers{}).Where("user_id = ? AND deleted_at is null", user_id).Find(&user_followers).Error
-	// if err != nil {
-	// 	tx.Rollback()
-	// 	return nil, err
-	// }
-	// follower := []dtos.UserResponse{}
-	// for _, user_follower := range user_followers {
-	// 	follower_id := user_follower.FollowerId
-	// 	follower_profile := models.User{}
-	// 	err = tx.Model(&models.User{}).Where("id = ? AND deleted_at is null", follower_id).First(&follower_profile).Error
-	// 	if err != nil {
-	// 		return nil, err
-	// 	}
-	// 	follower_res, _:= TypeComverter[dtos.UserResponse](follower_profile)
-	// 	follower = append(follower, *follower_res)
-	// }
-	// tx.Commit()
-	// return &follower, nil
 }
 
 func (s *UserService) GetFollowings(ctx context.Context) (*[]dtos.UserResponse, error) {
 	user_id := ctx.Value("user_id")
 	tx := s.DB.WithContext(ctx).Begin()
-	user_followings := []models.UserFollowers{}
-	err := tx.Model(&models.UserFollowers{}).Where("follower_id = ? AND deleted_at is null", user_id).Find(&user_followings).Error
+
+	followings := []dtos.UserResponse{}
+
+	err := tx.Table("user_followers").Select("users.*").Joins("JOIN users ON user_followers.user_id = users.id AND users.deleted_at is null").
+		Where("user_followers.follower_id = ? AND user_followers.deleted_at is null", user_id).Scan(&followings).Error
 	if err != nil {
-		tx.Rollback()
 		return nil, err
 	}
-	followings := []models.User{}
-	for _, user_following := range user_followings {
-		following_id := user_following.UserId
-		user := models.User{}
-		err = tx.Model(&models.User{}).Where("id = ? AND deleted_at is null", following_id).First(&user).Error
-		if err != nil {
-			tx.Rollback()
-			return nil, err
-		}
-		followings = append(followings, user)
-	}
-	followings_res := []dtos.UserResponse{}
-	for _, following := range followings {
-		res, _:= TypeComverter[dtos.UserResponse](following)
-		followings_res = append(followings_res, *res)
-	}
-	tx.Commit()
-	return &followings_res, nil
+	return &followings, nil
 }
 
 func (s *UserService) Follow(ctx context.Context) error {
