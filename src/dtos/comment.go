@@ -9,7 +9,9 @@ type CommentUpdate struct {
 }
 
 type CommentResponse struct {
-	TweetId int    `json:"tweet_id"`
-	UserId  int    `json:"user_id"`
-	Message string `json:"message"`
+	TweetId int           `json:"tweet_id"`
+	Tweet   TweetResponse `json:"tweet"`
+	UserId  int           `json:"user_id"`
+	User    UserResponse  `json:"user"`
+	Message string        `json:"message"`
 }

@@ -1,7 +1,5 @@
 package models
 
-import "twitter/src/dtos"
-
 type User struct {
 	BaseModel
 	Username     string `gorm:"size:30;not null;unique"`
@@ -23,18 +21,26 @@ type UserFollowers struct {
 type TweetLikes struct {
 	BaseModel
 	TweetId int
-	Tweet Tweet `gorm:"foreignKey:TweetId"`
-	UserId int
-	User User `gorm:"foreignKey:UserId"`
+	Tweet   Tweet `gorm:"foreignKey:TweetId"`
+	UserId  int
+	User    User `gorm:"foreignKey:UserId"`
 }
 
 type Tweet struct {
 	BaseModel
-	Title    string                 `gorm:"size:50;not null"`
-	Message  string                 `gorm:"size:1000;not null"`
-	UserId   int                    `json:"user_id" gorm:"not null"`
-	User     User                   `gorm:"foreignKey:UserId"`
-	Comments []dtos.CommentResponse `gorm:"foreignKey:TweetId"`
+	Title   string `gorm:"size:50;not null"`
+	Message string `gorm:"size:1000;not null"`
+	UserId  int    `json:"user_id" gorm:"not null"`
+	User    User   `gorm:"foreignKey:UserId"`
+	Likes   int    `gorm:"type:integer"`
+}
+
+type CommentLikes struct {
+	BaseModel
+	CommentId int
+	Comment   Comment `gorm:"foreignKey:CommentId"`
+	UserId    int
+	User      User `gorm:"foreignKey:UserId"`
 }
 
 type Comment struct {

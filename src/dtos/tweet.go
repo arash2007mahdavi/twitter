@@ -13,6 +13,7 @@ type TweetUpdate struct {
 type TweetResponse struct {
 	Id       int               `json:"id"`
 	UserId   int               `json:"user_id"`
+	User     UserResponse      `json:"user"`
 	Title    string            `json:"title"`
 	Message  string            `json:"message"`
 	Comments []CommentResponse `json:"comments"`
