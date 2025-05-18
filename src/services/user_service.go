@@ -120,25 +120,35 @@ func (s *UserService) GetProfile(ctx context.Context) (*models.User, error) {
 func (s *UserService) GetFollowers(ctx context.Context) (*[]dtos.UserResponse, error) {
 	user_id := ctx.Value("user_id")
 	tx := s.DB.WithContext(ctx).Begin()
-	user_followers := []models.UserFollowers{}
-	err := tx.Model(&models.UserFollowers{}).Where("user_id = ? AND deleted_at is null", user_id).Find(&user_followers).Error
+
+	followers := []dtos.UserResponse{}
+
+	err := tx.Table("user_followers").Select("users.*").Joins("JOIN users ON user_followers.follower_id = users.id AND users.deleted_at is null").
+		Where("user_followers.user_id = ? AND user_followers.deleted_at is null", user_id).Scan(&followers).Error
+
 	if err != nil {
-		tx.Rollback()
 		return nil, err
 	}
-	follower := []dtos.UserResponse{}
-	for _, user_follower := range user_followers {
-		follower_id := user_follower.FollowerId
-		follower_profile := models.User{}
-		err = tx.Model(&models.User{}).Where("id = ? AND deleted_at is null", follower_id).First(&follower_profile).Error
-		if err != nil {
-			return nil, err
-		}
-		follower_res, _:= TypeComverter[dtos.UserResponse](follower_profile)
-		follower = append(follower, *follower_res)
-	}
-	tx.Commit()
-	return &follower, nil
+	return &followers, nil
+	// user_followers := []models.UserFollowers{}
+	// err := tx.Model(&models.UserFollowers{}).Where("user_id = ? AND deleted_at is null", user_id).Find(&user_followers).Error
+	// if err != nil {
+	// 	tx.Rollback()
+	// 	return nil, err
+	// }
+	// follower := []dtos.UserResponse{}
+	// for _, user_follower := range user_followers {
+	// 	follower_id := user_follower.FollowerId
+	// 	follower_profile := models.User{}
+	// 	err = tx.Model(&models.User{}).Where("id = ? AND deleted_at is null", follower_id).First(&follower_profile).Error
+	// 	if err != nil {
+	// 		return nil, err
+	// 	}
+	// 	follower_res, _:= TypeComverter[dtos.UserResponse](follower_profile)
+	// 	follower = append(follower, *follower_res)
+	// }
+	// tx.Commit()
+	// return &follower, nil
 }
 
 func (s *UserService) GetFollowings(ctx context.Context) (*[]dtos.UserResponse, error) {

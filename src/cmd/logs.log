@@ -317,3 +317,34 @@
 {"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-16T00:45:13+03:30","message":"started successfuly"}
 {"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-16T00:45:13+03:30","message":"started successfuly"}
 {"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-16T00:45:14+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-18T20:17:51+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-18T20:17:51+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-18T20:17:51+03:30","message":"started successfuly"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Err":"ERROR: missing FROM-clause entry for table \"user_follower\" (SQLSTATE 42P01)","StatusCode":202,"time":"2025-05-18T20:20:01+03:30","message":"error in getting followers"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-18T20:23:24+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-18T20:23:24+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-18T20:23:24+03:30","message":"started successfuly"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Err":"ERROR: column reference \"deleted_at\" is ambiguous (SQLSTATE 42702)","StatusCode":202,"time":"2025-05-18T20:23:28+03:30","message":"error in getting followers"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-18T20:26:58+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-18T20:26:58+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-18T20:26:58+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Userid":2,"time":"2025-05-18T20:27:06+03:30","message":"get followers"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-18T20:29:24+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-18T20:29:24+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-18T20:29:24+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Userid":2,"time":"2025-05-18T20:29:28+03:30","message":"get followers"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Userid":2,"time":"2025-05-18T20:29:29+03:30","message":"get followers"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Userid":2,"time":"2025-05-18T20:29:35+03:30","message":"get followers"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Userid":2,"time":"2025-05-18T20:29:35+03:30","message":"get followers"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Userid":2,"time":"2025-05-18T20:29:35+03:30","message":"get followers"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Userid":2,"time":"2025-05-18T20:29:36+03:30","message":"get followers"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Userid":2,"time":"2025-05-18T20:29:36+03:30","message":"get followers"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Userid":2,"time":"2025-05-18T20:29:36+03:30","message":"get followers"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Userid":2,"time":"2025-05-18T20:29:36+03:30","message":"get followers"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Userid":2,"time":"2025-05-18T20:29:36+03:30","message":"get followers"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-18T20:39:57+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-18T20:39:57+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-18T20:39:57+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Userid":2,"time":"2025-05-18T20:40:00+03:30","message":"get followers"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Userid":2,"time":"2025-05-18T20:49:29+03:30","message":"get followers"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Userid":2,"time":"2025-05-18T20:49:29+03:30","message":"get followers"}

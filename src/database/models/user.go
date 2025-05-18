@@ -20,12 +20,20 @@ type UserFollowers struct {
 	Follower   User `gorm:"foreignKey:FollowerId"`
 }
 
+type TweetLikes struct {
+	BaseModel
+	TweetId int
+	Tweet Tweet `gorm:"foreignKey:TweetId"`
+	UserId int
+	User User `gorm:"foreignKey:UserId"`
+}
+
 type Tweet struct {
 	BaseModel
-	Title    string   `gorm:"size:50;not null"`
-	Message  string   `gorm:"size:1000;not null"`
-	UserId   int      `json:"user_id" gorm:"not null"`
-	User     User     `gorm:"foreignKey:UserId"`
+	Title    string                 `gorm:"size:50;not null"`
+	Message  string                 `gorm:"size:1000;not null"`
+	UserId   int                    `json:"user_id" gorm:"not null"`
+	User     User                   `gorm:"foreignKey:UserId"`
 	Comments []dtos.CommentResponse `gorm:"foreignKey:TweetId"`
 }
 
@@ -36,4 +44,12 @@ type Comment struct {
 	UserId  int    `json:"user_id" gorm:"not null"`
 	User    User   `gorm:"foreignKey:UserId"`
 	Message string `gorm:"size:1000;not null"`
+}
+
+type File struct {
+	BaseModel
+	Name        string `gorm:"size:100;type:string;not null"`
+	Directory   string `gorm:"size:100;type:string;not null"`
+	Description string `gorm:"size:500;type:string;not null"`
+	MimeType    string `gorm:"size:20;type:string;not null"`
 }
