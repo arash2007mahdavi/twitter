@@ -6,7 +6,7 @@ import (
 )
 
 type BaseModel struct {
-	Id int `gorm:"primarykey"`
+	Id int `gorm:"primaryKey"`
 
 	CreatedBy  int           `gorm:"not null"`
 	ModifiedBy sql.NullInt64 `gorm:"null"`

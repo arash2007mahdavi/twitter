@@ -45,7 +45,6 @@ func (s *CommentService) PostComment(ctx context.Context, req *dtos.CommentCreat
 		tx.Rollback()
 		return nil, err
 	}
-	user_tweet :=
 	err = tx.Model(&models.Comment{}).Create(&comment).Error
 	if err != nil {
 		tx.Rollback()
