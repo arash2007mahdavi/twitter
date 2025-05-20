@@ -2,12 +2,12 @@ package models
 
 type User struct {
 	BaseModel
-	Username     string    `json:"username" gorm:"size:30;not null;unique"`
-	Firstname    string    `json:"firstname" gorm:"size:20;null"`
-	Lastname     string    `json:"lastname" gorm:"size:40;null"`
-	MobileNumber string    `json:"mobile_number" gorm:"size:11;not null;unique"`
-	Password     string    `json:"password" gorm:"size:50000;not null"`
-	Enabled      bool      `json:"enabled" gorm:"default:true"`
+	Username     string    `gorm:"size:30;not null;unique"`
+	Firstname    string    `gorm:"size:20;null"`
+	Lastname     string    `gorm:"size:40;null"`
+	MobileNumber string    `gorm:"size:11;not null;unique"`
+	Password     string    `gorm:"size:50000;not null"`
+	Enabled      bool      `gorm:"default:true"`
 	Tweets       []Tweet   `gorm:"foreignKey:UserId"`
 	Comments     []Comment `gorm:"foreignKey:UserId"`
 	Followers    []User    `gorm:"many2many:follows;joinForeignKey:FollowingID;JoinReferences:FollowerID"`
