@@ -36,75 +36,39 @@ func (s *TweetService) NewTweet(ctx context.Context, req *dtos.TweetCreate) (*dt
 	}
 	tweet.UserId = id_creator
 	tweet.CreatedBy = id_creator
-	user := dtos.UserResponse{}
-	err = tx.Model(&models.User{}).Where("id = ?", id_creator).First(&user).Error
+	tweet_res := dtos.TweetResponse{}
+	err = tx.Preload("User").Model(&models.Tweet{}).Where("id = ? AND deleted_at is null", tweet.Id).First(&tweet_res).Error
 	if err != nil {
-		tx.Rollback()
-		return nil, err
-	}
-	err = tx.Model(&models.Tweet{}).Create(&tweet).Error
-	if err != nil {
-		tx.Rollback()
 		return nil, err
 	}
 	tx.Commit()
-	tweet_res, _:= TypeComverter[dtos.TweetResponse](tweet)
-	tweet_res.User = user
-	return tweet_res, nil
+	return &tweet_res, nil
 }
 
 func (s *TweetService) GetTweetByID(ctx context.Context) (*dtos.TweetResponse, error) {
 	tweet_id, _:= strconv.Atoi(ctx.Value("tweet_id").(string))
 	tx := s.Database.WithContext(ctx).Begin()
 	var tweet dtos.TweetResponse
-	err := tx.Model(&models.Tweet{}).Where("id = ? AND deleted_by is null", tweet_id).First(&tweet).Error
+	err := tx.Preload("User").Preload("Comments").Preload("Comments.User").Model(&models.Tweet{}).Where("id = ? AND deleted_by is null", tweet_id).First(&tweet).Error
 	if err != nil {
 		tx.Rollback()
 		return nil, err
 	}
-	user_id := tweet.UserId
-	user := dtos.UserResponse{}
-	err = tx.Model(&models.User{}).Where("id = ?", user_id).First(&user).Error
-	if err != nil {
-		tx.Rollback()
-		return nil, err
-	}
-	tweet.User = user
-	comments := []dtos.CommentResponse{}
-	tx.Model(&models.Comment{}).Where("tweet_id = ? AND deleted_at is null", tweet_id).Find(&comments)
-	tweet.Comments = comments
 	tx.Commit()
 	return &tweet, nil
 }
 
 func (s *TweetService) GetTweets(ctx context.Context) ([]dtos.TweetResponse, error) {
 	user_id := ctx.Value("user_id").(int)
-	tweets := []models.Tweet{}
 	tx := s.Database.WithContext(ctx).Begin()
-	err := tx.Model(&models.Tweet{}).Where("user_id = ? AND deleted_by is null", user_id).Find(&tweets).Error
+	tweets := []dtos.TweetResponse{}
+	err := tx.Preload("User").Preload("Comments").Preload("Comments.User").Model(&models.Tweet{}).Where("user_id = ? AND deleted_by is null", user_id).Find(&tweets).Error
 	if err != nil {
 		tx.Rollback()
 		return nil, err
 	}
-	tweets_response := []dtos.TweetResponse{}
-	for _, tweet := range tweets {
-		res, _:= TypeComverter[dtos.TweetResponse](tweet)
-		tweets_comments := []models.Comment{}
-		err = tx.Model(&models.Comment{}).Where("tweet_id = ? AND deleted_at is null", tweet.Id).Find(&tweets_comments).Error
-		if err != nil {
-			tx.Rollback()
-			return nil, err
-		}
-		comments_response := []dtos.CommentResponse{}
-		for _, comment := range tweets_comments {
-			res, _:= TypeComverter[dtos.CommentResponse](comment)
-			comments_response = append(comments_response, *res)
-		}
-		res.Comments = comments_response
-		tweets_response = append(tweets_response, *res)
-	}
 	tx.Commit()
-	return tweets_response, nil
+	return tweets, nil
 }
 
 func (s *TweetService) Update(ctx context.Context, req *dtos.TweetUpdate) (*dtos.TweetResponse, error) {
@@ -119,10 +83,14 @@ func (s *TweetService) Update(ctx context.Context, req *dtos.TweetUpdate) (*dtos
 		tx.Rollback()
 		return nil, err
 	}
-	tweet := models.Tweet{}
-	tx.Model(&models.Tweet{}).Where("id = ? AND deleted_by is null", tweet_id).First(&tweet)
+	tweet := dtos.TweetResponse{}
+	err = tx.Preload("User").Preload("Comments").Preload("Comments.User").Model(&models.Tweet{}).Where("id = ? AND deleted_by is null", tweet_id).First(&tweet).Error
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
 	tx.Commit()
-	return TypeComverter[dtos.TweetResponse](tweet)
+	return &tweet, nil
 } 
 
 func (s *TweetService) Delete(ctx context.Context) error {
@@ -132,10 +100,18 @@ func (s *TweetService) Delete(ctx context.Context) error {
 	(data)["deleted_by"] = sql.NullInt64{Int64: int64(deleted_by), Valid: true}
 	(data)["deleted_at"] = sql.NullTime{Time: time.Now().UTC(), Valid: true}
 	tx := s.Database.WithContext(ctx).Begin()
-	err := tx.Model(&models.Tweet{}).Where("id = ? AND deleted_by is null", tweet_id).Updates(data).Error
+	err := tx.Model(&models.Tweet{}).Where("id = ? AND deleted_at is null", tweet_id).Updates(data).Error
 	if err != nil {
 		tx.Rollback()
-		return fmt.Errorf("user doesnt exists")
+		return fmt.Errorf("tweet couldnt delete")
+	}
+	data_comments := map[string]interface{}{}
+	(data_comments)["deleted_by"] = sql.NullInt64{Int64: int64(deleted_by), Valid: true}
+	(data_comments)["deleted_at"] = sql.NullTime{Time: time.Now().UTC(), Valid: true}
+	err = tx.Model(&models.Comment{}).Where("tweet_id = ? AND deleted_at is null", tweet_id).Updates(data_comments).Error
+	if err != nil {
+		tx.Rollback()
+		return fmt.Errorf("comments couldnt delete")
 	}
 	tx.Commit()
 	return nil
@@ -144,43 +120,23 @@ func (s *TweetService) Delete(ctx context.Context) error {
 func (s *TweetService) GetFollowingsTweets(ctx context.Context) ([]dtos.TweetResponse, error) {
 	user_id := ctx.Value("user_id")
 	tx := s.Database.WithContext(ctx).Begin()
-	followings := []models.UserFollowers{}
-	err := tx.Model(&models.UserFollowers{}).Where("follower_id = ? AND deleted_at is null", user_id).Find(&followings).Error
+	user := models.User{}
+	err := tx.Preload("Followings").Preload("Followings.Tweets").Model(&models.User{}).Where("id = ? AND deleted_at is null", user_id).First(&user).Error
 	if err != nil {
-		tx.Rollback()
 		return nil, err
 	}
-	followings_tweets := []dtos.TweetResponse{}
-	for _, userFollower := range followings {
-		tweets := []models.Tweet{}
-		err = tx.Model(&models.Tweet{}).Where("user_id = ? AND deleted_at is null", userFollower.UserId).Find(&tweets).Error
-		if err != nil {
-			tx.Rollback()
-			return nil, err
-		}
-		tweets_res := []dtos.TweetResponse{}
-		for _, tweet:= range tweets {
-			tweet_res, _:= TypeComverter[dtos.TweetResponse](tweet)
-			tweets_res = append(tweets_res, *tweet_res)
-		}
-		for _, tweet := range tweets_res {
-			comments := []models.Comment{}
-			err = tx.Model(&models.Comment{}).Where("tweet_id = ? AND deleted_at is null", tweet.Id).Find(&comments).Error
-			if err != nil {
-				tx.Rollback()
-				return nil, err
-			}
-			comments_res := []dtos.CommentResponse{}
-			for _, comment := range comments {
-				comment_res, _:= TypeComverter[dtos.CommentResponse](comment)
-				comments_res = append(comments_res, *comment_res)
-			}
-			tweet.Comments = comments_res
-			followings_tweets = append(followings_tweets, tweet)
-		}
-	} 
+	followings := user.Followings
+	followings_tweets := []models.Tweet{}
+	for _, following := range followings {
+		followings_tweets = append(followings_tweets, following.Tweets...)
+	}
 	tx.Commit()
-	return followings_tweets, nil
+	res := []dtos.TweetResponse{}
+	for _, tweet := range followings_tweets {
+		res_tweet, _:= TypeComverter[dtos.TweetResponse](tweet)
+		res = append(res, *res_tweet)
+	}
+	return res, nil
 }
 
 func selectRandomTweets(slice []models.Tweet, count int) []models.Tweet {

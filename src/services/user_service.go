@@ -108,7 +108,10 @@ func (s *UserService) GetUsers(ctx context.Context) (*[]dtos.UserResponse, error
 func (s *UserService) GetProfile(ctx context.Context) (*models.User, error) {
 	user := models.User{}
 	id := ctx.Value("user_id")
-	s.DB.Model(&user).Where("id = ?", id).First(&user)
+	err := s.DB.Preload("Tweets").Preload("Tweets.Comments").Preload("Comments").Preload("Comments.Tweet").Model(&user).Where("id = ?", id).First(&user).Error
+	if err != nil {
+		return nil ,err
+	}
 	return &user, nil
 }
 
@@ -116,13 +119,16 @@ func (s *UserService) GetFollowers(ctx context.Context) (*[]dtos.UserResponse, e
 	user_id := ctx.Value("user_id")
 	tx := s.DB.WithContext(ctx).Begin()
 
-	followers := []dtos.UserResponse{}
-
-	err := tx.Table("user_followers").Select("users.*").Joins("JOIN users ON user_followers.follower_id = users.id AND users.deleted_at is null").
-		Where("user_followers.user_id = ? AND user_followers.deleted_at is null", user_id).Scan(&followers).Error
-
+	user := models.User{}
+	err := tx.Preload("Followers").Model(&models.User{}).Where("id = ? AND deleted_at is null", user_id).First(&user).Error
 	if err != nil {
 		return nil, err
+	}
+
+	followers := []dtos.UserResponse{}
+	for _, follower := range user.Followers {
+		res, _:= TypeComverter[dtos.UserResponse](follower)
+		followers = append(followers, *res)
 	}
 	return &followers, nil
 }
@@ -131,12 +137,16 @@ func (s *UserService) GetFollowings(ctx context.Context) (*[]dtos.UserResponse, 
 	user_id := ctx.Value("user_id")
 	tx := s.DB.WithContext(ctx).Begin()
 
-	followings := []dtos.UserResponse{}
-
-	err := tx.Table("user_followers").Select("users.*").Joins("JOIN users ON user_followers.user_id = users.id AND users.deleted_at is null").
-		Where("user_followers.follower_id = ? AND user_followers.deleted_at is null", user_id).Scan(&followings).Error
+	user := models.User{}
+	err := tx.Preload("Followings").Model(&models.User{}).Where("id = ? AND deleted_at is null", user_id).First(&user).Error
 	if err != nil {
 		return nil, err
+	}
+
+	followings := []dtos.UserResponse{}
+	for _, following := range user.Followings {
+		res, _:= TypeComverter[dtos.UserResponse](following)
+		followings = append(followings, *res)
 	}
 	return &followings, nil
 }
@@ -145,19 +155,17 @@ func (s *UserService) Follow(ctx context.Context) error {
 	user_id := ctx.Value("user_id")
 	target_id := ctx.Value("target_id")
 	tx := s.DB.WithContext(ctx).Begin()
-	try_sample := models.UserFollowers{}
-	err := tx.Model(&models.UserFollowers{}).Where("user_id = ? AND follower_id = ? AND deleted_at is null", target_id, user_id).First(&try_sample).Error
-	if err == nil {
-		tx.Rollback()
+	var user, target models.User
+	err := tx.Model(&models.User{}).Where("id = ? AND deleted_at is null", user_id).First(&user).Error
+	if err != nil {
 		return err
 	}
-	user_follower := models.UserFollowers{
-		UserId: target_id.(int),
-		FollowerId: user_id.(int),
-	}
-	err = tx.Model(&models.UserFollowers{}).Create(&user_follower).Error
+	err = tx.Model(&models.User{}).Where("id = ? AND deleted_at is null", target_id).First(&target).Error
 	if err != nil {
-		tx.Rollback()
+		return err
+	}
+	err = tx.Model(&user).Association("Followings").Append(&target)
+	if err != nil {
 		return err
 	}
 	tx.Commit()
@@ -168,24 +176,14 @@ func (s *UserService) UnFollow(ctx context.Context) error {
 	user_id := ctx.Value("user_id")
 	target_id := ctx.Value("target_id")
 	tx := s.DB.WithContext(ctx).Begin()
-	user_follower := models.UserFollowers{}
-	err := tx.Model(&models.UserFollowers{}).Where("follower_id = ? AND user_id = ?", user_id, target_id).First(&user_follower).Error
+	var user, target models.User
+	err := tx.Model(&models.User{}).Where("id = ? AND deleted_at is null", user_id).First(&user).Error
 	if err != nil {
-		tx.Rollback()
-		return fmt.Errorf("there is no follower or following like that")
+		return err
 	}
-	if user_follower.DeletedAt.Valid {
-		tx.Rollback()
-		return fmt.Errorf("you unfollowed target username")
-	}
-	user_id_int := user_id.(int)
-	data := map[string]interface{}{}
-	(data)["deleted_at"] = sql.NullTime{Valid: true, Time: time.Now().UTC()}
-	(data)["deleted_by"] = sql.NullInt64{Valid: true, Int64: int64(user_id_int)}
-	err = tx.Model(&models.UserFollowers{}).Where("follower_id = ? AND user_id = ? AND deleted_at is null", user_id, target_id).Updates(data).Error
+	err = tx.Model(&models.User{}).Where("id = ? AND deleted_at is null", target_id).First(&target).Error
 	if err != nil {
-		tx.Rollback()
-		return fmt.Errorf("error in unfollow target")
+		return err
 	}
 	tx.Commit()
 	return nil
