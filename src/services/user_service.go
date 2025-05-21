@@ -186,6 +186,9 @@ func (s *UserService) UnFollow(ctx context.Context) error {
 		return err
 	}
 	err = tx.Model(&user).Association("Followings").Delete(&target)
+	if err != nil {
+		return err
+	}
 	tx.Commit()
 	return nil
 }
