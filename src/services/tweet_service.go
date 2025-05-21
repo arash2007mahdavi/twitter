@@ -69,14 +69,19 @@ func (s *TweetService) GetTweetByID(ctx context.Context) (*dtos.TweetResponse, e
 func (s *TweetService) GetTweets(ctx context.Context) ([]dtos.TweetResponse, error) {
 	user_id := ctx.Value("user_id").(int)
 	tx := s.Database.WithContext(ctx).Begin()
-	tweets := []dtos.TweetResponse{}
+	tweets := []models.Tweet{}
 	err := tx.Preload("User").Preload("Comments").Preload("Comments.User").Model(&models.Tweet{}).Where("user_id = ? AND deleted_by is null", user_id).Find(&tweets).Error
 	if err != nil {
 		tx.Rollback()
 		return nil, err
 	}
 	tx.Commit()
-	return tweets, nil
+	tweets_res := []dtos.TweetResponse{}
+	for _, tweet := range tweets {
+		res, _:= TypeComverter[dtos.TweetResponse](tweet)
+		tweets_res = append(tweets_res, *res)
+	}
+	return tweets_res, nil
 }
 
 func (s *TweetService) Update(ctx context.Context, req *dtos.TweetUpdate) (*dtos.TweetResponse, error) {

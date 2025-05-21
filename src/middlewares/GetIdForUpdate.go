@@ -3,6 +3,7 @@ package middlewares
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 	"twitter/src/database"
 	"twitter/src/database/models"
 	"twitter/src/responses"
@@ -15,9 +16,6 @@ func GetIdForUpdate(ctx *gin.Context) {
 	username := ctx.Query("username")
 	password := ctx.Query("password")
 	modified_by := ctx.Query("modified_by")
-	if len(modified_by) == 0 {
-		modified_by = "0"
-	}
 	if len(username)==0 || len(password)==0 {
 		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, fmt.Errorf("invalid query"), "enter username, password"))
 		return
@@ -31,6 +29,11 @@ func GetIdForUpdate(ctx *gin.Context) {
 		return
 	}
 	ctx.Set("user_id", user.Id)
-	ctx.Set("modified_by", modified_by)
+	user_id := strconv.Itoa(user.Id)
+	if len(modified_by) != 0 {
+		ctx.Set("modified_by", modified_by)
+	} else {
+		ctx.Set("modified_by", user_id)
+	}
 	ctx.Next()
 }
