@@ -36,11 +36,18 @@ func (s *TweetService) NewTweet(ctx context.Context, req *dtos.TweetCreate) (*dt
 	}
 	tweet.UserId = id_creator
 	tweet.CreatedBy = id_creator
-	tweet_res := dtos.TweetResponse{}
-	err = tx.Preload("User").Model(&models.Tweet{}).Where("id = ? AND deleted_at is null", tweet.Id).First(&tweet_res).Error
+	err = tx.Create(&tweet).Error
 	if err != nil {
 		return nil, err
 	}
+	tweet_2 := models.Tweet{}
+	err = tx.Preload("User").Model(&models.Tweet{}).Where("id = ? AND deleted_at is null", tweet.Id).First(&tweet_2).Error
+	if err != nil {
+		return nil, err
+	}
+	tweet_res := dtos.TweetResponse{}
+	res, _:= TypeComverter[dtos.TweetResponse](tweet_2)
+	tweet_res = *res
 	tx.Commit()
 	return &tweet_res, nil
 }
@@ -48,14 +55,15 @@ func (s *TweetService) NewTweet(ctx context.Context, req *dtos.TweetCreate) (*dt
 func (s *TweetService) GetTweetByID(ctx context.Context) (*dtos.TweetResponse, error) {
 	tweet_id, _:= strconv.Atoi(ctx.Value("tweet_id").(string))
 	tx := s.Database.WithContext(ctx).Begin()
-	var tweet dtos.TweetResponse
+	var tweet models.Tweet
 	err := tx.Preload("User").Preload("Comments").Preload("Comments.User").Model(&models.Tweet{}).Where("id = ? AND deleted_by is null", tweet_id).First(&tweet).Error
 	if err != nil {
 		tx.Rollback()
 		return nil, err
 	}
+	tweet_res, _:= TypeComverter[dtos.TweetResponse](tweet)
 	tx.Commit()
-	return &tweet, nil
+	return tweet_res, nil
 }
 
 func (s *TweetService) GetTweets(ctx context.Context) ([]dtos.TweetResponse, error) {

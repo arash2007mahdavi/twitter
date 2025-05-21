@@ -2,7 +2,6 @@ package services
 
 import (
 	"context"
-	"fmt"
 	"strconv"
 	"twitter/src/database"
 	"twitter/src/database/models"
@@ -26,33 +25,24 @@ func NewCommentService() *CommentService {
 
 func (s *CommentService) PostComment(ctx context.Context, req *dtos.CommentCreate) (*dtos.CommentResponse, error) {
 	user_id := ctx.Value("user_id")
+	user_id1, _:= user_id.(int)
 	tweet_id := ctx.Value("tweet_id")
 	tweet_id1, _:= strconv.Atoi(tweet_id.(string))
 	tx := s.Database.WithContext(ctx).Begin()
 	comment, _:= TypeComverter[models.Comment](req)
-	comment.CreatedBy = user_id.(int)
-	comment.UserId = user_id.(int)
-	user := dtos.UserResponse{}
-	err := tx.Model(&models.User{}).Where("id = ?", comment.UserId).First(&user).Error
-	if err != nil {
-		tx.Rollback()
-		return nil, err
-	}
+	comment.UserId = user_id1
+	comment.CreatedBy = user_id1
 	comment.TweetId = tweet_id1
-	tweet := dtos.TweetResponse{}
-	err = tx.Model(&models.Tweet{}).Where("id = ?", comment.TweetId).First(&tweet).Error
+	err := tx.Create(&comment).Error
 	if err != nil {
-		tx.Rollback()
 		return nil, err
 	}
-	err = tx.Model(&models.Comment{}).Create(&comment).Error
+	comment_1 := models.Comment{}
+	err = tx.Preload("User").Preload("Tweet").Preload("Tweet.User").Model(&models.Comment{}).Where("id = ? AND deleted_at is null", comment.Id).First(&comment_1).Error
 	if err != nil {
-		tx.Rollback()
-		return nil, fmt.Errorf("error in creating comment")
+		return nil, err
 	}
+	comment_res, _:= TypeComverter[dtos.CommentResponse](comment_1)
 	tx.Commit()
-	comment_res, _:= TypeComverter[dtos.CommentResponse](comment)
-	comment_res.User = user
-	comment_res.Tweet = tweet
 	return comment_res, nil
 }

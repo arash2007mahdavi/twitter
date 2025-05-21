@@ -16,5 +16,5 @@ type TweetResponse struct {
 	User     UserResponse      `json:"user"`
 	Title    string            `json:"title"`
 	Message  string            `json:"message"`
-	Comments []CommentResponse `json:"comments"`
+	Comments []CommentResponse `json:"comments,omitempty"`
 }

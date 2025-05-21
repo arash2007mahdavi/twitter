@@ -108,7 +108,7 @@ func (s *UserService) GetUsers(ctx context.Context) (*[]dtos.UserResponse, error
 func (s *UserService) GetProfile(ctx context.Context) (*models.User, error) {
 	user := models.User{}
 	id := ctx.Value("user_id")
-	err := s.DB.Preload("Tweets").Preload("Tweets.Comments").Preload("Comments").Preload("Comments.Tweet").Model(&user).Where("id = ?", id).First(&user).Error
+	err := s.DB.Preload("Tweets").Preload("Tweets.Comments").Preload("Comments").Preload("Comments.Tweet").Preload("Followings").Preload("Followers").Model(&user).Where("id = ?", id).First(&user).Error
 	if err != nil {
 		return nil ,err
 	}
@@ -185,6 +185,7 @@ func (s *UserService) UnFollow(ctx context.Context) error {
 	if err != nil {
 		return err
 	}
+	err = tx.Model(&user).Association("Followings").Delete(&target)
 	tx.Commit()
 	return nil
 }

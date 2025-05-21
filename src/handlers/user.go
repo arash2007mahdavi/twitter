@@ -126,6 +126,7 @@ func (h *UserHelper) Follow(ctx *gin.Context) {
 	err := h.Service.Follow(ctx)
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "error in follow"))
+		return
 	}
 	h.Logger.Info(logger.User, logger.Follow, "user followed other one", map[logger.ExtraCategory]interface{}{logger.Userid: ctx.Value("user_id"), logger.Targetid: ctx.Value("target_id")})
 	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, nil, "followed successfuly"))

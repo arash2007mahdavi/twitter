@@ -3,31 +3,20 @@ package migrations
 import (
 	"twitter/src/database"
 	"twitter/src/database/models"
-
-	"gorm.io/gorm"
 )
 
 func Up1() {
 	db := database.GetDB()
-	
-	tables := []interface{}{}
 
 	user := &models.User{}
 	tweet := &models.Tweet{}
 	comment := &models.Comment{}
 
-	checkTable(db, user, &tables)
-	checkTable(db, tweet, &tables)
-	checkTable(db, comment, &tables)
-
-	err := db.Migrator().CreateTable(tables...)
-	if err != nil {
-		panic(err)
-	}
+	db.AutoMigrate(&user, &tweet, &comment)
 }
 
-func checkTable(db *gorm.DB, table interface{}, tables *[]interface{}) {
-	if !db.Migrator().HasTable(table) {
-		*tables = append(*tables, table)
-	}
-}
+// func checkTable(db *gorm.DB, table interface{}, tables *[]interface{}) {
+// 	if !db.Migrator().HasTable(table) {
+// 		*tables = append(*tables, table)
+// 	}
+// }
