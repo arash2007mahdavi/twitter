@@ -71,3 +71,19 @@ func (s *CommentService) Update(ctx context.Context, req dtos.CommentUpdate) (dt
 	tx.Commit()
 	return *res, nil
 }
+
+func (s *CommentService) Delete(ctx context.Context) error {
+	comment_id := ctx.Value("comment_id")
+	deleted_by := ctx.Value("deleted_by").(int)
+	data := map[string]interface{}{}
+	(data)["deleted_by"] = sql.NullInt64{Int64: int64(deleted_by), Valid: true}
+	(data)["deleted_at"] = sql.NullTime{Time: time.Now().UTC(), Valid: true}
+	tx := s.Database.WithContext(ctx).Begin()
+	err := tx.Model(&models.Comment{}).Where("id = ? AND deleted_at is null", comment_id).Updates(data).Error
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+	tx.Commit()
+	return nil
+}

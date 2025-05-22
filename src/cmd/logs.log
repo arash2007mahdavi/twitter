@@ -241,3 +241,11 @@
 {"level":"info","AppName":"Twitter","Logger":"Zerologger","Admin":"arash2007mahdavi","time":"2025-05-23T00:11:53+03:30","message":"admin saw users"}
 {"level":"info","AppName":"Twitter","Logger":"Zerologger","Userid":2,"time":"2025-05-23T00:12:09+03:30","message":"get profile"}
 {"level":"info","AppName":"Twitter","Logger":"Zerologger","Userid":1,"time":"2025-05-23T00:13:00+03:30","message":"get profile"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-23T00:25:37+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-23T00:25:37+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-23T00:25:38+03:30","message":"started successfuly"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Err":"ERROR: column tweets.tweet_id does not exist (SQLSTATE 42703)","StatusCode":406,"time":"2025-05-23T00:26:05+03:30","message":"invalid comment"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-23T00:27:06+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-23T00:27:06+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-23T00:27:07+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Userid":1,"time":"2025-05-23T00:28:07+03:30","message":"get profile"}

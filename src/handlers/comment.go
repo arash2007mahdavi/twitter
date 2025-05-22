@@ -55,3 +55,12 @@ func (h *CommentHelper) UpdateComment(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, res, "comment updated successfuly"))
 }
+
+func (h *CommentHelper) DeleteComment(ctx *gin.Context) {
+	err := h.Service.Delete(ctx)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "error in delete comment"))
+		return
+	}
+	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, nil, "comment deleted successfuly"))
+}

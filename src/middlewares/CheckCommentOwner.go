@@ -41,7 +41,7 @@ func CheckCommentOwner(ctx *gin.Context) {
 		return
 	}
 	if comment.UserId != user.Id {
-		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, fmt.Errorf("error in user and tweet"), "the tweet isnt for the user"))
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, fmt.Errorf("error in user and comment"), "the comment isnt for the user"))
 		return
 	}
 	ctx.Set("comment_id", comment_id)
