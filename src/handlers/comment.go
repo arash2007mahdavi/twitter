@@ -40,3 +40,18 @@ func (h *CommentHelper) PostComment(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, res, "comment posted successfuly"))
 }
+
+func (h *CommentHelper) UpdateComment(ctx *gin.Context) {
+	req := dtos.CommentUpdate{}
+	err := ctx.ShouldBindJSON(&req)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithValidationError(http.StatusNotAcceptable, err, "validation error"))
+		return
+	}
+	res, err := h.Service.Update(ctx, req)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "error in updating comment"))
+		return
+	}
+	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, res, "comment updated successfuly"))
+}

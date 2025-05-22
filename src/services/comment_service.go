@@ -2,7 +2,9 @@ package services
 
 import (
 	"context"
+	"database/sql"
 	"strconv"
+	"time"
 	"twitter/src/database"
 	"twitter/src/database/models"
 	"twitter/src/dtos"
@@ -45,4 +47,27 @@ func (s *CommentService) PostComment(ctx context.Context, req *dtos.CommentCreat
 	comment_res, _:= TypeComverter[dtos.CommentResponse](comment_1)
 	tx.Commit()
 	return comment_res, nil
+}
+
+func (s *CommentService) Update(ctx context.Context, req dtos.CommentUpdate) (dtos.CommentResponse, error) {
+	comment_id := ctx.Value("comment_id")
+	modified_by := ctx.Value("modified_by").(int)
+	data, _:= TypeComverter[map[string]interface{}](req)
+	(*data)["modified_by"] = sql.NullInt64{Int64: int64(modified_by), Valid: true}
+	(*data)["modified_at"] = sql.NullTime{Time: time.Now().UTC(), Valid: true}
+	tx := s.Database.WithContext(ctx).Begin()
+	err := tx.Model(&models.Comment{}).Where("id = ? AND deleted_at is null", comment_id).Updates(&data).Error
+	if err != nil {
+		tx.Rollback()
+		return dtos.CommentResponse{}, err
+	}
+	comment_res := models.Comment{}
+	err = tx.Preload("Tweet").Preload("User").Model(&models.Comment{}).Where("id = ? AND deleted_at is null", comment_id).First(&comment_res).Error
+	if err != nil {
+		tx.Rollback()
+		return dtos.CommentResponse{}, err
+	}
+	res, _:= TypeComverter[dtos.CommentResponse](comment_res)
+	tx.Commit()
+	return *res, nil
 }

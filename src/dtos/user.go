@@ -16,9 +16,9 @@ type UserUpdate struct {
 }
 
 type UserResponse struct {
-	Id           int    `json:"id"`
-	Username     string `json:"username"`
+	Id           int    `json:"id,omitempty"`
+	Username     string `json:"username,omitempty"`
 	Firstname    string `json:"firstname,omitempty"`
 	Lastname     string `json:"lastname,omitempty"`
-	MobileNumber string `json:"mobile_number"`
+	MobileNumber string `json:"mobile_number,omitempty"`
 }
