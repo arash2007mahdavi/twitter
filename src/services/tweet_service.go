@@ -134,7 +134,7 @@ func (s *TweetService) GetFollowingsTweets(ctx context.Context) ([]dtos.TweetRes
 	user_id := ctx.Value("user_id")
 	tx := s.Database.WithContext(ctx).Begin()
 	user := models.User{}
-	err := tx.Preload("Followings").Preload("Followings.Tweets").Model(&models.User{}).Where("id = ? AND deleted_at is null", user_id).First(&user).Error
+	err := tx.Preload("Followings").Preload("Followings.Tweets").Preload("Followings.Tweets.Comments").Preload("Followings.Tweets.User").Model(&models.User{}).Where("id = ? AND deleted_at is null", user_id).First(&user).Error
 	if err != nil {
 		return nil, err
 	}

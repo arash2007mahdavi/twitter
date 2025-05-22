@@ -19,16 +19,16 @@ type Tweet struct {
 	Title    string    `json:"title,omitempty" gorm:"size:50;not null"`
 	Message  string    `json:"message,omitempty" gorm:"size:1000;not null"`
 	UserId   int       `json:"user_id,omitempty"`
-	User     User      `json:"user,omitempty" gorm:"foreignKey:UserId"`
+	User     *User      `json:"user,omitempty" gorm:"foreignKey:UserId"`
 	Comments []Comment `json:"comments,omitempty" gorm:"foreignKey:TweetId"`
 }
 
 type Comment struct {
 	BaseModel
 	TweetId int    `json:"tweet_id,omitempty"`
-	Tweet   Tweet  `json:"tweet,omitempty" gorm:"foreignKey:TweetId"`
+	Tweet   *Tweet  `json:"tweet,omitempty" gorm:"foreignKey:TweetId"`
 	UserId  int    `json:"user_id,omitempty"`
-	User    User   `json:"user,omitempty" gorm:"foreignKey:UserId"`
+	User    *User   `json:"user,omitempty" gorm:"foreignKey:UserId"`
 	Message string `json:"message,omitempty" gorm:"size:1000;not null"`
 }
 
