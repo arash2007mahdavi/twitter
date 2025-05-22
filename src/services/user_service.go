@@ -46,6 +46,16 @@ func (s *UserService) Create(ctx context.Context, req *dtos.UserCreate) (*dtos.U
 		return nil, fmt.Errorf("error in comverting model")
 	}
 	tx := s.DB.WithContext(ctx).Begin()
+	user_test := models.User{}
+	err = tx.Model(&models.User{}).Where("username = ? AND deleted_at is null", req.Username).First(&user_test).Error
+	if err == nil {
+		return nil, fmt.Errorf("the username used by someone else")
+	}
+	user_test = models.User{}
+	err = tx.Model(&models.User{}).Where("mobile_number = ? AND deleted_at is null", req.MobileNumber).First(&user_test).Error
+	if err == nil {
+		return nil, fmt.Errorf("the mobile number used by someone else")
+	}
 	err = tx.Create(data).Error
 	if err != nil {
 		tx.Rollback()
