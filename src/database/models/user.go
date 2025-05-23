@@ -6,7 +6,7 @@ type User struct {
 	Firstname    string    `json:"firstname,omitempty" gorm:"size:20;null"`
 	Lastname     string    `json:"lastname,omitempty" gorm:"size:40;null"`
 	MobileNumber string    `json:"mobile_number,omitempty" gorm:"size:11;not null;unique"`
-	Password     string    `json:"password,omitempty" gorm:"size:50000;not null"`
+	Password     string    `json:"-" gorm:"size:50000;not null"`
 	Enabled      bool      `json:"enabled,omitempty" gorm:"default:true"`
 	Tweets       []Tweet   `json:"tweets,omitempty" gorm:"foreignKey:UserId"`
 	Comments     []Comment `json:"comments,omitempty" gorm:"foreignKey:UserId"`

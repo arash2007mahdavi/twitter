@@ -257,3 +257,11 @@
 {"level":"info","AppName":"Twitter","Logger":"Zerologger","Userid":2,"time":"2025-05-24T00:36:01+03:30","message":"user updated successfuly"}
 {"level":"error","AppName":"Twitter","Logger":"Zerologger","Err":"crypto/bcrypt: hashedPassword is not the hash of the given password","StatusCode":406,"time":"2025-05-24T00:36:20+03:30","message":"invalid User"}
 {"level":"info","AppName":"Twitter","Logger":"Zerologger","Userid":2,"time":"2025-05-24T00:39:01+03:30","message":"user updated successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-24T00:41:40+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-24T00:41:40+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-24T00:41:40+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Userid":2,"time":"2025-05-24T00:42:01+03:30","message":"get profile"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-24T00:44:03+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-24T00:44:03+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-24T00:44:04+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Userid":2,"time":"2025-05-24T00:44:11+03:30","message":"get profile"}
