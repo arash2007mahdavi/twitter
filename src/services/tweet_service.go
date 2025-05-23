@@ -56,7 +56,7 @@ func (s *TweetService) GetTweetByID(ctx context.Context) (*dtos.TweetResponse, e
 	tweet_id, _:= strconv.Atoi(ctx.Value("tweet_id").(string))
 	tx := s.Database.WithContext(ctx).Begin()
 	var tweet models.Tweet
-	err := tx.Preload("User").Preload("Comments").Preload("Comments.User").Model(&models.Tweet{}).Where("id = ? AND deleted_by is null", tweet_id).First(&tweet).Error
+	err := tx.Preload("User", "enabled", true).Preload("Comments", "enabled", true).Preload("Comments.User", "enabled", true).Model(&models.Tweet{}).Where("id = ? AND deleted_by is null", tweet_id).First(&tweet).Error
 	if err != nil {
 		tx.Rollback()
 		return nil, err
@@ -70,7 +70,7 @@ func (s *TweetService) GetTweets(ctx context.Context) ([]dtos.TweetResponse, err
 	user_id := ctx.Value("user_id").(int)
 	tx := s.Database.WithContext(ctx).Begin()
 	tweets := []models.Tweet{}
-	err := tx.Preload("User").Preload("Comments").Preload("Comments.User").Model(&models.Tweet{}).Where("user_id = ? AND deleted_by is null", user_id).Find(&tweets).Error
+	err := tx.Preload("User", "enabled", true).Preload("Comments", "enabled", true).Preload("Comments.User", "enabled", true).Model(&models.Tweet{}).Where("user_id = ? AND deleted_by is null", user_id).Find(&tweets).Error
 	if err != nil {
 		tx.Rollback()
 		return nil, err
@@ -112,6 +112,7 @@ func (s *TweetService) Delete(ctx context.Context) error {
 	data := map[string]interface{}{}
 	(data)["deleted_by"] = sql.NullInt64{Int64: int64(deleted_by), Valid: true}
 	(data)["deleted_at"] = sql.NullTime{Time: time.Now().UTC(), Valid: true}
+	(data)["enabled"] = false
 	tx := s.Database.WithContext(ctx).Begin()
 	err := tx.Model(&models.Tweet{}).Where("id = ? AND deleted_at is null", tweet_id).Updates(data).Error
 	if err != nil {
@@ -121,6 +122,7 @@ func (s *TweetService) Delete(ctx context.Context) error {
 	data_comments := map[string]interface{}{}
 	(data_comments)["deleted_by"] = sql.NullInt64{Int64: int64(deleted_by), Valid: true}
 	(data_comments)["deleted_at"] = sql.NullTime{Time: time.Now().UTC(), Valid: true}
+	(data_comments)["enabled"] = false
 	err = tx.Model(&models.Comment{}).Where("tweet_id = ? AND deleted_at is null", tweet_id).Updates(data_comments).Error
 	if err != nil {
 		tx.Rollback()
@@ -134,7 +136,7 @@ func (s *TweetService) GetFollowingsTweets(ctx context.Context) ([]dtos.TweetRes
 	user_id := ctx.Value("user_id")
 	tx := s.Database.WithContext(ctx).Begin()
 	user := models.User{}
-	err := tx.Preload("Followings").Preload("Followings.Tweets").Preload("Followings.Tweets.Comments").Preload("Followings.Tweets.User").Model(&models.User{}).Where("id = ? AND deleted_at is null", user_id).First(&user).Error
+	err := tx.Preload("Followings").Preload("Followings.Tweets", "enabled = ?", true).Preload("Followings.Tweets.Comments", "enabled = ?", true).Preload("Followings.Tweets.User", "enabled = ?", true).Model(&models.User{}).Where("id = ? AND deleted_at is null", user_id).First(&user).Error
 	if err != nil {
 		return nil, err
 	}

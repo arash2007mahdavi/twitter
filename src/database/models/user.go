@@ -21,6 +21,7 @@ type Tweet struct {
 	UserId   int       `json:"user_id,omitempty"`
 	User     *User      `json:"user,omitempty" gorm:"foreignKey:UserId"`
 	Comments []Comment `json:"comments,omitempty" gorm:"foreignKey:TweetId"`
+	Enabled      bool      `json:"enabled,omitempty" gorm:"default:true"`
 }
 
 type Comment struct {
@@ -30,6 +31,7 @@ type Comment struct {
 	UserId  int    `json:"user_id,omitempty"`
 	User    *User   `json:"user,omitempty" gorm:"foreignKey:UserId"`
 	Message string `json:"message,omitempty" gorm:"size:1000;not null"`
+	Enabled      bool      `json:"enabled,omitempty" gorm:"default:true"`
 }
 
 type File struct {

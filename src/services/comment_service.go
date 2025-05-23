@@ -78,6 +78,7 @@ func (s *CommentService) Delete(ctx context.Context) error {
 	data := map[string]interface{}{}
 	(data)["deleted_by"] = sql.NullInt64{Int64: int64(deleted_by), Valid: true}
 	(data)["deleted_at"] = sql.NullTime{Time: time.Now().UTC(), Valid: true}
+	(data)["enabled"] = false
 	tx := s.Database.WithContext(ctx).Begin()
 	err := tx.Model(&models.Comment{}).Where("id = ? AND deleted_at is null", comment_id).Updates(data).Error
 	if err != nil {
