@@ -103,6 +103,10 @@ func (h *UserHelper) UpdateUser(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, responses.GenerateResponseWithValidationError(http.StatusBadRequest, err, ""))
 		return
 	}
+	if req.Password != "" {
+		hashedPassword, _:= bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
+		req.Password = string(hashedPassword)
+	}
 	res, err := h.Service.Update(ctx, &req)
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "error in updating user"))
