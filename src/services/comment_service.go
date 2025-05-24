@@ -40,7 +40,7 @@ func (s *CommentService) PostComment(ctx context.Context, req *dtos.CommentCreat
 		return nil, err
 	}
 	comment_1 := models.Comment{}
-	err = tx.Preload("User").Preload("Tweet").Preload("Tweet.User").Model(&models.Comment{}).Where("id = ? AND deleted_at is null", comment.Id).First(&comment_1).Error
+	err = tx.Preload("User").Preload("Tweet").Preload("Tweet.User").Model(&models.Comment{}).Where("id = ? AND enabled is true", comment.Id).First(&comment_1).Error
 	if err != nil {
 		return nil, err
 	}
@@ -56,13 +56,13 @@ func (s *CommentService) Update(ctx context.Context, req dtos.CommentUpdate) (dt
 	(*data)["modified_by"] = sql.NullInt64{Int64: int64(modified_by), Valid: true}
 	(*data)["modified_at"] = sql.NullTime{Time: time.Now().UTC(), Valid: true}
 	tx := s.Database.WithContext(ctx).Begin()
-	err := tx.Model(&models.Comment{}).Where("id = ? AND deleted_at is null", comment_id).Updates(&data).Error
+	err := tx.Model(&models.Comment{}).Where("id = ? AND enabled is true", comment_id).Updates(&data).Error
 	if err != nil {
 		tx.Rollback()
 		return dtos.CommentResponse{}, err
 	}
 	comment_res := models.Comment{}
-	err = tx.Preload("Tweet").Preload("User").Model(&models.Comment{}).Where("id = ? AND deleted_at is null", comment_id).First(&comment_res).Error
+	err = tx.Preload("Tweet").Preload("User").Model(&models.Comment{}).Where("id = ? AND enabled is true", comment_id).First(&comment_res).Error
 	if err != nil {
 		tx.Rollback()
 		return dtos.CommentResponse{}, err

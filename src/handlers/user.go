@@ -54,7 +54,11 @@ func (h *UserHelper) NewUser(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, responses.GenerateResponseWithValidationError(http.StatusBadRequest, err, "validation error"))
 		return
 	}
-	HashPassword, _:= bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
+	HashPassword, err:= bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "error in hashing password"))
+		return
+	}
 	req.Password = string(HashPassword)
 	test_otp := ctx.Query("otp")
 	if len(test_otp) == 0 {

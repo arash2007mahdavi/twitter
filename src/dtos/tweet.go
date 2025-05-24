@@ -6,8 +6,8 @@ type TweetCreate struct {
 }
 
 type TweetUpdate struct {
-	Title   string `json:"title" binding:"omitempty,min=2,max=50"`
-	Message string `json:"message" binding:"omitempty,min=10,max=1000"`
+	Title   string `json:"title,omitempty" binding:"omitempty,min=2,max=50"`
+	Message string `json:"message,omitempty" binding:"omitempty,min=10,max=1000"`
 }
 
 type TweetResponse struct {

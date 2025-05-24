@@ -47,12 +47,12 @@ func (s *UserService) Create(ctx context.Context, req *dtos.UserCreate) (*dtos.U
 	}
 	tx := s.DB.WithContext(ctx).Begin()
 	user_test := models.User{}
-	err = tx.Model(&models.User{}).Where("username = ? AND deleted_at is null", req.Username).First(&user_test).Error
+	err = tx.Model(&models.User{}).Where("username = ? AND enabled is true", req.Username).First(&user_test).Error
 	if err == nil {
 		return nil, fmt.Errorf("the username used by someone else")
 	}
 	user_test = models.User{}
-	err = tx.Model(&models.User{}).Where("mobile_number = ? AND deleted_at is null", req.MobileNumber).First(&user_test).Error
+	err = tx.Model(&models.User{}).Where("mobile_number = ? AND enabled is true", req.MobileNumber).First(&user_test).Error
 	if err == nil {
 		return nil, fmt.Errorf("the mobile number used by someone else")
 	}
@@ -118,7 +118,7 @@ func (s *UserService) GetUsers(ctx context.Context) (*[]dtos.UserResponse, error
 func (s *UserService) GetProfile(ctx context.Context) (*models.User, error) {
 	user := models.User{}
 	id := ctx.Value("user_id")
-	err := s.DB.Preload("Tweets").Preload("Tweets.Comments").Preload("Comments").Preload("Comments.Tweet").Preload("Followings").Preload("Followers").Model(&user).Where("id = ?", id).First(&user).Error
+	err := s.DB.Preload("Tweets", "enabled = ?", true).Preload("Tweets.Comments").Preload("Comments", "enabled = ?", true).Preload("Comments.Tweet").Preload("Followings").Preload("Followers").Model(&user).Where("id = ?", id).First(&user).Error
 	if err != nil {
 		return nil ,err
 	}
@@ -130,7 +130,7 @@ func (s *UserService) GetFollowers(ctx context.Context) (*[]dtos.UserResponse, e
 	tx := s.DB.WithContext(ctx).Begin()
 
 	user := models.User{}
-	err := tx.Preload("Followers").Model(&models.User{}).Where("id = ? AND deleted_at is null", user_id).First(&user).Error
+	err := tx.Preload("Followers").Model(&models.User{}).Where("id = ? AND deleted_by is null", user_id).First(&user).Error
 	if err != nil {
 		return nil, err
 	}
@@ -148,7 +148,7 @@ func (s *UserService) GetFollowings(ctx context.Context) (*[]dtos.UserResponse, 
 	tx := s.DB.WithContext(ctx).Begin()
 
 	user := models.User{}
-	err := tx.Preload("Followings").Model(&models.User{}).Where("id = ? AND deleted_at is null", user_id).First(&user).Error
+	err := tx.Preload("Followings").Model(&models.User{}).Where("id = ? AND deleted_by is null", user_id).First(&user).Error
 	if err != nil {
 		return nil, err
 	}
@@ -166,11 +166,11 @@ func (s *UserService) Follow(ctx context.Context) error {
 	target_id := ctx.Value("target_id")
 	tx := s.DB.WithContext(ctx).Begin()
 	var user, target models.User
-	err := tx.Model(&models.User{}).Where("id = ? AND deleted_at is null", user_id).First(&user).Error
+	err := tx.Model(&models.User{}).Where("id = ? AND deleted_by is null", user_id).First(&user).Error
 	if err != nil {
 		return err
 	}
-	err = tx.Model(&models.User{}).Where("id = ? AND deleted_at is null", target_id).First(&target).Error
+	err = tx.Model(&models.User{}).Where("id = ? AND deleted_by is null", target_id).First(&target).Error
 	if err != nil {
 		return err
 	}
@@ -187,11 +187,11 @@ func (s *UserService) UnFollow(ctx context.Context) error {
 	target_id := ctx.Value("target_id")
 	tx := s.DB.WithContext(ctx).Begin()
 	var user, target models.User
-	err := tx.Model(&models.User{}).Where("id = ? AND deleted_at is null", user_id).First(&user).Error
+	err := tx.Model(&models.User{}).Where("id = ? AND deleted_by is null", user_id).First(&user).Error
 	if err != nil {
 		return err
 	}
-	err = tx.Model(&models.User{}).Where("id = ? AND deleted_at is null", target_id).First(&target).Error
+	err = tx.Model(&models.User{}).Where("id = ? AND deleted_by is null", target_id).First(&target).Error
 	if err != nil {
 		return err
 	}
