@@ -101,3 +101,21 @@ func (s *CommentService) GetCommentById(ctx context.Context) (*models.Comment, e
 	tx.Commit()
 	return &comment, nil
 }
+
+func (s *CommentService) GetComments(ctx context.Context) ([]dtos.CommentResponse, error) {
+	user_id := ctx.Value("user_id")
+	tx := s.Database.WithContext(ctx).Begin()
+	comments := []models.Comment{}
+	err := tx.Preload("Tweet", "enabled = ?", true).Preload("User", "enabled = ?", true).Preload("Tweet.User", "enabled = ?", true).Model(&models.Comment{}).Where("user_id = ? AND enabled is true", user_id).Find(&comments).Error
+	if err != nil {
+		tx.Rollback()
+		return []dtos.CommentResponse{}, err
+	}
+	tx.Commit()
+	comments_res := []dtos.CommentResponse{}
+	for _, comment := range comments {
+		res, _:= TypeComverter[dtos.CommentResponse](comment)
+		comments_res = append(comments_res, *res)
+	}
+	return comments_res, nil
+}

@@ -80,3 +80,12 @@ func (h *CommentHelper) GetComment(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, res, "comment recived"))
 }
+
+func (h *CommentHelper) GetComments(ctx *gin.Context) {
+	res, err := h.Service.GetComments(ctx)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "error in get comments"))
+		return
+	}
+	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, res, "comments recived"))
+}

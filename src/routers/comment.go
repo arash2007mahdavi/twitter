@@ -13,5 +13,5 @@ func CommentRouter(r *gin.RouterGroup) {
 	r.PUT("/update", middlewares.CheckCommentOwner, h.UpdateComment)
 	r.DELETE("/delete", middlewares.CheckForDeleteComment, h.DeleteComment)
 	r.GET("/get/comment", h.GetComment)
-	r.GET("")
+	r.GET("/get/comments", middlewares.GetIdFromUsername, h.GetComments)
 }
