@@ -315,3 +315,22 @@
 {"level":"info","AppName":"Twitter","Logger":"Zerologger","Tweetid":"2","time":"2025-05-24T13:34:14+03:30","message":"tweet updated"}
 {"level":"info","AppName":"Twitter","Logger":"Zerologger","Tweetid":"2","time":"2025-05-24T13:34:21+03:30","message":"tweet updated"}
 {"level":"info","AppName":"Twitter","Logger":"Zerologger","Tweetid":"2","time":"2025-05-24T13:36:20+03:30","message":"tweet got"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-24T14:58:28+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-24T14:58:28+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-24T14:58:28+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-24T15:21:57+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-24T15:21:57+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-24T15:21:58+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Tweetid":"2","time":"2025-05-24T15:22:02+03:30","message":"tweet got"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-24T15:23:21+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-24T15:23:21+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-24T15:23:22+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Tweetid":"2","time":"2025-05-24T15:23:22+03:30","message":"tweet got"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-24T19:06:05+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-24T19:06:05+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-24T19:06:06+03:30","message":"started successfuly"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Err":"error in query","StatusCode":406,"time":"2025-05-24T19:07:03+03:30","message":"enter comment_id"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Err":"ERROR: invalid input syntax for type bigint: \"\" (SQLSTATE 22P02)","StatusCode":406,"time":"2025-05-24T19:07:03+03:30","message":"error in get comment"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-24T19:08:40+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-24T19:08:40+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-24T19:08:40+03:30","message":"started successfuly"}

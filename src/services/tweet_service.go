@@ -52,7 +52,7 @@ func (s *TweetService) NewTweet(ctx context.Context, req *dtos.TweetCreate) (*dt
 	return &tweet_res, nil
 }
 
-func (s *TweetService) GetTweetByID(ctx context.Context) (*dtos.TweetResponse, error) {
+func (s *TweetService) GetTweetByID(ctx context.Context) (*models.Tweet, error) {
 	tweet_id, _:= strconv.Atoi(ctx.Value("tweet_id").(string))
 	tx := s.Database.WithContext(ctx).Begin()
 	var tweet models.Tweet
@@ -61,9 +61,8 @@ func (s *TweetService) GetTweetByID(ctx context.Context) (*dtos.TweetResponse, e
 		tx.Rollback()
 		return nil, err
 	}
-	tweet_res, _:= TypeComverter[dtos.TweetResponse](tweet)
 	tx.Commit()
-	return tweet_res, nil
+	return &tweet, nil
 }
 
 func (s *TweetService) GetTweets(ctx context.Context) ([]dtos.TweetResponse, error) {

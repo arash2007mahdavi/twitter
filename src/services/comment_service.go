@@ -88,3 +88,16 @@ func (s *CommentService) Delete(ctx context.Context) error {
 	tx.Commit()
 	return nil
 }
+
+func (s *CommentService) GetCommentById(ctx context.Context) (*models.Comment, error) {
+	comment_id := ctx.Value("comment_id")
+	tx := s.Database.WithContext(ctx).Begin()
+	comment := models.Comment{}
+	err := tx.Preload("Tweet", "enabled = ?", true).Preload("User", "enabled = ?", true).Preload("Tweet.User", "enabled = ?", true).Model(&models.Comment{}).Where("id = ? AND enabled is true", comment_id).First(&comment).Error
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+	tx.Commit()
+	return &comment, nil
+}
