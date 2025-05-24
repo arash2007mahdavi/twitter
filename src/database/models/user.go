@@ -10,6 +10,8 @@ type User struct {
 	Enabled      bool      `json:"enabled,omitempty" gorm:"default:true"`
 	Tweets       []Tweet   `json:"tweets,omitempty" gorm:"foreignKey:UserId"`
 	Comments     []Comment `json:"comments,omitempty" gorm:"foreignKey:UserId"`
+	TweetLikes   []Tweet   `json:"tweet_likes,omitempty" gorm:"many2many:tweet_likes;joinForeignKey:UserId;JoinRefrences:TweetId"`
+	CommentLikes []Comment `json:"comment_likes,omitempty" gorm:"many2many:comment_likes;joinForeignKey:UserId;JoinRefrences:CommentId"`
 	Followers    []User    `json:"followers,omitempty" gorm:"many2many:follows;joinForeignKey:FollowingID;JoinReferences:FollowerID"`
 	Followings   []User    `json:"followings,omitempty" gorm:"many2many:follows;joinForeignKey:FollowerID;JoinReferences:FollowingID"`
 }
@@ -21,6 +23,7 @@ type Tweet struct {
 	UserId   int       `json:"user_id,omitempty"`
 	User     *User     `json:"user,omitempty" gorm:"foreignKey:UserId"`
 	Comments []Comment `json:"comments,omitempty" gorm:"foreignKey:TweetId"`
+	Likes    []User    `json:"likes,omitempty" gorm:"many2many:tweet_likes;joinForeignKey:TweetId;JoinRefrences:UserId"`
 	Enabled  bool      `json:"enabled,omitempty" gorm:"default:true"`
 }
 
@@ -31,6 +34,7 @@ type Comment struct {
 	UserId  int    `json:"user_id,omitempty"`
 	User    *User  `json:"user,omitempty" gorm:"foreignKey:UserId"`
 	Message string `json:"message,omitempty" gorm:"size:1000;not null"`
+	Likes []User `json:"likes,omitempty" gorm:"many2many:comment_likes;joinForeignKey:CommentId;JoinRefrences:UserId"`
 	Enabled bool   `json:"enabled,omitempty" gorm:"default:true"`
 }
 

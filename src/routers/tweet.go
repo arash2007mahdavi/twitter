@@ -15,5 +15,6 @@ func TweetRouter(r *gin.RouterGroup) {
 	r.GET("/get/followings/tweets", middlewares.GetIdFromUsernameAndPassword, h.GetFollowingsTweets)
 	r.GET("/explore", h.TweetExplore)
 	r.PUT("/update", middlewares.CheckTweetOwner, h.UpdateTweet)
+	r.POST("/like", middlewares.GetIdFromUsernameAndPassword, h.LikeTweet)
 	r.DELETE("/delete", middlewares.CheckForDeleteTweet, h.DeleteTweet)
 }

@@ -56,7 +56,7 @@ func (s *TweetService) GetTweetByID(ctx context.Context) (*models.Tweet, error) 
 	tweet_id, _:= strconv.Atoi(ctx.Value("tweet_id").(string))
 	tx := s.Database.WithContext(ctx).Begin()
 	var tweet models.Tweet
-	err := tx.Preload("User", "enabled", true).Preload("Comments", "enabled", true).Preload("Comments.User").Model(&models.Tweet{}).Where("id = ? AND enabled is true", tweet_id).First(&tweet).Error
+	err := tx.Preload("User", "enabled", true).Preload("Comments", "enabled", true).Preload("Comments.User").Preload("Likes").Model(&models.Tweet{}).Where("id = ? AND enabled is true", tweet_id).First(&tweet).Error
 	if err != nil {
 		tx.Rollback()
 		return nil, err
@@ -69,7 +69,7 @@ func (s *TweetService) GetTweets(ctx context.Context) ([]dtos.TweetResponse, err
 	user_id := ctx.Value("user_id").(int)
 	tx := s.Database.WithContext(ctx).Begin()
 	tweets := []models.Tweet{}
-	err := tx.Preload("User", "enabled", true).Preload("Comments", "enabled", true).Preload("Comments.User", "enabled", true).Model(&models.Tweet{}).Where("user_id = ? AND enabled is true", user_id).Find(&tweets).Error
+	err := tx.Preload("User", "enabled", true).Preload("Comments", "enabled", true).Preload("Comments.User", "enabled", true).Preload("Likes").Model(&models.Tweet{}).Where("user_id = ? AND enabled is true", user_id).Find(&tweets).Error
 	if err != nil {
 		tx.Rollback()
 		return nil, err
@@ -96,7 +96,7 @@ func (s *TweetService) Update(ctx context.Context, req *dtos.TweetUpdate) (*dtos
 		return nil, err
 	}
 	tweet := dtos.TweetResponse{}
-	err = tx.Preload("User").Preload("Comments", "enabled = ?", true).Preload("Comments.User").Model(&models.Tweet{}).Where("id = ? AND enabled is true", tweet_id).First(&tweet).Error
+	err = tx.Preload("User").Preload("Comments", "enabled = ?", true).Preload("Comments.User").Preload("Likes").Model(&models.Tweet{}).Where("id = ? AND enabled is true", tweet_id).First(&tweet).Error
 	if err != nil {
 		tx.Rollback()
 		return nil, err
@@ -135,7 +135,7 @@ func (s *TweetService) GetFollowingsTweets(ctx context.Context) ([]dtos.TweetRes
 	user_id := ctx.Value("user_id")
 	tx := s.Database.WithContext(ctx).Begin()
 	user := models.User{}
-	err := tx.Preload("Followings").Preload("Followings.Tweets", "enabled = ?", true).Preload("Followings.Tweets.Comments", "enabled = ?", true).Preload("Followings.Tweets.User", "enabled = ?", true).Model(&models.User{}).Where("id = ? AND enabled is true", user_id).First(&user).Error
+	err := tx.Preload("Followings").Preload("Followings.Tweets", "enabled = ?", true).Preload("Followings.Tweets.Comments", "enabled = ?", true).Preload("Followings.Tweets.User", "enabled = ?", true).Preload("Likes").Model(&models.User{}).Where("id = ? AND enabled is true", user_id).First(&user).Error
 	if err != nil {
 		return nil, err
 	}
@@ -189,4 +189,26 @@ func (s *TweetService) TweetExplore(ctx context.Context) (*[]dtos.TweetResponse,
 	}
 	tx.Commit()
 	return &tweets_res, nil
+}
+
+func (s *TweetService) LikeTweet(ctx context.Context) error {
+	user_id := ctx.Value("user_id")
+	tweet_id := ctx.Value("tweet_id")
+	tx := s.Database.WithContext(ctx).Begin()
+	user := models.User{}
+	err := tx.Model(&models.User{}).Where("id = ? AND enabled is true", user_id).First(&user).Error
+	if err != nil {
+		return err
+	}
+	tweet := models.Tweet{}
+	err = tx.Model(&models.Tweet{}).Where("id = ? AND enabled is true", tweet_id).First(&tweet).Error
+	if err != nil {
+		return err
+	}
+	err = tx.Model(&user).Association("TweetLikes").Append(&tweet)
+	if err != nil {
+		return err
+	}
+	tx.Commit()
+	return nil
 }

@@ -89,3 +89,18 @@ func (h *CommentHelper) GetComments(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, res, "comments recived"))
 }
+
+func (h *CommentHelper) LikeComment(ctx *gin.Context) {
+	comment_id := ctx.Query("comment_id")
+	if len(comment_id) == 0 {
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, fmt.Errorf("error in get query"), "enter comment_id"))
+		return
+	}
+	ctx.Set("comment_id", comment_id)
+	err := h.Service.LikeComment(ctx)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "error in like comment"))
+		return
+	}
+	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, "the comment liked successfuly", "comment liked"))
+}

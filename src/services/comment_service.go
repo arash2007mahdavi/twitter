@@ -62,7 +62,7 @@ func (s *CommentService) Update(ctx context.Context, req dtos.CommentUpdate) (dt
 		return dtos.CommentResponse{}, err
 	}
 	comment_res := models.Comment{}
-	err = tx.Preload("Tweet").Preload("User").Model(&models.Comment{}).Where("id = ? AND enabled is true", comment_id).First(&comment_res).Error
+	err = tx.Preload("Tweet").Preload("User").Preload("Likes").Model(&models.Comment{}).Where("id = ? AND enabled is true", comment_id).First(&comment_res).Error
 	if err != nil {
 		tx.Rollback()
 		return dtos.CommentResponse{}, err
@@ -93,7 +93,7 @@ func (s *CommentService) GetCommentById(ctx context.Context) (*models.Comment, e
 	comment_id := ctx.Value("comment_id")
 	tx := s.Database.WithContext(ctx).Begin()
 	comment := models.Comment{}
-	err := tx.Preload("Tweet", "enabled = ?", true).Preload("User", "enabled = ?", true).Preload("Tweet.User", "enabled = ?", true).Model(&models.Comment{}).Where("id = ? AND enabled is true", comment_id).First(&comment).Error
+	err := tx.Preload("Tweet", "enabled = ?", true).Preload("User", "enabled = ?", true).Preload("Tweet.User", "enabled = ?", true).Preload("Likes").Model(&models.Comment{}).Where("id = ? AND enabled is true", comment_id).First(&comment).Error
 	if err != nil {
 		tx.Rollback()
 		return nil, err
@@ -106,7 +106,7 @@ func (s *CommentService) GetComments(ctx context.Context) ([]dtos.CommentRespons
 	user_id := ctx.Value("user_id")
 	tx := s.Database.WithContext(ctx).Begin()
 	comments := []models.Comment{}
-	err := tx.Preload("Tweet", "enabled = ?", true).Preload("User", "enabled = ?", true).Preload("Tweet.User", "enabled = ?", true).Model(&models.Comment{}).Where("user_id = ? AND enabled is true", user_id).Find(&comments).Error
+	err := tx.Preload("Tweet", "enabled = ?", true).Preload("User", "enabled = ?", true).Preload("Tweet.User", "enabled = ?", true).Preload("Likes").Model(&models.Comment{}).Where("user_id = ? AND enabled is true", user_id).Find(&comments).Error
 	if err != nil {
 		tx.Rollback()
 		return []dtos.CommentResponse{}, err
@@ -118,4 +118,27 @@ func (s *CommentService) GetComments(ctx context.Context) ([]dtos.CommentRespons
 		comments_res = append(comments_res, *res)
 	}
 	return comments_res, nil
+}
+
+func (s *CommentService) LikeComment(ctx context.Context) error {
+	user_id := ctx.Value("user_id")
+	comment_id := ctx.Value("comment_id")
+	tx := s.Database.WithContext(ctx).Begin()
+	user := models.User{}
+	err := tx.Model(&models.User{}).Where("id = ? AND enabled is true", user_id).First(&user).Error
+	if err != nil {
+		return err
+	}
+	comment := models.Comment{}
+	err = tx.Model(&models.Comment{}).Where("id = ? AND enabled is true", comment_id).First(&comment).Error
+	if err != nil {
+		return err
+	}
+	err = tx.Model(&user).Association("CommentLikes").Append(&comment)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+	tx.Commit()
+	return nil
 }

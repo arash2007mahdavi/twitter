@@ -118,7 +118,7 @@ func (s *UserService) GetUsers(ctx context.Context) (*[]dtos.UserResponse, error
 func (s *UserService) GetProfile(ctx context.Context) (*models.User, error) {
 	user := models.User{}
 	id := ctx.Value("user_id")
-	err := s.DB.Preload("Tweets", "enabled = ?", true).Preload("Tweets.Comments").Preload("Comments", "enabled = ?", true).Preload("Comments.Tweet").Preload("Followings").Preload("Followers").Model(&user).Where("id = ?", id).First(&user).Error
+	err := s.DB.Preload("Tweets", "enabled = ?", true).Preload("Tweets.Comments").Preload("Comments", "enabled = ?", true).Preload("Comments.Tweet").Preload("Followings").Preload("Followers").Preload("TweetLikes").Preload("CommentLikes").Model(&user).Where("id = ?", id).First(&user).Error
 	if err != nil {
 		return nil ,err
 	}
