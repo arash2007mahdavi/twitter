@@ -80,7 +80,7 @@ func (s *CommentService) Delete(ctx context.Context) error {
 	(data)["deleted_at"] = sql.NullTime{Time: time.Now().UTC(), Valid: true}
 	(data)["enabled"] = false
 	tx := s.Database.WithContext(ctx).Begin()
-	err := tx.Model(&models.Comment{}).Where("id = ? AND deleted_at is null", comment_id).Updates(data).Error
+	err := tx.Model(&models.Comment{}).Where("id = ? AND enabled is true", comment_id).Updates(data).Error
 	if err != nil {
 		tx.Rollback()
 		return err

@@ -77,7 +77,7 @@ func (s *UserService) Update(ctx context.Context, req *dtos.UserUpdate) (*dtos.U
 	tx := s.DB.WithContext(ctx).Begin()
 	model := new(models.User)
 	err = tx.Model(model).
-		Where("id = ? AND deleted_by is null", ctx.Value("user_id")).
+		Where("id = ? AND enabled is true", ctx.Value("user_id")).
 		Updates(*data).Error
 	if err != nil {
 		tx.Rollback()
@@ -99,7 +99,7 @@ func (s *UserService) Delete(ctx context.Context) error {
 	tx := s.DB.WithContext(ctx).Begin()
 	model := new(models.User)
 	err := tx.Model(&model).
-		Where("id = ? AND deleted_by is null", int_id).
+		Where("id = ? AND enabled is true", int_id).
 		Updates(data).Error
 	if err != nil {
 		tx.Rollback()
@@ -130,7 +130,7 @@ func (s *UserService) GetFollowers(ctx context.Context) (*[]dtos.UserResponse, e
 	tx := s.DB.WithContext(ctx).Begin()
 
 	user := models.User{}
-	err := tx.Preload("Followers").Model(&models.User{}).Where("id = ? AND deleted_by is null", user_id).First(&user).Error
+	err := tx.Preload("Followers").Model(&models.User{}).Where("id = ? AND enabled is true", user_id).First(&user).Error
 	if err != nil {
 		return nil, err
 	}
@@ -148,7 +148,7 @@ func (s *UserService) GetFollowings(ctx context.Context) (*[]dtos.UserResponse, 
 	tx := s.DB.WithContext(ctx).Begin()
 
 	user := models.User{}
-	err := tx.Preload("Followings").Model(&models.User{}).Where("id = ? AND deleted_by is null", user_id).First(&user).Error
+	err := tx.Preload("Followings").Model(&models.User{}).Where("id = ? AND enabled is true", user_id).First(&user).Error
 	if err != nil {
 		return nil, err
 	}
@@ -166,11 +166,11 @@ func (s *UserService) Follow(ctx context.Context) error {
 	target_id := ctx.Value("target_id")
 	tx := s.DB.WithContext(ctx).Begin()
 	var user, target models.User
-	err := tx.Model(&models.User{}).Where("id = ? AND deleted_by is null", user_id).First(&user).Error
+	err := tx.Model(&models.User{}).Where("id = ? AND enabled is true", user_id).First(&user).Error
 	if err != nil {
 		return err
 	}
-	err = tx.Model(&models.User{}).Where("id = ? AND deleted_by is null", target_id).First(&target).Error
+	err = tx.Model(&models.User{}).Where("id = ? AND enabled is true", target_id).First(&target).Error
 	if err != nil {
 		return err
 	}
@@ -187,11 +187,11 @@ func (s *UserService) UnFollow(ctx context.Context) error {
 	target_id := ctx.Value("target_id")
 	tx := s.DB.WithContext(ctx).Begin()
 	var user, target models.User
-	err := tx.Model(&models.User{}).Where("id = ? AND deleted_by is null", user_id).First(&user).Error
+	err := tx.Model(&models.User{}).Where("id = ? AND enabled is true", user_id).First(&user).Error
 	if err != nil {
 		return err
 	}
-	err = tx.Model(&models.User{}).Where("id = ? AND deleted_by is null", target_id).First(&target).Error
+	err = tx.Model(&models.User{}).Where("id = ? AND enabled is true", target_id).First(&target).Error
 	if err != nil {
 		return err
 	}
