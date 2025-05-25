@@ -104,3 +104,18 @@ func (h *CommentHelper) LikeComment(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, "the comment liked successfuly", "comment liked"))
 }
+
+func (h *CommentHelper) DislikeComment(ctx *gin.Context) {
+	comment_id := ctx.Query("comment_id")
+	if len(comment_id) == 0 {
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, fmt.Errorf("error in get query"), "enter comment_id"))
+		return
+	}
+	ctx.Set("comment_id", comment_id)
+	err := h.Service.DislikeComment(ctx)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "error in dislike comment"))
+		return
+	}
+	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, "the comment disliked successfuly", "comment disliked"))
+}

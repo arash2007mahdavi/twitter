@@ -128,3 +128,18 @@ func (h *TweetHelper) LikeTweet(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, "liked successfuly", "tweet liked"))
 }
+
+func (h *TweetHelper) DislikeTweet(ctx *gin.Context) {
+	tweet_id := ctx.Query("tweet_id")
+	if len(tweet_id) == 0 {
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, fmt.Errorf("error in get query"), "enter tweet_id"))
+		return
+	}
+	ctx.Set("tweet_id", tweet_id)
+	err := h.Service.DislikeTweet(ctx)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "error in dislike tweet"))
+		return
+	}
+	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, "disliked successfuly", "tweet disliked"))
+}

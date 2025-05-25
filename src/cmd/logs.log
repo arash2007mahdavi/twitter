@@ -366,3 +366,23 @@
 {"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-24T23:49:30+03:30","message":"started successfuly"}
 {"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-24T23:49:30+03:30","message":"started successfuly"}
 {"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-24T23:49:30+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-25T20:47:22+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-25T20:47:22+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-25T20:47:22+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","MobileNumber":"09945092968","time":"2025-05-25T20:48:17+03:30","message":"new otp set"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","MobileNumber":"09945092968","time":"2025-05-25T20:48:54+03:30","message":"otp validated successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Username":"arash2007mahdavi","time":"2025-05-25T20:48:54+03:30","message":"new user added"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Userid":1,"time":"2025-05-25T20:49:32+03:30","message":"user updated successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","MobileNumber":"09107288663","time":"2025-05-25T20:50:10+03:30","message":"new otp set"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Err":"Key: 'UserCreate.Password' Error:Field validation for 'Password' failed on the 'password' tag","StatusCode":400,"time":"2025-05-25T20:52:09+03:30","message":"validation error"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Err":"this mobileNumber doesnt exists","StatusCode":406,"time":"2025-05-25T20:52:25+03:30","message":"error in validate otp"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","MobileNumber":"09107288663","time":"2025-05-25T20:52:48+03:30","message":"new otp set"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","MobileNumber":"09107288663","time":"2025-05-25T20:52:58+03:30","message":"otp validated successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Username":"milad1999","time":"2025-05-25T20:52:58+03:30","message":"new user added"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Userid":2,"time":"2025-05-25T20:54:00+03:30","message":"user updated successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Tweetid":1,"Userid":1,"time":"2025-05-25T20:58:03+03:30","message":"new tweet posted"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-25T21:48:13+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-25T21:48:13+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-25T21:48:13+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Userid":1,"time":"2025-05-25T21:50:23+03:30","message":"tweets got"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Userid":2,"time":"2025-05-25T21:54:00+03:30","message":"get profile"}

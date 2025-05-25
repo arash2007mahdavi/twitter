@@ -13,6 +13,7 @@ func CommentRouter(r *gin.RouterGroup) {
 	r.PUT("/update", middlewares.CheckCommentOwner, h.UpdateComment)
 	r.DELETE("/delete", middlewares.CheckForDeleteComment, h.DeleteComment)
 	r.POST("/like", middlewares.GetIdFromUsernameAndPassword, h.LikeComment)
+	r.POST("/dislike", middlewares.GetIdFromUsernameAndPassword, h.DislikeComment)
 	r.GET("/get/comment", h.GetComment)
 	r.GET("/get/comments", middlewares.GetIdFromUsername, h.GetComments)
 }

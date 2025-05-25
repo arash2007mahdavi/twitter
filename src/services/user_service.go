@@ -118,7 +118,13 @@ func (s *UserService) GetUsers(ctx context.Context) (*[]dtos.UserResponse, error
 func (s *UserService) GetProfile(ctx context.Context) (*models.User, error) {
 	user := models.User{}
 	id := ctx.Value("user_id")
-	err := s.DB.Preload("Tweets", "enabled = ?", true).Preload("Tweets.Comments").Preload("Comments", "enabled = ?", true).Preload("Comments.Tweet").Preload("Followings").Preload("Followers").Preload("TweetLikes").Preload("CommentLikes").Model(&user).Where("id = ?", id).First(&user).Error
+	err := s.DB.Preload("Tweets", "enabled = ?", true).Preload("Tweets.Comments").
+				Preload("Tweets.Likes").Preload("Tweets.Dislikes").
+				Preload("Comments", "enabled = ?", true).Preload("Comments.Tweet").
+				Preload("Comments.Likes").Preload("Comments.Dislikes").Preload("Followings").
+				Preload("Followers").Preload("TweetLikes").Preload("TweetDislikes").
+				Preload("CommentLikes").Preload("CommentDislikes").Model(&user).
+				Where("id = ?", id).First(&user).Error
 	if err != nil {
 		return nil ,err
 	}
@@ -130,7 +136,8 @@ func (s *UserService) GetFollowers(ctx context.Context) (*[]dtos.UserResponse, e
 	tx := s.DB.WithContext(ctx).Begin()
 
 	user := models.User{}
-	err := tx.Preload("Followers").Model(&models.User{}).Where("id = ? AND enabled is true", user_id).First(&user).Error
+	err := tx.Preload("Followers").Model(&models.User{}).
+			  Where("id = ? AND enabled is true", user_id).First(&user).Error
 	if err != nil {
 		return nil, err
 	}
@@ -148,7 +155,8 @@ func (s *UserService) GetFollowings(ctx context.Context) (*[]dtos.UserResponse, 
 	tx := s.DB.WithContext(ctx).Begin()
 
 	user := models.User{}
-	err := tx.Preload("Followings").Model(&models.User{}).Where("id = ? AND enabled is true", user_id).First(&user).Error
+	err := tx.Preload("Followings").Model(&models.User{}).
+			  Where("id = ? AND enabled is true", user_id).First(&user).Error
 	if err != nil {
 		return nil, err
 	}
