@@ -39,7 +39,6 @@ func (s *OtpService) SetOtp(mobileNumber string, otp string) error {
 	if err != nil {
 		return err
 	}
-	log.Info(logger.Otp, logger.Set, "new otp set", map[logger.ExtraCategory]interface{}{logger.MobileNumber: mobileNumber})
 	return nil
 }
 

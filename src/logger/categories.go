@@ -11,6 +11,7 @@ const (
 	User     Category = "User"
 	Admin    Category = "Admin"
 	Tweet    Category = "Tweet"
+	Comment  Category = "Comment"
 	Config   Category = "Config"
 	Otp      Category = "Otp"
 	Error    Category = "Error"
@@ -36,6 +37,8 @@ const (
 	Follower        SubCategory = "Follower"
 	Following       SubCategory = "Following"
 	Profile         SubCategory = "Profile"
+	Like            SubCategory = "Like"
+	Dislike         SubCategory = "Dislike"
 )
 
 const (
@@ -43,6 +46,7 @@ const (
 	Userid       ExtraCategory = "Userid"
 	Targetid     ExtraCategory = "Targetid"
 	Tweetid      ExtraCategory = "Tweetid"
+	Commentid    ExtraCategory = "Commentid"
 	StatusCode   ExtraCategory = "StatusCode"
 	Err          ExtraCategory = "Err"
 	MobileNumber ExtraCategory = "MobileNumber"

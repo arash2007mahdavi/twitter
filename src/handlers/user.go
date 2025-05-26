@@ -44,6 +44,7 @@ func (h *UserHelper) GetOtp(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "error in seting otp"))
 		return
 	}
+	h.Logger.Info(logger.Otp, logger.Set, "new otp set", map[logger.ExtraCategory]interface{}{logger.MobileNumber: req.MobileNumber})
 	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, map[string]string{"otp": otp}, "otp set successfuly"))
 }
 
@@ -146,6 +147,7 @@ func (h *UserHelper) UnFollow(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "error in unfollowing target"))
 		return
 	}
+	h.Logger.Info(logger.User, logger.UnFollow, "user unfollowed other one", map[logger.ExtraCategory]interface{}{logger.Userid: ctx.Value("user_id"), logger.Targetid: ctx.Value("target_id")})
 	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, nil, "target unfollowed successfuly"))
 }
 

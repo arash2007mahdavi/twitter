@@ -102,6 +102,7 @@ func (h *TweetHelper) GetFollowingsTweets(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(http.StatusNotFound, responses.GenerateResponseWithError(http.StatusNotFound, err, "error in get followers tweets"))
 		return
 	}
+	h.Logger.Info(logger.Tweet, logger.Get, "followings tweets get", map[logger.ExtraCategory]interface{}{logger.Userid: ctx.Value("user_id")})
 	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, tweets, "followers tweets show"))
 }
 
@@ -111,6 +112,7 @@ func (h *TweetHelper) TweetExplore(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "error in load explore"))
 		return
 	}
+	h.Logger.Info(logger.Tweet, logger.Get, "explore get", nil)
 	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, res, "explore loaded"))
 }
 
@@ -126,6 +128,7 @@ func (h *TweetHelper) LikeTweet(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "error in like tweet"))
 		return
 	}
+	h.Logger.Info(logger.Tweet, logger.Like, "tweet liked", map[logger.ExtraCategory]interface{}{logger.Userid: ctx.Value("user_id"), logger.Tweetid: tweet_id})
 	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, "liked successfuly", "tweet liked"))
 }
 
@@ -141,5 +144,6 @@ func (h *TweetHelper) DislikeTweet(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "error in dislike tweet"))
 		return
 	}
+	h.Logger.Info(logger.Tweet, logger.Dislike, "tweet disliked", map[logger.ExtraCategory]interface{}{logger.Userid: ctx.Value("user_id"), logger.Tweetid: tweet_id})
 	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, "disliked successfuly", "tweet disliked"))
 }
