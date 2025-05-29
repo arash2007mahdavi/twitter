@@ -97,7 +97,7 @@ func CheckForDeleteComment(ctx *gin.Context) {
 		return
 	}
 	comment := models.Comment{}
-	err = tx.Model(&models.Comment{}).Where("id = ? AND deleted_by is null", comment_id).First(&comment).Error
+	err = tx.Model(&models.Comment{}).Where("id = ? AND enabled is true", comment_id).First(&comment).Error
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "invalid comment"))
 		return

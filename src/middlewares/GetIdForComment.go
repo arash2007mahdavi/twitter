@@ -22,7 +22,7 @@ func GetIdForComment(ctx *gin.Context) {
 	db := database.GetDB()
 	tx := db.WithContext(ctx).Begin()
 	user := models.User{}
-	err := tx.Model(&models.User{}).Where("username = ? AND deleted_at is null", username).First(&user).Error
+	err := tx.Model(&models.User{}).Where("username = ? AND enabled is true", username).First(&user).Error
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "invalid user"))
 		return

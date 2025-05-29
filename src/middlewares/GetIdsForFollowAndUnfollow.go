@@ -26,7 +26,7 @@ func GetIdsForFollowAndUnfollow(ctx *gin.Context) {
 	}
 	user := models.User{}
 	tx := db.WithContext(ctx).Begin()
-	err := tx.Model(&models.User{}).Where("username = ? AND deleted_by is null", username).First(&user).Error
+	err := tx.Model(&models.User{}).Where("username = ? AND enabled is true", username).First(&user).Error
 	if err != nil {
 		tx.Rollback()
 		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "invalid user"))
@@ -39,7 +39,7 @@ func GetIdsForFollowAndUnfollow(ctx *gin.Context) {
 		return
 	}
 	target_user := models.User{}
-	err = tx.Model(&models.User{}).Where("username = ? AND deleted_by is null", target_username).First(&target_user).Error
+	err = tx.Model(&models.User{}).Where("username = ? AND enabled is true", target_username).First(&target_user).Error
 	if err != nil {
 		tx.Rollback()
 		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "invalid target user"))

@@ -22,7 +22,7 @@ func CheckCommentOwner(ctx *gin.Context) {
 	}
 	user := models.User{}
 	tx := db.WithContext(ctx).Begin()
-	err := tx.Model(&models.User{}).Where("username = ? AND deleted_at is null", username).First(&user).Error
+	err := tx.Model(&models.User{}).Where("username = ? AND enabled is true", username).First(&user).Error
 	if err != nil {
 		tx.Rollback()
 		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "invalid user"))
@@ -35,7 +35,7 @@ func CheckCommentOwner(ctx *gin.Context) {
 		return
 	}
 	comment := models.Comment{}
-	err = tx.Model(&models.Comment{}).Where("id = ? AND deleted_at is null", comment_id).First(&comment).Error
+	err = tx.Model(&models.Comment{}).Where("id = ? AND enabled is true", comment_id).First(&comment).Error
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "invalid comment"))
 		return

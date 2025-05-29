@@ -22,7 +22,7 @@ func GetIdForUpdate(ctx *gin.Context) {
 	}
 	db := database.GetDB()
 	user := models.User{}
-	db.Model(&models.User{}).Where("username = ? AND deleted_at is null", username).First(&user)
+	db.Model(&models.User{}).Where("username = ? AND enabled is true", username).First(&user)
 	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "invalid User"))

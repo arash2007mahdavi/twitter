@@ -22,7 +22,7 @@ func CheckTweetOwner(ctx *gin.Context) {
 	}
 	user := models.User{}
 	tx := db.WithContext(ctx).Begin()
-	err := tx.Model(&models.User{}).Where("username = ? AND deleted_by is null", username).First(&user).Error
+	err := tx.Model(&models.User{}).Where("username = ? AND enabled is true", username).First(&user).Error
 	if err != nil {
 		tx.Rollback()
 		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "invalid user"))
@@ -35,7 +35,7 @@ func CheckTweetOwner(ctx *gin.Context) {
 		return
 	}
 	tweet := models.Tweet{}
-	err = tx.Model(&models.Tweet{}).Where("id = ? AND deleted_by is null", tweet_id).First(&tweet).Error
+	err = tx.Model(&models.Tweet{}).Where("id = ? AND enabled is true", tweet_id).First(&tweet).Error
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "invalid tweet"))
 		return
