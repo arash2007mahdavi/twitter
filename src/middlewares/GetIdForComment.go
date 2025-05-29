@@ -16,7 +16,7 @@ func GetIdForComment(ctx *gin.Context) {
 	password := ctx.Query("password")
 	tweet_id := ctx.Query("tweet_id")
 	if len(username) == 0 || len(password) == 0 || len(tweet_id) == 0 {
-		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, fmt.Errorf("Missing required fields"), "error in query"))
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, fmt.Errorf("missing required fields"), "error in query"))
 		return
 	}
 	db := database.GetDB()
