@@ -386,3 +386,23 @@
 {"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-25T21:48:13+03:30","message":"started successfuly"}
 {"level":"info","AppName":"Twitter","Logger":"Zerologger","Userid":1,"time":"2025-05-25T21:50:23+03:30","message":"tweets got"}
 {"level":"info","AppName":"Twitter","Logger":"Zerologger","Userid":2,"time":"2025-05-25T21:54:00+03:30","message":"get profile"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-30T20:19:44+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-30T20:19:44+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-30T20:19:45+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-30T20:24:35+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-30T20:24:35+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-30T20:24:36+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-30T20:31:50+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-30T20:31:50+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-30T20:31:51+03:30","message":"started successfuly"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Err":"Key: 'UploadFileRequest.FileFormRequest.File' Error:Field validation for 'File' failed on the 'required' tag\nKey: 'UploadFileRequest.Description' Error:Field validation for 'Description' failed on the 'required' tag","StatusCode":406,"time":"2025-05-30T20:32:08+03:30","message":"validation error"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Err":"Key: 'UploadFileRequest.FileFormRequest.File' Error:Field validation for 'File' failed on the 'required' tag","StatusCode":406,"time":"2025-05-30T20:32:55+03:30","message":"validation error"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Err":"Key: 'UploadFileRequest.FileFormRequest.File' Error:Field validation for 'File' failed on the 'required' tag","StatusCode":406,"time":"2025-05-30T20:33:25+03:30","message":"validation error"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Err":"Key: 'UploadFileRequest.FileFormRequest.File' Error:Field validation for 'File' failed on the 'required' tag\nKey: 'UploadFileRequest.Description' Error:Field validation for 'Description' failed on the 'required' tag","StatusCode":406,"time":"2025-05-30T20:33:51+03:30","message":"validation error"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Err":"Key: 'UploadFileRequest.FileFormRequest.File' Error:Field validation for 'File' failed on the 'required' tag","StatusCode":406,"time":"2025-05-30T20:34:02+03:30","message":"validation error"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Err":"Key: 'UploadFileRequest.FileFormRequest.File' Error:Field validation for 'File' failed on the 'required' tag","StatusCode":406,"time":"2025-05-30T20:34:03+03:30","message":"validation error"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Err":"Key: 'UploadFileRequest.FileFormRequest.File' Error:Field validation for 'File' failed on the 'required' tag","StatusCode":406,"time":"2025-05-30T20:34:23+03:30","message":"validation error"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Err":"Key: 'UploadFileRequest.FileFormRequest.File' Error:Field validation for 'File' failed on the 'required' tag","StatusCode":406,"time":"2025-05-30T20:34:28+03:30","message":"validation error"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Err":"Key: 'UploadFileRequest.FileFormRequest.File' Error:Field validation for 'File' failed on the 'required' tag","StatusCode":406,"time":"2025-05-30T20:38:18+03:30","message":"validation error"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Err":"Key: 'UploadFileRequest.FileFormRequest.File' Error:Field validation for 'File' failed on the 'required' tag","StatusCode":406,"time":"2025-05-30T20:40:29+03:30","message":"validation error"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Err":"Key: 'UploadFileRequest.FileFormRequest.File' Error:Field validation for 'File' failed on the 'required' tag","StatusCode":406,"time":"2025-05-30T20:40:30+03:30","message":"validation error"}

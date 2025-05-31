@@ -11,8 +11,9 @@ func Up1() {
 	user := &models.User{}
 	tweet := &models.Tweet{}
 	comment := &models.Comment{}
+	file := &models.File{}
 
-	db.AutoMigrate(&user, &tweet, &comment)
+	db.AutoMigrate(&user, &tweet, &comment, &file)
 }
 
 // func checkTable(db *gorm.DB, table interface{}, tables *[]interface{}) {

@@ -3,12 +3,12 @@ package dtos
 import "mime/multipart"
 
 type FileFormRequest struct {
-	File *multipart.FileHeader `json:"file" binding:"required" swaggerignor:"true"`
+	File *multipart.FileHeader `json:"file" form:"file" binding:"required" swaggerignor:"true"`
 }
 
 type UploadFileRequest struct {
 	FileFormRequest
-	Description string `json:"description" binding:"required"`
+	Description string `json:"description" form:"description" binding:"required"`
 }
 
 type CreateFileRequest struct {
