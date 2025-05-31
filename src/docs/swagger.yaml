@@ -1,0 +1,63 @@
+definitions:
+  handlers.OtpDto:
+    properties:
+      mobile_number:
+        type: string
+    required:
+    - mobile_number
+    type: object
+  responses.Response:
+    properties:
+      error:
+        type: string
+      message:
+        type: string
+      result: {}
+      status:
+        type: boolean
+      statusCode:
+        type: integer
+      validationError:
+        items:
+          $ref: '#/definitions/validations.ValidationError'
+        type: array
+    type: object
+  validations.ValidationError:
+    properties:
+      field:
+        type: string
+      param:
+        type: string
+      tag:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /user/get/otp:
+    get:
+      consumes:
+      - application/json
+      description: Get Otp by mobile number
+      parameters:
+      - description: mobile number
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.OtpDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/responses.Response'
+        "400":
+          description: Failed
+          schema:
+            $ref: '#/definitions/responses.Response'
+      summary: Get Otp
+      tags:
+      - User
+swagger: "2.0"

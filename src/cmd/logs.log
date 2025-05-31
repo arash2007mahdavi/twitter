@@ -406,3 +406,19 @@
 {"level":"error","AppName":"Twitter","Logger":"Zerologger","Err":"Key: 'UploadFileRequest.FileFormRequest.File' Error:Field validation for 'File' failed on the 'required' tag","StatusCode":406,"time":"2025-05-30T20:38:18+03:30","message":"validation error"}
 {"level":"error","AppName":"Twitter","Logger":"Zerologger","Err":"Key: 'UploadFileRequest.FileFormRequest.File' Error:Field validation for 'File' failed on the 'required' tag","StatusCode":406,"time":"2025-05-30T20:40:29+03:30","message":"validation error"}
 {"level":"error","AppName":"Twitter","Logger":"Zerologger","Err":"Key: 'UploadFileRequest.FileFormRequest.File' Error:Field validation for 'File' failed on the 'required' tag","StatusCode":406,"time":"2025-05-30T20:40:30+03:30","message":"validation error"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-31T22:07:44+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-31T22:07:44+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-31T22:07:44+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-31T22:23:28+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-31T22:23:28+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-31T22:23:28+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-31T22:24:48+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-31T22:24:48+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-31T22:24:48+03:30","message":"started successfuly"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Err":"EOF","StatusCode":400,"time":"2025-05-31T22:24:56+03:30","message":"validation error"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-31T22:31:03+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-31T22:31:03+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-31T22:31:03+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-31T22:35:19+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-31T22:35:19+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-31T22:35:19+03:30","message":"started successfuly"}

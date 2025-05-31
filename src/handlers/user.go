@@ -31,6 +31,16 @@ type OtpDto struct {
 	MobileNumber string `json:"mobile_number" binding:"required,mobile"`
 }
 
+// GetOtp godoc
+// @Summary Get Otp
+// @Description Get Otp by mobile number
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param user body OtpDto true "mobile number"
+// @Success 200 {object} responses.Response{} "Success"
+// @Failure 400 {object} responses.Response{} "Failed"
+// @Router /user/get/otp [get]
 func (h *UserHelper) GetOtp(ctx *gin.Context) {
 	req := OtpDto{}
 	err := ctx.ShouldBindJSON(&req)

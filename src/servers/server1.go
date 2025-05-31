@@ -3,6 +3,7 @@ package servers
 import (
 	"fmt"
 	"twitter/src/configs"
+	"twitter/src/docs"
 	"twitter/src/logger"
 	"twitter/src/routers"
 	"twitter/src/validations"
@@ -10,6 +11,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 var log = logger.NewLogger()
@@ -36,6 +39,20 @@ func Init_Server(cfg *configs.Config) {
 		file := twitter.Group("/file")
 		routers.FileRouter(file)
 	}
+
+	RegisterSwagger(engine)
+
 	log.Info(logger.Server, logger.Start, "started successfuly", nil)
 	engine.Run(fmt.Sprintf("%v:%v", cfg.Server.Host, cfg.Server.Port))
+}
+
+func RegisterSwagger(r *gin.Engine) {
+	docs.SwaggerInfo.Title = "twitter"
+	docs.SwaggerInfo.Description = "twitter"
+	docs.SwaggerInfo.Version = "1.0"
+	docs.SwaggerInfo.BasePath = "/twitter"
+	docs.SwaggerInfo.Host = "localhost:2025"
+	docs.SwaggerInfo.Schemes = []string{"http"}
+
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 }
