@@ -17,7 +17,7 @@ const docTemplate = `{
     "paths": {
         "/user/get/otp": {
             "post": {
-                "description": "Get Otp by mobile number",
+                "description": "get otp by valid mobile_number",
                 "consumes": [
                     "application/json"
                 ],
@@ -30,8 +30,8 @@ const docTemplate = `{
                 "summary": "Get Otp",
                 "parameters": [
                     {
-                        "description": "mobile number",
-                        "name": "mobile_number",
+                        "description": "body for get mobile_number",
+                        "name": "OtpDto",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -43,11 +43,94 @@ const docTemplate = `{
                     "200": {
                         "description": "Success",
                         "schema": {
-                            "$ref": "#/definitions/responses.Response"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/responses.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
-                        "description": "Failed",
+                        "description": "Validation Error",
+                        "schema": {
+                            "$ref": "#/definitions/responses.Response"
+                        }
+                    },
+                    "503": {
+                        "description": "Redis Error",
+                        "schema": {
+                            "$ref": "#/definitions/responses.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/new": {
+            "post": {
+                "description": "make new user with username and password and mobile_number and also the otp has gotten by mobile_number",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Make New User",
+                "parameters": [
+                    {
+                        "description": "body for create user",
+                        "name": "UserCreate",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dtos.UserCreate"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "the otp has been gotten for the mobile_number",
+                        "name": "otp",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/responses.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/dtos.UserResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Validation Error",
+                        "schema": {
+                            "$ref": "#/definitions/responses.Response"
+                        }
+                    },
+                    "406": {
+                        "description": "Error",
                         "schema": {
                             "$ref": "#/definitions/responses.Response"
                         }
@@ -57,6 +140,45 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "dtos.UserCreate": {
+            "type": "object",
+            "required": [
+                "mobile_number",
+                "password",
+                "username"
+            ],
+            "properties": {
+                "mobile_number": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "dtos.UserResponse": {
+            "type": "object",
+            "properties": {
+                "firstname": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "lastname": {
+                    "type": "string"
+                },
+                "mobile_number": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
         "handlers.OtpDto": {
             "type": "object",
             "required": [

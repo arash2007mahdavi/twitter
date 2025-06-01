@@ -33,13 +33,14 @@ type OtpDto struct {
 
 // GetOtp godoc
 // @Summary Get Otp
-// @Description Get Otp by mobile number
+// @Description get otp by valid mobile_number
 // @Tags User
 // @Accept json
 // @Produce json
-// @Param mobile_number body OtpDto true "mobile number"
-// @Success 200 {object} responses.Response{} "Success"
-// @Failure 400 {object} responses.Response{} "Failed"
+// @Param OtpDto body OtpDto true "body for get mobile_number"
+// @Success 200 {object} responses.Response{result=string} "Success"
+// @Failure 400 {object} responses.Response{} "Validation Error"
+// @Failure 503 {object} responses.Response{} "Redis Error"
 // @Router /user/get/otp [post]
 func (h *UserHelper) GetOtp(ctx *gin.Context) {
 	req := OtpDto{}
@@ -51,13 +52,25 @@ func (h *UserHelper) GetOtp(ctx *gin.Context) {
 	otp := services.MakeOtp()
 	err = h.Otp.SetOtp(req.MobileNumber, otp)
 	if err != nil {
-		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, responses.GenerateResponseWithError(http.StatusNotAcceptable, err, "error in seting otp"))
+		ctx.AbortWithStatusJSON(http.StatusServiceUnavailable, responses.GenerateResponseWithError(http.StatusServiceUnavailable, err, "error in seting otp"))
 		return
 	}
 	h.Logger.Info(logger.Otp, logger.Set, "new otp set", map[logger.ExtraCategory]interface{}{logger.MobileNumber: req.MobileNumber})
 	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, map[string]string{"otp": otp}, "otp set successfuly"))
 }
 
+// NewUser godoc
+// @Summary Make New User
+// @Description make new user with username and password and mobile_number and also the otp has gotten by mobile_number
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param UserCreate body dtos.UserCreate true "body for create user"
+// @Param otp query string true "the otp has been gotten for the mobile_number"
+// @Success 200 {object} responses.Response{result=dtos.UserResponse} "Success"
+// @Failure 400 {object} responses.Response{} "Validation Error"
+// @Failure 406 {object} responses.Response{} "Error"
+// @Router /user/new [post]
 func (h *UserHelper) NewUser(ctx *gin.Context) {
 	req := dtos.UserCreate{}
 	err := ctx.ShouldBindJSON(&req)

@@ -1,4 +1,30 @@
 definitions:
+  dtos.UserCreate:
+    properties:
+      mobile_number:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - mobile_number
+    - password
+    - username
+    type: object
+  dtos.UserResponse:
+    properties:
+      firstname:
+        type: string
+      id:
+        type: integer
+      lastname:
+        type: string
+      mobile_number:
+        type: string
+      username:
+        type: string
+    type: object
   handlers.OtpDto:
     properties:
       mobile_number:
@@ -38,11 +64,11 @@ paths:
     post:
       consumes:
       - application/json
-      description: Get Otp by mobile number
+      description: get otp by valid mobile_number
       parameters:
-      - description: mobile number
+      - description: body for get mobile_number
         in: body
-        name: mobile_number
+        name: OtpDto
         required: true
         schema:
           $ref: '#/definitions/handlers.OtpDto'
@@ -52,12 +78,62 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: '#/definitions/responses.Response'
+            allOf:
+            - $ref: '#/definitions/responses.Response'
+            - properties:
+                result:
+                  type: string
+              type: object
         "400":
-          description: Failed
+          description: Validation Error
+          schema:
+            $ref: '#/definitions/responses.Response'
+        "503":
+          description: Redis Error
           schema:
             $ref: '#/definitions/responses.Response'
       summary: Get Otp
+      tags:
+      - User
+  /user/new:
+    post:
+      consumes:
+      - application/json
+      description: make new user with username and password and mobile_number and
+        also the otp has gotten by mobile_number
+      parameters:
+      - description: body for create user
+        in: body
+        name: UserCreate
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.UserCreate'
+      - description: the otp has been gotten for the mobile_number
+        in: query
+        name: otp
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            allOf:
+            - $ref: '#/definitions/responses.Response'
+            - properties:
+                result:
+                  $ref: '#/definitions/dtos.UserResponse'
+              type: object
+        "400":
+          description: Validation Error
+          schema:
+            $ref: '#/definitions/responses.Response'
+        "406":
+          description: Error
+          schema:
+            $ref: '#/definitions/responses.Response'
+      summary: Make New User
       tags:
       - User
 swagger: "2.0"
