@@ -9,7 +9,7 @@ import (
 
 func UserRouter(r *gin.RouterGroup) {
 	h := handlers.GetUserHelper()
-	r.GET("/get/otp", h.GetOtp)
+	r.POST("/get/otp", h.GetOtp)
 	r.POST("/new", h.NewUser)
 	r.PUT("/update", middlewares.GetIdForUpdate, h.UpdateUser)
 	r.DELETE("/delete", middlewares.GetIdForDelete, h.DeleteUser)

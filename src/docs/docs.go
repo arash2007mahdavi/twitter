@@ -16,7 +16,7 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/user/get/otp": {
-            "get": {
+            "post": {
                 "description": "Get Otp by mobile number",
                 "consumes": [
                     "application/json"
@@ -31,7 +31,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "description": "mobile number",
-                        "name": "user",
+                        "name": "mobile_number",
                         "in": "body",
                         "required": true,
                         "schema": {

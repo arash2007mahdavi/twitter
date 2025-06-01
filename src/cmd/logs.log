@@ -422,3 +422,20 @@
 {"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-31T22:35:19+03:30","message":"started successfuly"}
 {"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-31T22:35:19+03:30","message":"started successfuly"}
 {"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-05-31T22:35:19+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-01T22:40:21+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-01T22:40:21+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-01T22:40:22+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-01T22:43:47+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-01T22:43:47+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-01T22:43:48+03:30","message":"started successfuly"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Err":"Key: 'OtpDto.MobileNumber' Error:Field validation for 'MobileNumber' failed on the 'mobile' tag","StatusCode":400,"time":"2025-06-01T22:44:08+03:30","message":"validation error"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","MobileNumber":"09945092968","time":"2025-06-01T22:44:23+03:30","message":"new otp set"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-01T22:50:28+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-01T22:50:28+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-01T22:50:29+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","MobileNumber":"646464446","time":"2025-06-01T22:50:51+03:30","message":"new otp set"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-01T22:52:08+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-01T22:52:08+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-01T22:52:08+03:30","message":"started successfuly"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Err":"Key: 'OtpDto.MobileNumber' Error:Field validation for 'MobileNumber' failed on the 'mobile' tag","StatusCode":400,"time":"2025-06-01T22:52:22+03:30","message":"validation error"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","MobileNumber":"09107288663","time":"2025-06-01T22:52:32+03:30","message":"new otp set"}

@@ -35,14 +35,14 @@ info:
   contact: {}
 paths:
   /user/get/otp:
-    get:
+    post:
       consumes:
       - application/json
       description: Get Otp by mobile number
       parameters:
       - description: mobile number
         in: body
-        name: user
+        name: mobile_number
         required: true
         schema:
           $ref: '#/definitions/handlers.OtpDto'

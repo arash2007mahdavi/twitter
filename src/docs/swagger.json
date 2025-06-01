@@ -5,7 +5,7 @@
     },
     "paths": {
         "/user/get/otp": {
-            "get": {
+            "post": {
                 "description": "Get Otp by mobile number",
                 "consumes": [
                     "application/json"
@@ -20,7 +20,7 @@
                 "parameters": [
                     {
                         "description": "mobile number",
-                        "name": "user",
+                        "name": "mobile_number",
                         "in": "body",
                         "required": true,
                         "schema": {
