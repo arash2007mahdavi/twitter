@@ -25,6 +25,7 @@ type Tweet struct {
 	UserId   int       `json:"user_id,omitempty"`
 	User     *User     `json:"user,omitempty" gorm:"foreignKey:UserId"`
 	Comments []Comment `json:"comments,omitempty" gorm:"foreignKey:TweetId"`
+	Files    []File    `json:"files,omitempty" gorm:"foreignKey:TweetId"`
 	Likes    []User    `json:"likes,omitempty" gorm:"many2many:tweet_likes;joinForeignKey:TweetId;JoinRefrences:UserId"`
 	Dislikes []User    `json:"dislikes,omitempty" gorm:"many2many:tweet_dislikes;joinForeignKey:TweetId;JoinRefrences:UserId"`
 	Enabled  bool      `json:"enabled,omitempty" gorm:"default:true"`
@@ -37,6 +38,7 @@ type Comment struct {
 	UserId   int    `json:"user_id,omitempty"`
 	User     *User  `json:"user,omitempty" gorm:"foreignKey:UserId"`
 	Message  string `json:"message,omitempty" gorm:"size:1000;not null"`
+	Files    []File `json:"files,omitempty" gorm:"foreignKey:TweetId"`
 	Likes    []User `json:"likes,omitempty" gorm:"many2many:comment_likes;joinForeignKey:CommentId;JoinRefrences:UserId"`
 	Dislikes []User `json:"dislikes,omitempty" gorm:"many2many:comment_dislikes;joinForeignKey:CommentId;JoinRefrences:UserId"`
 	Enabled  bool   `json:"enabled,omitempty" gorm:"default:true"`
@@ -44,8 +46,12 @@ type Comment struct {
 
 type File struct {
 	BaseModel
-	Name        string `gorm:"size:100;type:string;not null"`
-	Directory   string `gorm:"size:100;type:string;not null"`
-	Description string `gorm:"size:500;type:string;not null"`
-	MimeType    string `gorm:"size:20;type:string;not null"`
+	Name        string   `gorm:"size:100;type:string;not null"`
+	Directory   string   `gorm:"size:100;type:string;not null"`
+	Description string   `gorm:"size:500;type:string;not null"`
+	MimeType    string   `json:"mime_type" gorm:"size:20;type:string;not null"`
+	Tweet       *Tweet   `json:"tweet,omitempty" gorm:"foreignKey:TweetId"`
+	TweetId     int      `json:"tweet_id,omitempty"`
+	Comment     *Comment `json:"comment,omitempty" gorm:"foreignKey:CommentId"`
+	CommentId   int      `json:"comment_id,omitempty"`
 }

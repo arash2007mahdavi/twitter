@@ -38,10 +38,11 @@ func NewFileHelper() *FileHelper {
 // @Tags File
 // @Accept x-www-form-urlencoded
 // @Produce json
-// @Param data formData dtos.UploadFileRequest true "new file"
-// @Param file formData file true "create file"
-// @Success 200 {object} responses.Response{result=[]dtos.UserResponse} "Success"
-// @Failure 406 {object} responses.Response{} "Error"
+// @Param data formData dtos.UploadFileRequest true "new file-data"
+// @Param file formData file true "new file"
+// @Success 200 {object} responses.Response{result=dtos.FileResponse} "Success"
+// @Failure 400 {object} responses.Response{} "Validation Error"
+// @Failure 424 {object} responses.Response{} "Error"
 // @Router /file/post [post]
 func (h *FileHelper) Create(ctx *gin.Context) {
 	upload := dtos.UploadFileRequest{}
@@ -56,7 +57,7 @@ func (h *FileHelper) Create(ctx *gin.Context) {
 	req.Directory = "uploads"
 	req.Name, err = saveUploadFile(upload.File, req.Directory)
 	if err != nil {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, responses.GenerateResponseWithError(http.StatusBadRequest, err, "error in save file"))
+		ctx.AbortWithStatusJSON(http.StatusFailedDependency, responses.GenerateResponseWithError(http.StatusFailedDependency, err, "error in save file"))
 		return
 	}
 
