@@ -12,8 +12,8 @@ import (
 var log = logger.NewLogger()
 
 func CheckAdmin(ctx *gin.Context) {
-	admin_username := ctx.GetHeader("admin")
-	admin_password := ctx.GetHeader("password")
+	admin_username := ctx.GetHeader("admin_username")
+	admin_password := ctx.GetHeader("admin_password")
 	if admin_username == "arash2007mahdavi" && admin_password == "arash2306" {
 		log.Info(logger.Admin, logger.Enter, "admin entered", map[logger.ExtraCategory]interface{}{logger.Username: admin_username})
 		ctx.Set("admin_username", admin_username)

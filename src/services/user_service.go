@@ -111,7 +111,10 @@ func (s *UserService) Delete(ctx context.Context) error {
 
 func (s *UserService) GetUsers(ctx context.Context) (*[]dtos.UserResponse, error) {
 	users := []dtos.UserResponse{}
-	s.DB.Table("users").Where("enabled = ?", true).Scan(&users)
+	err := s.DB.Table("users").Where("enabled = ?", true).Scan(&users).Error
+	if err != nil {
+		return nil, err
+	}
 	return &users, nil
 }
 

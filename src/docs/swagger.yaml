@@ -25,12 +25,168 @@ definitions:
       username:
         type: string
     type: object
+  dtos.UserUpdate:
+    properties:
+      enabled:
+        type: boolean
+      firstname:
+        maxLength: 25
+        minLength: 2
+        type: string
+      lastname:
+        maxLength: 35
+        minLength: 3
+        type: string
+      mobile_number:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
   handlers.OtpDto:
     properties:
       mobile_number:
         type: string
     required:
     - mobile_number
+    type: object
+  models.Comment:
+    properties:
+      created_at:
+        type: string
+      created_by:
+        type: integer
+      deleted_at:
+        type: string
+      deleted_by:
+        type: string
+      dislikes:
+        items:
+          $ref: '#/definitions/models.User'
+        type: array
+      enabled:
+        type: boolean
+      id:
+        type: integer
+      likes:
+        items:
+          $ref: '#/definitions/models.User'
+        type: array
+      message:
+        type: string
+      modified_at:
+        type: string
+      modified_by:
+        type: string
+      tweet:
+        $ref: '#/definitions/models.Tweet'
+      tweet_id:
+        type: integer
+      user:
+        $ref: '#/definitions/models.User'
+      user_id:
+        type: integer
+    type: object
+  models.Tweet:
+    properties:
+      comments:
+        items:
+          $ref: '#/definitions/models.Comment'
+        type: array
+      created_at:
+        type: string
+      created_by:
+        type: integer
+      deleted_at:
+        type: string
+      deleted_by:
+        type: string
+      dislikes:
+        items:
+          $ref: '#/definitions/models.User'
+        type: array
+      enabled:
+        type: boolean
+      id:
+        type: integer
+      likes:
+        items:
+          $ref: '#/definitions/models.User'
+        type: array
+      message:
+        type: string
+      modified_at:
+        type: string
+      modified_by:
+        type: string
+      title:
+        type: string
+      user:
+        $ref: '#/definitions/models.User'
+      user_id:
+        type: integer
+    type: object
+  models.User:
+    properties:
+      comment_dislikes:
+        items:
+          $ref: '#/definitions/models.Comment'
+        type: array
+      comment_likes:
+        items:
+          $ref: '#/definitions/models.Comment'
+        type: array
+      comments:
+        items:
+          $ref: '#/definitions/models.Comment'
+        type: array
+      created_at:
+        type: string
+      created_by:
+        type: integer
+      deleted_at:
+        type: string
+      deleted_by:
+        type: string
+      enabled:
+        type: boolean
+      firstname:
+        type: string
+      followers:
+        items:
+          $ref: '#/definitions/models.User'
+        type: array
+      followings:
+        items:
+          $ref: '#/definitions/models.User'
+        type: array
+      id:
+        type: integer
+      lastname:
+        type: string
+      mobile_number:
+        type: string
+      modified_at:
+        type: string
+      modified_by:
+        type: string
+      password:
+        type: string
+      tweet_dislikes:
+        items:
+          $ref: '#/definitions/models.Tweet'
+        type: array
+      tweet_likes:
+        items:
+          $ref: '#/definitions/models.Tweet'
+        type: array
+      tweets:
+        items:
+          $ref: '#/definitions/models.Tweet'
+        type: array
+      username:
+        type: string
     type: object
   responses.Response:
     properties:
@@ -60,6 +216,141 @@ definitions:
 info:
   contact: {}
 paths:
+  /user/delete:
+    delete:
+      description: delete user with user's username and password
+      parameters:
+      - description: get user's username
+        in: query
+        name: username
+        required: true
+        type: string
+      - description: get user's password
+        in: query
+        name: password
+        required: true
+        type: string
+      - description: get deleted_by user id
+        in: query
+        name: deleted_by
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            allOf:
+            - $ref: '#/definitions/responses.Response'
+            - properties:
+                result:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.Response'
+      summary: Delete User
+      tags:
+      - User
+  /user/follow:
+    post:
+      description: following an user by another with it's username and password and
+        also the target user's id
+      parameters:
+      - description: get user's username
+        in: query
+        name: username
+        required: true
+        type: string
+      - description: get user's password
+        in: query
+        name: password
+        required: true
+        type: string
+      - description: get target's username
+        in: query
+        name: target_username
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            allOf:
+            - $ref: '#/definitions/responses.Response'
+            - properties:
+                result:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.Response'
+      summary: Follow An User
+      tags:
+      - User
+  /user/get/followers:
+    get:
+      description: get followers of an user
+      parameters:
+      - description: get user's username
+        in: query
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            allOf:
+            - $ref: '#/definitions/responses.Response'
+            - properties:
+                result:
+                  items:
+                    $ref: '#/definitions/dtos.UserResponse'
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.Response'
+      summary: Get Followers
+      tags:
+      - User
+  /user/get/followings:
+    get:
+      description: get followings of an user
+      parameters:
+      - description: get user's username
+        in: query
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            allOf:
+            - $ref: '#/definitions/responses.Response'
+            - properties:
+                result:
+                  items:
+                    $ref: '#/definitions/dtos.UserResponse'
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.Response'
+      summary: Get Followings
+      tags:
+      - User
   /user/get/otp:
     post:
       consumes:
@@ -93,6 +384,69 @@ paths:
           schema:
             $ref: '#/definitions/responses.Response'
       summary: Get Otp
+      tags:
+      - User
+  /user/get/profile:
+    get:
+      description: get user profile
+      parameters:
+      - description: get user's username
+        in: query
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            allOf:
+            - $ref: '#/definitions/responses.Response'
+            - properties:
+                result:
+                  $ref: '#/definitions/models.User'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.Response'
+      summary: Get Profile
+      tags:
+      - User
+  /user/get/users:
+    get:
+      description: get users just with admin username and password
+      parameters:
+      - description: get admin username
+        in: header
+        name: admin_username
+        required: true
+        type: string
+      - description: get admin password
+        in: header
+        name: admin_password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            allOf:
+            - $ref: '#/definitions/responses.Response'
+            - properties:
+                result:
+                  items:
+                    $ref: '#/definitions/dtos.UserResponse'
+                  type: array
+              type: object
+        "406":
+          description: Error
+          schema:
+            $ref: '#/definitions/responses.Response'
+      summary: Get Users
       tags:
       - User
   /user/new:
@@ -134,6 +488,93 @@ paths:
           schema:
             $ref: '#/definitions/responses.Response'
       summary: Make New User
+      tags:
+      - User
+  /user/unfollow:
+    delete:
+      description: unfollowing an user by another with it's username and password
+        and also the target user's id
+      parameters:
+      - description: get user's username
+        in: query
+        name: username
+        required: true
+        type: string
+      - description: get user's password
+        in: query
+        name: password
+        required: true
+        type: string
+      - description: get target's username
+        in: query
+        name: target_username
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            allOf:
+            - $ref: '#/definitions/responses.Response'
+            - properties:
+                result:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.Response'
+      summary: UnFollow An User
+      tags:
+      - User
+  /user/update:
+    put:
+      consumes:
+      - application/json
+      description: update user's firstname, lastname and ...
+      parameters:
+      - description: body for update user
+        in: body
+        name: UserUpdate
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.UserUpdate'
+      - description: get user's username
+        in: query
+        name: username
+        required: true
+        type: string
+      - description: get user's password
+        in: query
+        name: password
+        required: true
+        type: string
+      - description: get modified_by user id
+        in: query
+        name: modified_by
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            allOf:
+            - $ref: '#/definitions/responses.Response'
+            - properties:
+                result:
+                  $ref: '#/definitions/dtos.UserResponse'
+              type: object
+        "400":
+          description: Validation Error
+          schema:
+            $ref: '#/definitions/responses.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.Response'
+      summary: Update User
       tags:
       - User
 swagger: "2.0"
