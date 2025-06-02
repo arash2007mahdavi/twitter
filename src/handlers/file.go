@@ -32,6 +32,17 @@ func NewFileHelper() *FileHelper {
 	}
 }
 
+// Create godoc
+// @Summary Create File
+// @Description create new file
+// @Tags File
+// @Accept x-www-form-urlencoded
+// @Produce json
+// @Param file formData dtos.UploadFileRequest true "new file"
+// @Param file formData file true "create file"
+// @Success 200 {object} responses.Response{result=[]dtos.UserResponse} "Success"
+// @Failure 406 {object} responses.Response{} "Error"
+// @Router /file/post [post]
 func (h *FileHelper) Create(ctx *gin.Context) {
 	upload := dtos.UploadFileRequest{}
 	err := ctx.ShouldBind(&upload)

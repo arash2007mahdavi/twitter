@@ -3,7 +3,7 @@ package dtos
 import "mime/multipart"
 
 type FileFormRequest struct {
-	File *multipart.FileHeader `json:"file" form:"file" binding:"required" swaggerignor:"true"`
+	File *multipart.FileHeader `json:"file" form:"file" binding:"required" swaggerignore:"true"`
 }
 
 type UploadFileRequest struct {
@@ -19,7 +19,6 @@ type CreateFileRequest struct {
 }
 
 type UpdateFileRequest struct {
-	Name        string `json:"name"`
 	Description string `json:"description"`
 }
 

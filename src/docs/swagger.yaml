@@ -1,4 +1,93 @@
 definitions:
+  dtos.CommentCreate:
+    properties:
+      message:
+        maxLength: 300
+        minLength: 5
+        type: string
+    required:
+    - message
+    type: object
+  dtos.CommentResponse:
+    properties:
+      dislikes:
+        items:
+          $ref: '#/definitions/dtos.UserResponse'
+        type: array
+      id:
+        type: integer
+      likes:
+        items:
+          $ref: '#/definitions/dtos.UserResponse'
+        type: array
+      message:
+        type: string
+      tweet:
+        $ref: '#/definitions/dtos.TweetResponse'
+      tweet_id:
+        type: integer
+      user:
+        $ref: '#/definitions/dtos.UserResponse'
+      user_id:
+        type: integer
+    type: object
+  dtos.CommentUpdate:
+    properties:
+      message:
+        maxLength: 300
+        minLength: 5
+        type: string
+    type: object
+  dtos.TweetCreate:
+    properties:
+      message:
+        maxLength: 1000
+        minLength: 10
+        type: string
+      title:
+        maxLength: 50
+        minLength: 2
+        type: string
+    required:
+    - message
+    - title
+    type: object
+  dtos.TweetResponse:
+    properties:
+      comments:
+        items:
+          $ref: '#/definitions/dtos.CommentResponse'
+        type: array
+      dislikes:
+        items:
+          $ref: '#/definitions/dtos.UserResponse'
+        type: array
+      id:
+        type: integer
+      likes:
+        items:
+          $ref: '#/definitions/dtos.UserResponse'
+        type: array
+      message:
+        type: string
+      title:
+        type: string
+      user:
+        $ref: '#/definitions/dtos.UserResponse'
+      user_id:
+        type: integer
+    type: object
+  dtos.TweetUpdate:
+    properties:
+      message:
+        maxLength: 1000
+        minLength: 10
+        type: string
+      title:
+        maxLength: 50
+        minLength: 2
+        type: string
+    type: object
   dtos.UserCreate:
     properties:
       mobile_number:
@@ -56,7 +145,7 @@ definitions:
       created_at:
         type: string
       created_by:
-        type: integer
+        type: string
       deleted_at:
         type: string
       deleted_by:
@@ -97,7 +186,7 @@ definitions:
       created_at:
         type: string
       created_by:
-        type: integer
+        type: string
       deleted_at:
         type: string
       deleted_by:
@@ -144,7 +233,7 @@ definitions:
       created_at:
         type: string
       created_by:
-        type: integer
+        type: string
       deleted_at:
         type: string
       deleted_by:
@@ -216,6 +305,655 @@ definitions:
 info:
   contact: {}
 paths:
+  /comment/delete:
+    delete:
+      description: delete comment
+      parameters:
+      - description: user's username
+        in: query
+        name: username
+        required: true
+        type: string
+      - description: user's password
+        in: query
+        name: password
+        required: true
+        type: string
+      - description: comment's id
+        in: query
+        name: comment_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            allOf:
+            - $ref: '#/definitions/responses.Response'
+            - properties:
+                result:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.Response'
+      summary: Delete Comment
+      tags:
+      - Comment
+  /comment/dislike:
+    post:
+      description: dislike comment
+      parameters:
+      - description: user's username
+        in: query
+        name: username
+        required: true
+        type: string
+      - description: user's password
+        in: query
+        name: password
+        required: true
+        type: string
+      - description: comment's id
+        in: query
+        name: comment_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            allOf:
+            - $ref: '#/definitions/responses.Response'
+            - properties:
+                result:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.Response'
+      summary: Dislike Comment
+      tags:
+      - Comment
+  /comment/get/comment:
+    get:
+      description: get comment
+      parameters:
+      - description: comment's id
+        in: query
+        name: comment_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            allOf:
+            - $ref: '#/definitions/responses.Response'
+            - properties:
+                result:
+                  $ref: '#/definitions/models.Comment'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.Response'
+      summary: Get Comment
+      tags:
+      - Comment
+  /comment/get/comments:
+    get:
+      description: get comments of an user
+      parameters:
+      - description: user's username
+        in: query
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            allOf:
+            - $ref: '#/definitions/responses.Response'
+            - properties:
+                result:
+                  items:
+                    $ref: '#/definitions/dtos.CommentResponse'
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.Response'
+      summary: Get Comments
+      tags:
+      - Comment
+  /comment/like:
+    post:
+      description: like comment
+      parameters:
+      - description: user's username
+        in: query
+        name: username
+        required: true
+        type: string
+      - description: user's password
+        in: query
+        name: password
+        required: true
+        type: string
+      - description: comment's id
+        in: query
+        name: comment_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            allOf:
+            - $ref: '#/definitions/responses.Response'
+            - properties:
+                result:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.Response'
+      summary: Like Comment
+      tags:
+      - Comment
+  /comment/post:
+    post:
+      consumes:
+      - application/json
+      description: post comment with message
+      parameters:
+      - description: user's username
+        in: query
+        name: username
+        required: true
+        type: string
+      - description: user's password
+        in: query
+        name: password
+        required: true
+        type: string
+      - description: tweet's id
+        in: query
+        name: tweet_id
+        required: true
+        type: string
+      - description: get message of new comment
+        in: body
+        name: CommentCreate
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.CommentCreate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            allOf:
+            - $ref: '#/definitions/responses.Response'
+            - properties:
+                result:
+                  $ref: '#/definitions/dtos.CommentResponse'
+              type: object
+        "400":
+          description: Validation Error
+          schema:
+            $ref: '#/definitions/responses.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.Response'
+      summary: Post Comment
+      tags:
+      - Comment
+  /comment/update:
+    put:
+      consumes:
+      - application/json
+      description: update comment's message
+      parameters:
+      - description: user's username
+        in: query
+        name: username
+        required: true
+        type: string
+      - description: user's password
+        in: query
+        name: password
+        required: true
+        type: string
+      - description: comment's id
+        in: query
+        name: comment_id
+        required: true
+        type: string
+      - description: get updated message of comment
+        in: body
+        name: CommentUpdate
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.CommentUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            allOf:
+            - $ref: '#/definitions/responses.Response'
+            - properties:
+                result:
+                  $ref: '#/definitions/dtos.CommentResponse'
+              type: object
+        "400":
+          description: Validation Error
+          schema:
+            $ref: '#/definitions/responses.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.Response'
+      summary: Update Comment
+      tags:
+      - Comment
+  /file/post:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: create new file
+      parameters:
+      - in: formData
+        name: description
+        required: true
+        type: string
+      - description: create file
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            allOf:
+            - $ref: '#/definitions/responses.Response'
+            - properties:
+                result:
+                  items:
+                    $ref: '#/definitions/dtos.UserResponse'
+                  type: array
+              type: object
+        "406":
+          description: Error
+          schema:
+            $ref: '#/definitions/responses.Response'
+      summary: Create File
+      tags:
+      - File
+  /tweet/delete:
+    delete:
+      description: delete tweet by id and its owner information
+      parameters:
+      - description: owner's username
+        in: query
+        name: username
+        required: true
+        type: string
+      - description: owner's password
+        in: query
+        name: password
+        required: true
+        type: string
+      - description: tweet's id
+        in: query
+        name: tweet_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            allOf:
+            - $ref: '#/definitions/responses.Response'
+            - properties:
+                result:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.Response'
+      summary: Delete Tweet
+      tags:
+      - Tweet
+  /tweet/dislike:
+    post:
+      description: dislike tweet
+      parameters:
+      - description: owner's username
+        in: query
+        name: username
+        required: true
+        type: string
+      - description: owner's password
+        in: query
+        name: password
+        required: true
+        type: string
+      - description: tweet's id
+        in: query
+        name: tweet_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            allOf:
+            - $ref: '#/definitions/responses.Response'
+            - properties:
+                result:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.Response'
+      summary: Dislike Tweet
+      tags:
+      - Tweet
+  /tweet/explore:
+    get:
+      description: delete tweet by id and its owner information
+      parameters:
+      - description: owner's username
+        in: query
+        name: username
+        required: true
+        type: string
+      - description: owner's password
+        in: query
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            allOf:
+            - $ref: '#/definitions/responses.Response'
+            - properties:
+                result:
+                  items:
+                    $ref: '#/definitions/dtos.TweetResponse'
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.Response'
+      summary: Get Followings Tweets
+      tags:
+      - Tweet
+  /tweet/get/followings/tweets:
+    get:
+      description: delete tweet by id and its owner information
+      parameters:
+      - description: owner's username
+        in: query
+        name: username
+        required: true
+        type: string
+      - description: owner's password
+        in: query
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            allOf:
+            - $ref: '#/definitions/responses.Response'
+            - properties:
+                result:
+                  items:
+                    $ref: '#/definitions/dtos.TweetResponse'
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.Response'
+      summary: Get Followings Tweets
+      tags:
+      - Tweet
+  /tweet/get/tweet:
+    get:
+      description: get tweet by id
+      parameters:
+      - description: tweet's id
+        in: query
+        name: tweet_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            allOf:
+            - $ref: '#/definitions/responses.Response'
+            - properties:
+                result:
+                  $ref: '#/definitions/models.Tweet'
+              type: object
+        "400":
+          description: Validation Error
+          schema:
+            $ref: '#/definitions/responses.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.Response'
+      summary: Get Tweet
+      tags:
+      - Tweet
+  /tweet/get/tweets:
+    get:
+      description: get tweets those tweeted by an user
+      parameters:
+      - description: get user's username
+        in: query
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            allOf:
+            - $ref: '#/definitions/responses.Response'
+            - properties:
+                result:
+                  items:
+                    $ref: '#/definitions/dtos.TweetResponse'
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.Response'
+      summary: Get Tweets
+      tags:
+      - Tweet
+  /tweet/like:
+    post:
+      description: like tweet
+      parameters:
+      - description: owner's username
+        in: query
+        name: username
+        required: true
+        type: string
+      - description: owner's password
+        in: query
+        name: password
+        required: true
+        type: string
+      - description: tweet's id
+        in: query
+        name: tweet_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            allOf:
+            - $ref: '#/definitions/responses.Response'
+            - properties:
+                result:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.Response'
+      summary: Like Tweet
+      tags:
+      - Tweet
+  /tweet/post:
+    post:
+      consumes:
+      - application/json
+      description: tweet post
+      parameters:
+      - description: get user's username
+        in: query
+        name: username
+        required: true
+        type: string
+      - description: get user's password
+        in: query
+        name: password
+        required: true
+        type: string
+      - description: get title and message of new tweet
+        in: body
+        name: TweetCreate
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.TweetCreate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            allOf:
+            - $ref: '#/definitions/responses.Response'
+            - properties:
+                result:
+                  $ref: '#/definitions/dtos.TweetResponse'
+              type: object
+        "400":
+          description: Validation Error
+          schema:
+            $ref: '#/definitions/responses.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.Response'
+      summary: Post Tweet
+      tags:
+      - Tweet
+  /tweet/update:
+    put:
+      consumes:
+      - application/json
+      description: update tweet's title and message
+      parameters:
+      - description: owner's username
+        in: query
+        name: username
+        required: true
+        type: string
+      - description: owner's password
+        in: query
+        name: password
+        required: true
+        type: string
+      - description: tweet's id
+        in: query
+        name: tweet_id
+        required: true
+        type: string
+      - description: update's fields
+        in: body
+        name: TweetUpdate
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.TweetUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            allOf:
+            - $ref: '#/definitions/responses.Response'
+            - properties:
+                result:
+                  $ref: '#/definitions/dtos.TweetResponse'
+              type: object
+        "400":
+          description: Validation Error
+          schema:
+            $ref: '#/definitions/responses.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.Response'
+      summary: Update Tweet
+      tags:
+      - Tweet
   /user/delete:
     delete:
       description: delete user with user's username and password

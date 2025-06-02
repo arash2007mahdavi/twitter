@@ -8,7 +8,7 @@ import (
 type BaseModel struct {
 	Id int `json:"id,omitempty" gorm:"primaryKey"`
 
-	CreatedBy  int           `json:"created_by,omitempty" gorm:"not null"`
+	CreatedBy  int           `json:"created_by,omitempty" gorm:"not null" swaggertype:"string"`
 	ModifiedBy sql.NullInt64 `json:"modified_by,omitempty" gorm:"null" swaggertype:"string"`
 	DeletedBy  sql.NullInt64 `json:"deleted_by,omitempty" gorm:"null" swaggertype:"string"`
 
