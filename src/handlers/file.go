@@ -38,7 +38,7 @@ func NewFileHelper() *FileHelper {
 // @Tags File
 // @Accept x-www-form-urlencoded
 // @Produce json
-// @Param file formData dtos.UploadFileRequest true "new file"
+// @Param data formData dtos.UploadFileRequest true "new file"
 // @Param file formData file true "create file"
 // @Success 200 {object} responses.Response{result=[]dtos.UserResponse} "Success"
 // @Failure 406 {object} responses.Response{} "Error"
