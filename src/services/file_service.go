@@ -98,7 +98,7 @@ func (s *FileService) GetFileById(ctx context.Context) (dtos.FileResponse, error
 	tx.Commit()
 
 	file_binery := base64.StdEncoding.EncodeToString(fileBytes)
-	file_res.Binery = file_binery
+	file_res.Base64 = file_binery
 	return *file_res, nil
 }
 

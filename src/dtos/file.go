@@ -30,7 +30,7 @@ type FileResponse struct {
 	Directory   string `json:"directory"`
 	Description string `json:"description,omitempty"`
 	MimeType    string `json:"mime_type"`
-	Binery      string `json:"binery,omitempty"`
+	Base64      string `json:"base64,omitempty"`
 	TweetId     int    `json:"tweet_id,omitempty"`
 	CommentId   int    `json:"comment_id,omitempty"`
 }
