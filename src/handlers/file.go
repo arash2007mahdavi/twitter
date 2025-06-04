@@ -121,13 +121,33 @@ func (h *FileHelper) CommentFile(ctx *gin.Context) {
 // @Param file_id query int true "file id"
 // @Success 200 {object} responses.Response{result=dtos.FileResponse} "Success"
 // @Failure 500 {object} responses.Response{} "Error"
-// @Router /file/get [get]
+// @Router /file/get/file [get]
 func (h *FileHelper) GetFile(ctx *gin.Context) {
 	file_id := ctx.Query("file_id")
 	ctx.Set("file_id", file_id)
 	file, err := h.Service.GetFileById(ctx)
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusInternalServerError, responses.GenerateResponseWithError(http.StatusInternalServerError, err, "error in get file from database"))
+		return
+	}
+	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, file, "file got"))
+}
+
+// GetFileInformation godoc
+// @Summary Get File Information With Id
+// @Description get file information with id
+// @Tags File
+// @Produce json
+// @Param file_id query int true "file id"
+// @Success 200 {object} responses.Response{result=models.File} "Success"
+// @Failure 500 {object} responses.Response{} "Error"
+// @Router /file/get/information [get]
+func (h *FileHelper) GetFileInformation(ctx *gin.Context) {
+	file_id := ctx.Query("file_id")
+	ctx.Set("file_id", file_id)
+	file, err := h.Service.GetFileInformationById(ctx)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, responses.GenerateResponseWithError(http.StatusInternalServerError, err, "error in get file information from database"))
 		return
 	}
 	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, file, "file got"))

@@ -40,7 +40,7 @@ definitions:
     type: object
   dtos.FileResponse:
     properties:
-      binery:
+      base64:
         type: string
       comment_id:
         type: integer
@@ -679,7 +679,7 @@ paths:
       summary: Delete File With Id
       tags:
       - File
-  /file/get:
+  /file/get/file:
     get:
       description: get file with id
       parameters:
@@ -705,6 +705,34 @@ paths:
           schema:
             $ref: '#/definitions/responses.Response'
       summary: Get File With Id
+      tags:
+      - File
+  /file/get/information:
+    get:
+      description: get file information with id
+      parameters:
+      - description: file id
+        in: query
+        name: file_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            allOf:
+            - $ref: '#/definitions/responses.Response'
+            - properties:
+                result:
+                  $ref: '#/definitions/models.File'
+              type: object
+        "500":
+          description: Error
+          schema:
+            $ref: '#/definitions/responses.Response'
+      summary: Get File Information With Id
       tags:
       - File
   /file/post/comment:

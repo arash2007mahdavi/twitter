@@ -514,7 +514,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/file/get": {
+        "/file/get/file": {
             "get": {
                 "description": "get file with id",
                 "produces": [
@@ -546,6 +546,53 @@ const docTemplate = `{
                                     "properties": {
                                         "result": {
                                             "$ref": "#/definitions/dtos.FileResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Error",
+                        "schema": {
+                            "$ref": "#/definitions/responses.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/file/get/information": {
+            "get": {
+                "description": "get file information with id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "File"
+                ],
+                "summary": "Get File Information With Id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "file id",
+                        "name": "file_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/responses.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/models.File"
                                         }
                                     }
                                 }
@@ -1924,7 +1971,7 @@ const docTemplate = `{
         "dtos.FileResponse": {
             "type": "object",
             "properties": {
-                "binery": {
+                "base64": {
                     "type": "string"
                 },
                 "comment_id": {

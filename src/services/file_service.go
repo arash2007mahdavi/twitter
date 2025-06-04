@@ -129,3 +129,16 @@ func (s *FileService) DeleteFileById(ctx context.Context) error {
 	tx.Commit()
 	return nil
 }
+
+func (s *FileService) GetFileInformationById(ctx context.Context) (models.File, error) {
+	file_id := ctx.Value("file_id")
+	tx := s.Database.WithContext(ctx).Begin()
+	file := models.File{}
+	err := tx.Model(&models.File{}).Where("id = ?", file_id).First(&file).Error
+	if err != nil {
+		tx.Rollback()
+		return models.File{}, err
+	}
+	tx.Commit()
+	return file, nil
+}
