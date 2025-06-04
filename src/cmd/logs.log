@@ -507,3 +507,43 @@
 {"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-02T23:14:06+03:30","message":"started successfuly"}
 {"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-02T23:14:06+03:30","message":"started successfuly"}
 {"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-02T23:14:06+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-03T11:27:08+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-03T11:27:08+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-03T11:27:08+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-03T19:01:44+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-03T19:01:44+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-03T19:01:44+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-03T20:59:22+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-03T20:59:22+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-03T20:59:23+03:30","message":"started successfuly"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Err":"invalid character '-' in numeric literal","StatusCode":400,"time":"2025-06-03T21:00:42+03:30","message":"validation error"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-03T21:08:24+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-03T21:08:24+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-03T21:08:24+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Tweetid":2,"Userid":1,"time":"2025-06-03T21:08:59+03:30","message":"new tweet posted"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-03T23:53:30+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-03T23:53:30+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-03T23:53:31+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Userid":1,"time":"2025-06-03T23:53:56+03:30","message":"tweets got"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-03T23:56:42+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-03T23:56:42+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-03T23:56:42+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-03T23:59:27+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-03T23:59:27+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-03T23:59:28+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-04T00:02:17+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-04T00:02:17+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-04T00:02:17+03:30","message":"started successfuly"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Err":"ERROR: insert or update on table \"files\" violates foreign key constraint \"fk_files_comment\" (SQLSTATE 23503)","StatusCode":400,"time":"2025-06-04T00:02:44+03:30","message":"error in add file to database"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-04T00:08:09+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-04T00:08:09+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-04T00:08:09+03:30","message":"started successfuly"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Err":"ERROR: insert or update on table \"files\" violates foreign key constraint \"fk_files_comment\" (SQLSTATE 23503)","StatusCode":400,"time":"2025-06-04T00:08:34+03:30","message":"error in add file to database"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-04T00:10:22+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-04T00:10:22+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-04T00:10:23+03:30","message":"started successfuly"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Err":"ERROR: insert or update on table \"files\" violates foreign key constraint \"fk_files_comment\" (SQLSTATE 23503)","StatusCode":400,"time":"2025-06-04T00:10:47+03:30","message":"error in add file to database"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-04T00:14:47+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-04T00:14:47+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-04T00:14:47+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Userid":1,"time":"2025-06-04T00:15:55+03:30","message":"tweets got"}

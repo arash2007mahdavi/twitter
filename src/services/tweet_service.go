@@ -36,12 +36,14 @@ func (s *TweetService) NewTweet(ctx context.Context, req *dtos.TweetCreate) (*dt
 	}
 	tweet.UserId = id_creator
 	tweet.CreatedBy = id_creator
+
 	err = tx.Create(&tweet).Error
 	if err != nil {
+		tx.Rollback()
 		return nil, err
 	}
 	tweet_2 := models.Tweet{}
-	err = tx.Preload("User").Model(&models.Tweet{}).Where("id = ? AND enabled is true", tweet.Id).First(&tweet_2).Error
+	err = tx.Preload("User").Preload("Files").Model(&models.Tweet{}).Where("id = ? AND enabled is true", tweet.Id).First(&tweet_2).Error
 	if err != nil {
 		return nil, err
 	}
@@ -73,7 +75,7 @@ func (s *TweetService) GetTweets(ctx context.Context) ([]dtos.TweetResponse, err
 	tx := s.Database.WithContext(ctx).Begin()
 	tweets := []models.Tweet{}
 	err := tx.Preload("User", "enabled", true).Preload("Comments", "enabled", true).
-			  Preload("Comments.User", "enabled", true).Preload("Likes").
+			  Preload("Comments.User", "enabled", true).Preload("Files").Preload("Likes").
 			  Preload("Dislikes").Model(&models.Tweet{}).Where("user_id = ? AND enabled is true", user_id).Find(&tweets).Error
 	if err != nil {
 		tx.Rollback()

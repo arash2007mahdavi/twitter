@@ -38,6 +38,23 @@ definitions:
         minLength: 5
         type: string
     type: object
+  dtos.FileResponse:
+    properties:
+      comment_id:
+        type: integer
+      description:
+        type: string
+      directory:
+        type: string
+      id:
+        type: integer
+      mime_type:
+        type: string
+      name:
+        type: string
+      tweet_id:
+        type: integer
+    type: object
   dtos.TweetCreate:
     properties:
       message:
@@ -61,6 +78,10 @@ definitions:
       dislikes:
         items:
           $ref: '#/definitions/dtos.UserResponse'
+        type: array
+      files:
+        items:
+          $ref: '#/definitions/dtos.FileResponse'
         type: array
       id:
         type: integer
@@ -156,6 +177,10 @@ definitions:
         type: array
       enabled:
         type: boolean
+      files:
+        items:
+          $ref: '#/definitions/models.File'
+        type: array
       id:
         type: integer
       likes:
@@ -175,6 +200,39 @@ definitions:
       user:
         $ref: '#/definitions/models.User'
       user_id:
+        type: integer
+    type: object
+  models.File:
+    properties:
+      comment:
+        $ref: '#/definitions/models.Comment'
+      comment_id:
+        type: integer
+      created_at:
+        type: string
+      created_by:
+        type: string
+      deleted_at:
+        type: string
+      deleted_by:
+        type: string
+      description:
+        type: string
+      directory:
+        type: string
+      id:
+        type: integer
+      mime_type:
+        type: string
+      modified_at:
+        type: string
+      modified_by:
+        type: string
+      name:
+        type: string
+      tweet:
+        $ref: '#/definitions/models.Tweet'
+      tweet_id:
         type: integer
     type: object
   models.Tweet:
@@ -197,6 +255,10 @@ definitions:
         type: array
       enabled:
         type: boolean
+      files:
+        items:
+          $ref: '#/definitions/models.File'
+        type: array
       id:
         type: integer
       likes:
@@ -577,21 +639,35 @@ paths:
       summary: Update Comment
       tags:
       - Comment
-  /file/post:
+  /file/post/tweet:
     post:
       consumes:
       - application/x-www-form-urlencoded
-      description: create new file
+      description: create new file for tweet
       parameters:
       - in: formData
         name: description
-        required: true
         type: string
-      - description: create file
+      - description: new file
         in: formData
         name: file
         required: true
         type: file
+      - description: user's username
+        in: query
+        name: username
+        required: true
+        type: string
+      - description: user's password
+        in: query
+        name: password
+        required: true
+        type: string
+      - description: tweet id
+        in: query
+        name: tweet_id
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -602,15 +678,17 @@ paths:
             - $ref: '#/definitions/responses.Response'
             - properties:
                 result:
-                  items:
-                    $ref: '#/definitions/dtos.UserResponse'
-                  type: array
+                  $ref: '#/definitions/dtos.FileResponse'
               type: object
-        "406":
+        "400":
+          description: Validation Error
+          schema:
+            $ref: '#/definitions/responses.Response'
+        "424":
           description: Error
           schema:
             $ref: '#/definitions/responses.Response'
-      summary: Create File
+      summary: Create File For Tweet
       tags:
       - File
   /tweet/delete:

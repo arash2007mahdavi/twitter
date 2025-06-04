@@ -19,4 +19,5 @@ type TweetResponse struct {
 	Comments []CommentResponse `json:"comments,omitempty"`
 	Likes    []UserResponse    `json:"likes,omitempty"`
 	Dislikes []UserResponse    `json:"dislikes,omitempty"`
+	Files    []FileResponse    `json:"files,omitempty"`
 }

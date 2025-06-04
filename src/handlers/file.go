@@ -1,12 +1,8 @@
 package handlers
 
 import (
-	"fmt"
-	"io"
-	"mime/multipart"
 	"net/http"
-	"os"
-	"strings"
+	"strconv"
 	"twitter/src/database"
 	"twitter/src/dtos"
 	"twitter/src/logger"
@@ -14,7 +10,6 @@ import (
 	"twitter/src/services"
 
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -26,25 +21,28 @@ type FileHelper struct {
 
 func NewFileHelper() *FileHelper {
 	return &FileHelper{
-		Logger: logger.NewLogger(),
-		Service: *services.NewFileService(),
+		Logger:   logger.NewLogger(),
+		Service:  *services.NewFileService(),
 		Database: database.GetDB(),
 	}
 }
 
-// Create godoc
-// @Summary Create File
-// @Description create new file
+// TweetFile godoc
+// @Summary Create File For Tweet
+// @Description create new file for tweet
 // @Tags File
 // @Accept x-www-form-urlencoded
 // @Produce json
 // @Param data formData dtos.UploadFileRequest true "new file-data"
 // @Param file formData file true "new file"
+// @Param username query string true "user's username"
+// @Param password query string true "user's password"
+// @Param tweet_id query int true "tweet id"
 // @Success 200 {object} responses.Response{result=dtos.FileResponse} "Success"
 // @Failure 400 {object} responses.Response{} "Validation Error"
 // @Failure 424 {object} responses.Response{} "Error"
-// @Router /file/post [post]
-func (h *FileHelper) Create(ctx *gin.Context) {
+// @Router /file/post/tweet [post]
+func (h *FileHelper) TweetFile(ctx *gin.Context) {
 	upload := dtos.UploadFileRequest{}
 	err := ctx.ShouldBind(&upload)
 	if err != nil {
@@ -55,7 +53,10 @@ func (h *FileHelper) Create(ctx *gin.Context) {
 	req.Description = upload.Description
 	req.MimeType = upload.File.Header.Get("Content-Type")
 	req.Directory = "uploads"
-	req.Name, err = saveUploadFile(upload.File, req.Directory)
+	tweet_id := ctx.Value("tweet_id")
+	tweet_id_int, _ := strconv.Atoi(tweet_id.(string))
+	req.TweetId = &tweet_id_int
+	req.Name, err = services.SaveUploadFile(upload.File, req.Directory)
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusFailedDependency, responses.GenerateResponseWithError(http.StatusFailedDependency, err, "error in save file"))
 		return
@@ -67,35 +68,4 @@ func (h *FileHelper) Create(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, res, "file saved successfuly"))
-}
-
-func saveUploadFile(file *multipart.FileHeader, directory string) (string, error) {
-	randFileName := uuid.New()
-	err := os.MkdirAll(directory, os.ModePerm)
-	if err != nil {
-		return "", err
-	}
-	fileName := file.Filename
-	fileNameArr := strings.Split(fileName, ".")
-	fileExt := fileNameArr[len(fileNameArr) - 1]
-	fileName = fmt.Sprintf("%s.%s", randFileName, fileExt)
-	dst := fmt.Sprintf("%s/%s", directory, fileName)
-
-	src, err := file.Open()
-	if err != nil {
-		return "", err
-	}
-	defer src.Close()
-
-	out, err := os.Create(dst)
-	if err != nil {
-		return "", err
-	}
-	defer out.Close()
-
-	_, err = io.Copy(out, src)
-	if err != nil {
-		return "", err
-	}
-	return fileName, nil
 }

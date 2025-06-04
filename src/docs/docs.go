@@ -453,9 +453,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/file/post": {
+        "/file/post/tweet": {
             "post": {
-                "description": "create new file",
+                "description": "create new file for tweet",
                 "consumes": [
                     "application/x-www-form-urlencoded"
                 ],
@@ -465,19 +465,39 @@ const docTemplate = `{
                 "tags": [
                     "File"
                 ],
-                "summary": "Create File",
+                "summary": "Create File For Tweet",
                 "parameters": [
                     {
                         "type": "string",
                         "name": "description",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "file",
+                        "description": "new file",
+                        "name": "file",
                         "in": "formData",
                         "required": true
                     },
                     {
-                        "type": "file",
-                        "description": "create file",
-                        "name": "file",
-                        "in": "formData",
+                        "type": "string",
+                        "description": "user's username",
+                        "name": "username",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "user's password",
+                        "name": "password",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "tweet id",
+                        "name": "tweet_id",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -493,17 +513,20 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "result": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/dtos.UserResponse"
-                                            }
+                                            "$ref": "#/definitions/dtos.FileResponse"
                                         }
                                     }
                                 }
                             ]
                         }
                     },
-                    "406": {
+                    "400": {
+                        "description": "Validation Error",
+                        "schema": {
+                            "$ref": "#/definitions/responses.Response"
+                        }
+                    },
+                    "424": {
                         "description": "Error",
                         "schema": {
                             "$ref": "#/definitions/responses.Response"
@@ -1708,6 +1731,32 @@ const docTemplate = `{
                 }
             }
         },
+        "dtos.FileResponse": {
+            "type": "object",
+            "properties": {
+                "comment_id": {
+                    "type": "integer"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "directory": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "mime_type": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "tweet_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "dtos.TweetCreate": {
             "type": "object",
             "required": [
@@ -1740,6 +1789,12 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/dtos.UserResponse"
+                    }
+                },
+                "files": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dtos.FileResponse"
                     }
                 },
                 "id": {
@@ -1881,6 +1936,12 @@ const docTemplate = `{
                 "enabled": {
                     "type": "boolean"
                 },
+                "files": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.File"
+                    }
+                },
                 "id": {
                     "type": "integer"
                 },
@@ -1909,6 +1970,56 @@ const docTemplate = `{
                     "$ref": "#/definitions/models.User"
                 },
                 "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.File": {
+            "type": "object",
+            "properties": {
+                "comment": {
+                    "$ref": "#/definitions/models.Comment"
+                },
+                "comment_id": {
+                    "type": "integer"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "type": "string"
+                },
+                "deleted_by": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "directory": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "mime_type": {
+                    "type": "string"
+                },
+                "modified_at": {
+                    "type": "string"
+                },
+                "modified_by": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "tweet": {
+                    "$ref": "#/definitions/models.Tweet"
+                },
+                "tweet_id": {
                     "type": "integer"
                 }
             }
@@ -1942,6 +2053,12 @@ const docTemplate = `{
                 },
                 "enabled": {
                     "type": "boolean"
+                },
+                "files": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.File"
+                    }
                 },
                 "id": {
                     "type": "integer"
