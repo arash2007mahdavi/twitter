@@ -58,7 +58,7 @@ func (s *TweetService) GetTweetByID(ctx context.Context) (*models.Tweet, error) 
 	tweet_id, _:= strconv.Atoi(ctx.Value("tweet_id").(string))
 	tx := s.Database.WithContext(ctx).Begin()
 	var tweet models.Tweet
-	err := tx.Preload("User", "enabled", true).Preload("Comments", "enabled", true).
+	err := tx.Preload("User", "enabled", true).Preload("Comments", "enabled", true).Preload("Files").
 			  Preload("Comments.User").Preload("Comments.Likes").Preload("Comments.Dislikes").
 			  Preload("Likes").Preload("Dislikes").Model(&models.Tweet{}).
 			  Where("id = ? AND enabled is true", tweet_id).First(&tweet).Error
@@ -74,7 +74,7 @@ func (s *TweetService) GetTweets(ctx context.Context) ([]dtos.TweetResponse, err
 	user_id := ctx.Value("user_id").(int)
 	tx := s.Database.WithContext(ctx).Begin()
 	tweets := []models.Tweet{}
-	err := tx.Preload("User", "enabled", true).Preload("Comments", "enabled", true).
+	err := tx.Preload("User", "enabled", true).Preload("Comments", "enabled", true).Preload("Files").
 			  Preload("Comments.User", "enabled", true).Preload("Files").Preload("Likes").
 			  Preload("Dislikes").Model(&models.Tweet{}).Where("user_id = ? AND enabled is true", user_id).Find(&tweets).Error
 	if err != nil {
@@ -103,7 +103,7 @@ func (s *TweetService) Update(ctx context.Context, req *dtos.TweetUpdate) (*dtos
 		return nil, err
 	}
 	tweet := dtos.TweetResponse{}
-	err = tx.Preload("User").Preload("Comments", "enabled = ?", true).
+	err = tx.Preload("User").Preload("Comments", "enabled = ?", true).Preload("Files").
 			 Preload("Comments.User").Preload("Likes").Preload("Dislikes").
 			 Model(&models.Tweet{}).Where("id = ? AND enabled is true", tweet_id).First(&tweet).Error
 	if err != nil {
@@ -144,7 +144,7 @@ func (s *TweetService) GetFollowingsTweets(ctx context.Context) ([]dtos.TweetRes
 	user_id := ctx.Value("user_id")
 	tx := s.Database.WithContext(ctx).Begin()
 	user := models.User{}
-	err := tx.Preload("Followings").Preload("Followings.Tweets", "enabled = ?", true).
+	err := tx.Preload("Followings").Preload("Followings.Tweets", "enabled = ?", true).Preload("Followings.Files").
 			  Preload("Followings.Tweets.Comments", "enabled = ?", true).Preload("Followings.Tweets.User", "enabled = ?", true).
 			  Preload("Followings.Tweets.Likes").Preload("Followings.Tweets.Dislikes").Model(&models.User{}).
 			  Where("id = ? AND enabled is true", user_id).First(&user).Error

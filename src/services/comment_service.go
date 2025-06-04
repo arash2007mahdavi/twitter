@@ -40,7 +40,7 @@ func (s *CommentService) PostComment(ctx context.Context, req *dtos.CommentCreat
 		return nil, err
 	}
 	comment_1 := models.Comment{}
-	err = tx.Preload("User").Preload("Tweet").Preload("Tweet.User").Model(&models.Comment{}).
+	err = tx.Preload("User").Preload("Tweet").Preload("Files").Preload("Tweet.User").Model(&models.Comment{}).
 			 Where("id = ? AND enabled is true", comment.Id).First(&comment_1).Error
 	if err != nil {
 		return nil, err
@@ -63,7 +63,7 @@ func (s *CommentService) Update(ctx context.Context, req dtos.CommentUpdate) (dt
 		return dtos.CommentResponse{}, err
 	}
 	comment_res := models.Comment{}
-	err = tx.Preload("Tweet").Preload("User").Preload("Likes").
+	err = tx.Preload("Tweet").Preload("User").Preload("Likes").Preload("Files").
 			 Preload("Dislikes").Model(&models.Comment{}).
 			 Where("id = ? AND enabled is true", comment_id).First(&comment_res).Error
 	if err != nil {
@@ -97,7 +97,7 @@ func (s *CommentService) GetCommentById(ctx context.Context) (*models.Comment, e
 	tx := s.Database.WithContext(ctx).Begin()
 	comment := models.Comment{}
 	err := tx.Preload("Tweet", "enabled = ?", true).Preload("User", "enabled = ?", true).
-			  Preload("Tweet.User", "enabled = ?", true).Preload("Tweet.Likes").
+			  Preload("Tweet.User", "enabled = ?", true).Preload("Tweet.Likes").Preload("Files").
 			  Preload("Tweet.Dislikes").Preload("Likes").Preload("Dislikes").
 			  Model(&models.Comment{}).Where("id = ? AND enabled is true", comment_id).First(&comment).Error
 	if err != nil {
@@ -114,7 +114,7 @@ func (s *CommentService) GetComments(ctx context.Context) ([]dtos.CommentRespons
 	comments := []models.Comment{}
 	err := tx.Preload("Tweet", "enabled = ?", true).Preload("User", "enabled = ?", true).
 			  Preload("Tweet.User", "enabled = ?", true).Preload("Tweet.Likes").
-			  Preload("Tweet.Dislikes").Preload("Likes").Preload("Dislikes").
+			  Preload("Tweet.Dislikes").Preload("Likes").Preload("Dislikes").Preload("Files").
 			  Model(&models.Comment{}).Where("user_id = ? AND enabled is true", user_id).Find(&comments).Error
 	if err != nil {
 		tx.Rollback()

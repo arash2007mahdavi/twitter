@@ -17,4 +17,5 @@ type CommentResponse struct {
 	Message  string         `json:"message"`
 	Likes    []UserResponse `json:"likes,omitempty"`
 	Dislikes []UserResponse `json:"dislikes,omitempty"`
+	Files    []FileResponse    `json:"files,omitempty"`
 }
