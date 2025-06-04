@@ -30,7 +30,9 @@ func NewFileService() *FileService {
 
 func (s *FileService) Create(ctx context.Context, upload *dtos.CreateFileRequest) (*dtos.FileResponse, error) {
 	tx := s.Database.WithContext(ctx).Begin()
-	file, _:= TypeComverter[models.File](upload)
+	file, _ := TypeComverter[models.File](upload)
+	user := ctx.Value("user_id").(int)
+	file.CreatedBy = user
 	err := tx.Create(&file).Error
 	if err != nil {
 		tx.Rollback()

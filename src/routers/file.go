@@ -10,4 +10,5 @@ import (
 func FileRouter(r *gin.RouterGroup) {
 	h := handlers.NewFileHelper()
 	r.POST("/post/tweet", middlewares.CheckTweetForAddFile, h.TweetFile)
+	r.POST("/post/comment", middlewares.CheckCommentForAddFile, h.CommentFile)
 }

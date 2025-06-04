@@ -69,3 +69,47 @@ func (h *FileHelper) TweetFile(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, res, "file saved successfuly"))
 }
+
+
+// CommentFile godoc
+// @Summary Create File For Comment
+// @Description create new file for comment
+// @Tags File
+// @Accept x-www-form-urlencoded
+// @Produce json
+// @Param data formData dtos.UploadFileRequest true "new file-data"
+// @Param file formData file true "new file"
+// @Param username query string true "user's username"
+// @Param password query string true "user's password"
+// @Param comment_id query int true "comment id"
+// @Success 200 {object} responses.Response{result=dtos.FileResponse} "Success"
+// @Failure 400 {object} responses.Response{} "Validation Error"
+// @Failure 424 {object} responses.Response{} "Error"
+// @Router /file/post/comment [post]
+func (h *FileHelper) CommentFile(ctx *gin.Context) {
+	upload := dtos.UploadFileRequest{}
+	err := ctx.ShouldBind(&upload)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, responses.GenerateResponseWithValidationError(http.StatusNotAcceptable, err, "validation error"))
+		return
+	}
+	req := dtos.CreateFileRequest{}
+	req.Description = upload.Description
+	req.MimeType = upload.File.Header.Get("Content-Type")
+	req.Directory = "uploads"
+	comment_id := ctx.Value("comment_id")
+	comment_id_int, _ := strconv.Atoi(comment_id.(string))
+	req.CommentId = &comment_id_int
+	req.Name, err = services.SaveUploadFile(upload.File, req.Directory)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusFailedDependency, responses.GenerateResponseWithError(http.StatusFailedDependency, err, "error in save file"))
+		return
+	}
+
+	res, err := h.Service.Create(ctx, &req)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, responses.GenerateResponseWithError(http.StatusBadRequest, err, "error in add file to database"))
+		return
+	}
+	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, res, "file saved successfuly"))
+}

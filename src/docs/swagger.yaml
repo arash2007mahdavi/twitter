@@ -639,6 +639,58 @@ paths:
       summary: Update Comment
       tags:
       - Comment
+  /file/post/comment:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: create new file for comment
+      parameters:
+      - in: formData
+        name: description
+        type: string
+      - description: new file
+        in: formData
+        name: file
+        required: true
+        type: file
+      - description: user's username
+        in: query
+        name: username
+        required: true
+        type: string
+      - description: user's password
+        in: query
+        name: password
+        required: true
+        type: string
+      - description: comment id
+        in: query
+        name: comment_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            allOf:
+            - $ref: '#/definitions/responses.Response'
+            - properties:
+                result:
+                  $ref: '#/definitions/dtos.FileResponse'
+              type: object
+        "400":
+          description: Validation Error
+          schema:
+            $ref: '#/definitions/responses.Response'
+        "424":
+          description: Error
+          schema:
+            $ref: '#/definitions/responses.Response'
+      summary: Create File For Comment
+      tags:
+      - File
   /file/post/tweet:
     post:
       consumes:
