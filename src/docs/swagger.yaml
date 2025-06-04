@@ -40,6 +40,8 @@ definitions:
     type: object
   dtos.FileResponse:
     properties:
+      binery:
+        type: string
       comment_id:
         type: integer
       description:
@@ -639,6 +641,72 @@ paths:
       summary: Update Comment
       tags:
       - Comment
+  /file/delete:
+    delete:
+      description: delete file with id and check its owner
+      parameters:
+      - description: file id
+        in: query
+        name: file_id
+        required: true
+        type: integer
+      - description: user's username
+        in: query
+        name: username
+        required: true
+        type: string
+      - description: user's password
+        in: query
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            allOf:
+            - $ref: '#/definitions/responses.Response'
+            - properties:
+                result:
+                  type: string
+              type: object
+        "500":
+          description: Error
+          schema:
+            $ref: '#/definitions/responses.Response'
+      summary: Delete File With Id
+      tags:
+      - File
+  /file/get:
+    get:
+      description: get file with id
+      parameters:
+      - description: file id
+        in: query
+        name: file_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            allOf:
+            - $ref: '#/definitions/responses.Response'
+            - properties:
+                result:
+                  $ref: '#/definitions/dtos.FileResponse'
+              type: object
+        "500":
+          description: Error
+          schema:
+            $ref: '#/definitions/responses.Response'
+      summary: Get File With Id
+      tags:
+      - File
   /file/post/comment:
     post:
       consumes:

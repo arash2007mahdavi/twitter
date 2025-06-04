@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"encoding/base64"
 	"fmt"
 	"io"
 	"mime/multipart"
@@ -72,4 +73,59 @@ func SaveUploadFile(file *multipart.FileHeader, directory string) (string, error
 		return "", err
 	}
 	return fileName, nil
+}
+
+func (s *FileService) GetFileById(ctx context.Context) (dtos.FileResponse, error) {
+	file_id := ctx.Value("file_id")
+	tx := s.Database.WithContext(ctx).Begin()
+	file := models.File{}
+	err := tx.Model(&models.File{}).Where("id = ?", file_id).First(&file).Error
+	if err != nil {
+		return dtos.FileResponse{}, err
+	}
+	file_res, _:= TypeComverter[dtos.FileResponse](file)
+
+	data, err := os.Open(fmt.Sprintf("%s/%s", file.Directory, file.Name))
+	if err != nil {
+		return dtos.FileResponse{}, err
+	}
+	defer data.Close()
+
+	fileBytes, err := io.ReadAll(data)
+	if err != nil {
+		return dtos.FileResponse{}, err
+	}
+	tx.Commit()
+
+	file_binery := base64.StdEncoding.EncodeToString(fileBytes)
+	file_res.Binery = file_binery
+	return *file_res, nil
+}
+
+func (s *FileService) DeleteFileById(ctx context.Context) error {
+	user_id := ctx.Value("user_id")
+	file_id := ctx.Value("file_id")
+
+	tx := s.Database.WithContext(ctx).Begin()
+	file := models.File{}
+	err := tx.Model(&models.File{}).Where("id = ?", file_id).First(&file).Error
+	if err != nil {
+		return err
+	}
+	if file.CreatedBy != user_id {
+		return fmt.Errorf("user cant delete file")
+	}
+	file_name := fmt.Sprintf("%s/%s", file.Directory, file.Name)
+	err = os.Remove(file_name)
+	if err != nil {
+		return err
+	}
+	err = tx.Model(&models.File{}).Where("id = ?", file_id).Delete(&models.File{}).Error
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	tx.Commit()
+	return nil
 }

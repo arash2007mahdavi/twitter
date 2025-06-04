@@ -9,6 +9,8 @@ import (
 
 func FileRouter(r *gin.RouterGroup) {
 	h := handlers.NewFileHelper()
+	r.GET("/get", h.GetFile)
+	r.DELETE("/delete", middlewares.GetIdFromUsernameAndPassword, h.DeleteFile)
 	r.POST("/post/tweet", middlewares.CheckTweetForAddFile, h.TweetFile)
 	r.POST("/post/comment", middlewares.CheckCommentForAddFile, h.CommentFile)
 }

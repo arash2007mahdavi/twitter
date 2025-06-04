@@ -16,8 +16,8 @@ type CreateFileRequest struct {
 	Directory   string `json:"directory"`
 	Description string `json:"description"`
 	MimeType    string `json:"mime_type"`
-	TweetId     *int    `json:"tweet_id,omitempty" gorm:"omitempty"`
-	CommentId   *int    `json:"comment_id,omitempty" gorm:"omitempty"`
+	TweetId     *int   `json:"tweet_id,omitempty" gorm:"omitempty"`
+	CommentId   *int   `json:"comment_id,omitempty" gorm:"omitempty"`
 }
 
 type UpdateFileRequest struct {
@@ -30,6 +30,7 @@ type FileResponse struct {
 	Directory   string `json:"directory"`
 	Description string `json:"description,omitempty"`
 	MimeType    string `json:"mime_type"`
+	Binery      string `json:"binery,omitempty"`
 	TweetId     int    `json:"tweet_id,omitempty"`
 	CommentId   int    `json:"comment_id,omitempty"`
 }

@@ -70,7 +70,6 @@ func (h *FileHelper) TweetFile(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, res, "file saved successfuly"))
 }
 
-
 // CommentFile godoc
 // @Summary Create File For Comment
 // @Description create new file for comment
@@ -112,4 +111,46 @@ func (h *FileHelper) CommentFile(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, res, "file saved successfuly"))
+}
+
+// GetFile godoc
+// @Summary Get File With Id
+// @Description get file with id
+// @Tags File
+// @Produce json
+// @Param file_id query int true "file id"
+// @Success 200 {object} responses.Response{result=dtos.FileResponse} "Success"
+// @Failure 500 {object} responses.Response{} "Error"
+// @Router /file/get [get]
+func (h *FileHelper) GetFile(ctx *gin.Context) {
+	file_id := ctx.Query("file_id")
+	ctx.Set("file_id", file_id)
+	file, err := h.Service.GetFileById(ctx)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, responses.GenerateResponseWithError(http.StatusInternalServerError, err, "error in get file from database"))
+		return
+	}
+	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, file, "file got"))
+}
+
+// DeleteFile godoc
+// @Summary Delete File With Id
+// @Description delete file with id and check its owner
+// @Tags File
+// @Produce json
+// @Param file_id query int true "file id"
+// @Param username query string true "user's username"
+// @Param password query string true "user's password"
+// @Success 200 {object} responses.Response{result=string} "Success"
+// @Failure 500 {object} responses.Response{} "Error"
+// @Router /file/delete [delete]
+func (h *FileHelper) DeleteFile(ctx *gin.Context) {
+	file_id := ctx.Query("file_id")
+	ctx.Set("file_id", file_id)
+	err := h.Service.DeleteFileById(ctx)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, responses.GenerateResponseWithError(http.StatusInternalServerError, err, "error in delete file from database"))
+		return
+	}
+	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, "deleted", "file deleted successfuly"))
 }
