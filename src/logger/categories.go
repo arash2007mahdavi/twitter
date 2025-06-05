@@ -15,6 +15,7 @@ const (
 	Config   Category = "Config"
 	Otp      Category = "Otp"
 	Error    Category = "Error"
+	File     Category = "File"
 )
 
 const (
@@ -47,6 +48,7 @@ const (
 	Targetid     ExtraCategory = "Targetid"
 	Tweetid      ExtraCategory = "Tweetid"
 	Commentid    ExtraCategory = "Commentid"
+	Fileid       ExtraCategory = "Fileid"
 	StatusCode   ExtraCategory = "StatusCode"
 	Err          ExtraCategory = "Err"
 	MobileNumber ExtraCategory = "MobileNumber"

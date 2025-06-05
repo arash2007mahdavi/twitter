@@ -591,3 +591,6 @@
 {"level":"info","AppName":"Twitter","Logger":"Zerologger","Userid":1,"time":"2025-06-04T23:47:45+03:30","message":"tweets got"}
 {"level":"error","AppName":"Twitter","Logger":"Zerologger","Err":"ERROR: value too long for type character varying(20) (SQLSTATE 22001)","StatusCode":400,"time":"2025-06-04T23:49:14+03:30","message":"error in add file to database"}
 {"level":"error","AppName":"Twitter","Logger":"Zerologger","Err":"ERROR: value too long for type character varying(20) (SQLSTATE 22001)","StatusCode":400,"time":"2025-06-04T23:50:25+03:30","message":"error in add file to database"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-05T13:07:20+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-05T13:07:20+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-05T13:07:21+03:30","message":"started successfuly"}

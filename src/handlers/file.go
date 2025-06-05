@@ -67,6 +67,7 @@ func (h *FileHelper) TweetFile(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, responses.GenerateResponseWithError(http.StatusBadRequest, err, "error in add file to database"))
 		return
 	}
+	h.Logger.Info(logger.File, logger.New, "new file for tweet", map[logger.ExtraCategory]interface{}{logger.Tweetid: tweet_id})
 	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, res, "file saved successfuly"))
 }
 
@@ -110,6 +111,7 @@ func (h *FileHelper) CommentFile(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, responses.GenerateResponseWithError(http.StatusBadRequest, err, "error in add file to database"))
 		return
 	}
+	h.Logger.Info(logger.File, logger.New, "new file for comment", map[logger.ExtraCategory]interface{}{logger.Commentid: comment_id})
 	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, res, "file saved successfuly"))
 }
 
@@ -130,6 +132,7 @@ func (h *FileHelper) GetFile(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(http.StatusInternalServerError, responses.GenerateResponseWithError(http.StatusInternalServerError, err, "error in get file from database"))
 		return
 	}
+	h.Logger.Info(logger.File, logger.Get, "get file", map[logger.ExtraCategory]interface{}{logger.Fileid: file_id})
 	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, file, "file got"))
 }
 
@@ -150,6 +153,7 @@ func (h *FileHelper) GetFileInformation(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(http.StatusInternalServerError, responses.GenerateResponseWithError(http.StatusInternalServerError, err, "error in get file information from database"))
 		return
 	}
+	h.Logger.Info(logger.File, logger.Get, "get file information", map[logger.ExtraCategory]interface{}{logger.Fileid: file_id})
 	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, file, "file got"))
 }
 
@@ -172,5 +176,6 @@ func (h *FileHelper) DeleteFile(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(http.StatusInternalServerError, responses.GenerateResponseWithError(http.StatusInternalServerError, err, "error in delete file from database"))
 		return
 	}
+	h.Logger.Info(logger.File, logger.Delete, "delete file", map[logger.ExtraCategory]interface{}{logger.Fileid: file_id})
 	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, "deleted", "file deleted successfuly"))
 }
