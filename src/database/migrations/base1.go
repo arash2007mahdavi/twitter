@@ -15,9 +15,3 @@ func Up1() {
 
 	db.AutoMigrate(&user, &tweet, &comment, &file)
 }
-
-// func checkTable(db *gorm.DB, table interface{}, tables *[]interface{}) {
-// 	if !db.Migrator().HasTable(table) {
-// 		*tables = append(*tables, table)
-// 	}
-// }
