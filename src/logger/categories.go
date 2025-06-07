@@ -5,17 +5,18 @@ type SubCategory string
 type ExtraCategory string
 
 const (
-	Server   Category = "Server"
-	Postgres Category = "Postgres"
-	Redis    Category = "Redis"
-	User     Category = "User"
-	Admin    Category = "Admin"
-	Tweet    Category = "Tweet"
-	Comment  Category = "Comment"
-	Config   Category = "Config"
-	Otp      Category = "Otp"
-	Error    Category = "Error"
-	File     Category = "File"
+	Server     Category = "Server"
+	Postgres   Category = "Postgres"
+	Redis      Category = "Redis"
+	User       Category = "User"
+	Admin      Category = "Admin"
+	Tweet      Category = "Tweet"
+	Comment    Category = "Comment"
+	Config     Category = "Config"
+	Otp        Category = "Otp"
+	Error      Category = "Error"
+	File       Category = "File"
+	Prometheus Category = "Prometheus"
 )
 
 const (

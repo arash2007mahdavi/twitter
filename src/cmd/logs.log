@@ -615,3 +615,13 @@
 {"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-05T19:46:42+03:30","message":"started successfuly"}
 {"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-05T19:46:42+03:30","message":"started successfuly"}
 {"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-05T19:46:42+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-07T21:22:42+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-07T21:22:43+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-07T21:22:43+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","MobileNumber":"09107855669","time":"2025-06-07T21:25:27+03:30","message":"new otp set"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","MobileNumber":"09107855669","time":"2025-06-07T21:26:12+03:30","message":"otp validated successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Username":"fdgfdgfdg","time":"2025-06-07T21:26:12+03:30","message":"new user added"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-07T22:48:20+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-07T22:48:20+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","time":"2025-06-07T22:48:20+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Userid":1,"time":"2025-06-07T22:50:15+03:30","message":"user updated successfuly"}

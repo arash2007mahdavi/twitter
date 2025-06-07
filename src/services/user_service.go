@@ -5,17 +5,19 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	"reflect"
 	"strconv"
 	"time"
 	"twitter/src/database"
 	"twitter/src/database/models"
 	"twitter/src/dtos"
 	"twitter/src/logger"
+	"twitter/src/metrics"
 
 	"gorm.io/gorm"
 )
 
-func TypeComverter[T any](req any) (*T, error) {
+func TypeConverter[T any](req any) (*T, error) {
 	var result T
 	json_sample, err := json.Marshal(&req)
 	if err != nil {
@@ -41,7 +43,7 @@ func NewUserService() *UserService {
 }
 
 func (s *UserService) Create(ctx context.Context, req *dtos.UserCreate) (*dtos.UserResponse, error) {
-	data, err := TypeComverter[models.User](req)
+	data, err := TypeConverter[models.User](req)
 	if err != nil {
 		return nil, fmt.Errorf("error in comverting model")
 	}
@@ -49,24 +51,28 @@ func (s *UserService) Create(ctx context.Context, req *dtos.UserCreate) (*dtos.U
 	user_test := models.User{}
 	err = tx.Model(&models.User{}).Where("username = ? AND enabled is true", req.Username).First(&user_test).Error
 	if err == nil {
+		metrics.DbCalls.WithLabelValues(reflect.TypeOf(*data).String(), "Create", "Failed").Inc()
 		return nil, fmt.Errorf("the username used by someone else")
 	}
 	user_test = models.User{}
 	err = tx.Model(&models.User{}).Where("mobile_number = ? AND enabled is true", req.MobileNumber).First(&user_test).Error
 	if err == nil {
+		metrics.DbCalls.WithLabelValues(reflect.TypeOf(*data).String(), "Create", "Failed").Inc()
 		return nil, fmt.Errorf("the mobile number used by someone else")
 	}
 	err = tx.Create(data).Error
 	if err != nil {
 		tx.Rollback()
+		metrics.DbCalls.WithLabelValues(reflect.TypeOf(*data).String(), "Create", "Failed").Inc()
 		return nil, fmt.Errorf("error in creating new model")
 	}
 	tx.Commit()
-	return TypeComverter[dtos.UserResponse](data)
+	metrics.DbCalls.WithLabelValues(reflect.TypeOf(*data).String(), "Create", "Success").Inc()
+	return TypeConverter[dtos.UserResponse](data)
 }
 
 func (s *UserService) Update(ctx context.Context, req *dtos.UserUpdate) (*dtos.UserResponse, error) {
-	data, err := TypeComverter[map[string]interface{}](req)
+	data, err := TypeConverter[map[string]interface{}](req)
 	if err != nil {
 		return nil, fmt.Errorf("error in comverting model")
 	}
@@ -81,12 +87,14 @@ func (s *UserService) Update(ctx context.Context, req *dtos.UserUpdate) (*dtos.U
 		Updates(*data).Error
 	if err != nil {
 		tx.Rollback()
+		metrics.DbCalls.WithLabelValues(reflect.TypeOf(model).String(), "Update", "Failed").Inc()
 		return nil, fmt.Errorf("error in updating model")
 	}
 	user := models.User{}
 	tx.Model(&models.User{}).Where("id = ?", int_id).First(&user)
 	tx.Commit()
-	return TypeComverter[dtos.UserResponse](user)
+	metrics.DbCalls.WithLabelValues(reflect.TypeOf(model).String(), "Update", "Success").Inc()
+	return TypeConverter[dtos.UserResponse](user)
 }
 
 func (s *UserService) Delete(ctx context.Context) error {
@@ -103,9 +111,11 @@ func (s *UserService) Delete(ctx context.Context) error {
 		Updates(data).Error
 	if err != nil {
 		tx.Rollback()
+		metrics.DbCalls.WithLabelValues(reflect.TypeOf(model).String(), "Delete", "Failed").Inc()
 		return fmt.Errorf("error in deleting model")
 	}
 	tx.Commit()
+	metrics.DbCalls.WithLabelValues(reflect.TypeOf(model).String(), "Delete", "Success").Inc()
 	return nil
 }
 
@@ -113,8 +123,10 @@ func (s *UserService) GetUsers(ctx context.Context) (*[]dtos.UserResponse, error
 	users := []dtos.UserResponse{}
 	err := s.DB.Table("users").Where("enabled = ?", true).Scan(&users).Error
 	if err != nil {
+		metrics.DbCalls.WithLabelValues(reflect.TypeOf(models.User{}).String(), "GetUsers", "Failed").Inc()
 		return nil, err
 	}
+	metrics.DbCalls.WithLabelValues(reflect.TypeOf(models.User{}).String(), "GetUsers", "Success").Inc()
 	return &users, nil
 }
 
@@ -129,8 +141,10 @@ func (s *UserService) GetProfile(ctx context.Context) (*models.User, error) {
 				Preload("CommentLikes").Preload("CommentDislikes").Model(&user).
 				Where("id = ?", id).First(&user).Error
 	if err != nil {
+		metrics.DbCalls.WithLabelValues(reflect.TypeOf(user).String(), "GetProfile", "Failed").Inc()
 		return nil ,err
 	}
+	metrics.DbCalls.WithLabelValues(reflect.TypeOf(user).String(), "GetProfile", "Success").Inc()
 	return &user, nil
 }
 
@@ -142,14 +156,16 @@ func (s *UserService) GetFollowers(ctx context.Context) (*[]dtos.UserResponse, e
 	err := tx.Preload("Followers").Model(&models.User{}).
 			  Where("id = ? AND enabled is true", user_id).First(&user).Error
 	if err != nil {
+		metrics.DbCalls.WithLabelValues(reflect.TypeOf(user).String(), "GetFollowers", "Failed").Inc()
 		return nil, err
 	}
 
 	followers := []dtos.UserResponse{}
 	for _, follower := range user.Followers {
-		res, _:= TypeComverter[dtos.UserResponse](follower)
+		res, _:= TypeConverter[dtos.UserResponse](follower)
 		followers = append(followers, *res)
 	}
+	metrics.DbCalls.WithLabelValues(reflect.TypeOf(user).String(), "GetFollowers", "Success").Inc()
 	return &followers, nil
 }
 
@@ -161,14 +177,16 @@ func (s *UserService) GetFollowings(ctx context.Context) (*[]dtos.UserResponse, 
 	err := tx.Preload("Followings").Model(&models.User{}).
 			  Where("id = ? AND enabled is true", user_id).First(&user).Error
 	if err != nil {
+		metrics.DbCalls.WithLabelValues(reflect.TypeOf(user).String(), "GetFollowings", "Failed").Inc()
 		return nil, err
 	}
 
 	followings := []dtos.UserResponse{}
 	for _, following := range user.Followings {
-		res, _:= TypeComverter[dtos.UserResponse](following)
+		res, _:= TypeConverter[dtos.UserResponse](following)
 		followings = append(followings, *res)
 	}
+	metrics.DbCalls.WithLabelValues(reflect.TypeOf(user).String(), "GetFollowings", "Success").Inc()
 	return &followings, nil
 }
 
@@ -179,17 +197,21 @@ func (s *UserService) Follow(ctx context.Context) error {
 	var user, target models.User
 	err := tx.Model(&models.User{}).Where("id = ? AND enabled is true", user_id).First(&user).Error
 	if err != nil {
+		metrics.DbCalls.WithLabelValues(reflect.TypeOf(user).String(), "Follow", "Failed").Inc()
 		return err
 	}
 	err = tx.Model(&models.User{}).Where("id = ? AND enabled is true", target_id).First(&target).Error
 	if err != nil {
+		metrics.DbCalls.WithLabelValues(reflect.TypeOf(user).String(), "Follow", "Failed").Inc()
 		return err
 	}
 	err = tx.Model(&user).Association("Followings").Append(&target)
 	if err != nil {
+		metrics.DbCalls.WithLabelValues(reflect.TypeOf(user).String(), "Follow", "Failed").Inc()
 		return err
 	}
 	tx.Commit()
+	metrics.DbCalls.WithLabelValues(reflect.TypeOf(user).String(), "Follow", "Success").Inc()
 	return nil
 }
 
@@ -200,16 +222,20 @@ func (s *UserService) UnFollow(ctx context.Context) error {
 	var user, target models.User
 	err := tx.Model(&models.User{}).Where("id = ? AND enabled is true", user_id).First(&user).Error
 	if err != nil {
+		metrics.DbCalls.WithLabelValues(reflect.TypeOf(user).String(), "UnFollow", "Failed").Inc()
 		return err
 	}
 	err = tx.Model(&models.User{}).Where("id = ? AND enabled is true", target_id).First(&target).Error
 	if err != nil {
+		metrics.DbCalls.WithLabelValues(reflect.TypeOf(user).String(), "UnFollow", "Failed").Inc()
 		return err
 	}
 	err = tx.Model(&user).Association("Followings").Delete(&target)
 	if err != nil {
+		metrics.DbCalls.WithLabelValues(reflect.TypeOf(user).String(), "UnFollow", "Failed").Inc()
 		return err
 	}
 	tx.Commit()
+	metrics.DbCalls.WithLabelValues(reflect.TypeOf(user).String(), "UnFollow", "Success").Inc()
 	return nil
 }

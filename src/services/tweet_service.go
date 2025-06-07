@@ -5,12 +5,14 @@ import (
 	"database/sql"
 	"fmt"
 	"math/rand"
+	"reflect"
 	"strconv"
 	"time"
 	"twitter/src/database"
 	"twitter/src/database/models"
 	"twitter/src/dtos"
 	"twitter/src/logger"
+	"twitter/src/metrics"
 
 	"gorm.io/gorm"
 )
@@ -30,7 +32,7 @@ func NewTweetService() *TweetService {
 func (s *TweetService) NewTweet(ctx context.Context, req *dtos.TweetCreate) (*dtos.TweetResponse, error) {
 	id_creator := ctx.Value("user_id").(int)
 	tx := s.Database.WithContext(ctx).Begin()
-	tweet, err := TypeComverter[models.Tweet](req)
+	tweet, err := TypeConverter[models.Tweet](req)
 	if err != nil {
 		return nil, err
 	}
@@ -40,17 +42,20 @@ func (s *TweetService) NewTweet(ctx context.Context, req *dtos.TweetCreate) (*dt
 	err = tx.Create(&tweet).Error
 	if err != nil {
 		tx.Rollback()
+		metrics.DbCalls.WithLabelValues(reflect.TypeOf(models.Tweet{}).String(), "PostTweet", "Failed").Inc()
 		return nil, err
 	}
 	tweet_2 := models.Tweet{}
 	err = tx.Preload("User").Preload("Files").Model(&models.Tweet{}).Where("id = ? AND enabled is true", tweet.Id).First(&tweet_2).Error
 	if err != nil {
+		metrics.DbCalls.WithLabelValues(reflect.TypeOf(models.Tweet{}).String(), "PostTweet", "Failed").Inc()
 		return nil, err
 	}
 	tweet_res := dtos.TweetResponse{}
-	res, _:= TypeComverter[dtos.TweetResponse](tweet_2)
+	res, _:= TypeConverter[dtos.TweetResponse](tweet_2)
 	tweet_res = *res
 	tx.Commit()
+	metrics.DbCalls.WithLabelValues(reflect.TypeOf(models.Tweet{}).String(), "PostTweet", "Success").Inc()
 	return &tweet_res, nil
 }
 
@@ -64,9 +69,11 @@ func (s *TweetService) GetTweetByID(ctx context.Context) (*models.Tweet, error) 
 			  Where("id = ? AND enabled is true", tweet_id).First(&tweet).Error
 	if err != nil {
 		tx.Rollback()
+		metrics.DbCalls.WithLabelValues(reflect.TypeOf(models.Tweet{}).String(), "GetTweet", "Failed").Inc()
 		return nil, err
 	}
 	tx.Commit()
+	metrics.DbCalls.WithLabelValues(reflect.TypeOf(models.Tweet{}).String(), "GetTweet", "Success").Inc()
 	return &tweet, nil
 }
 
@@ -79,19 +86,21 @@ func (s *TweetService) GetTweets(ctx context.Context) ([]dtos.TweetResponse, err
 			  Preload("Dislikes").Model(&models.Tweet{}).Where("user_id = ? AND enabled is true", user_id).Find(&tweets).Error
 	if err != nil {
 		tx.Rollback()
+		metrics.DbCalls.WithLabelValues(reflect.TypeOf(models.Tweet{}).String(), "GetTweets", "Failed").Inc()
 		return nil, err
 	}
 	tx.Commit()
 	tweets_res := []dtos.TweetResponse{}
 	for _, tweet := range tweets {
-		res, _:= TypeComverter[dtos.TweetResponse](tweet)
+		res, _:= TypeConverter[dtos.TweetResponse](tweet)
 		tweets_res = append(tweets_res, *res)
 	}
+	metrics.DbCalls.WithLabelValues(reflect.TypeOf(models.Tweet{}).String(), "GetTweets", "Success").Inc()
 	return tweets_res, nil
 }
 
 func (s *TweetService) Update(ctx context.Context, req *dtos.TweetUpdate) (*dtos.TweetResponse, error) {
-	data, _:= TypeComverter[map[string]interface{}](req)
+	data, _:= TypeConverter[map[string]interface{}](req)
 	modified_by := ctx.Value("modified_by").(int)
 	tweet_id := ctx.Value("tweet_id")
 	(*data)["modified_by"] = sql.NullInt64{Int64: int64(modified_by), Valid: true}
@@ -100,6 +109,7 @@ func (s *TweetService) Update(ctx context.Context, req *dtos.TweetUpdate) (*dtos
 	err := tx.Model(&models.Tweet{}).Where("id = ? AND enabled is true", tweet_id).Updates(*data).Error
 	if err != nil {
 		tx.Rollback()
+		metrics.DbCalls.WithLabelValues(reflect.TypeOf(models.Tweet{}).String(), "Update", "Failed").Inc()
 		return nil, err
 	}
 	tweet := dtos.TweetResponse{}
@@ -108,9 +118,11 @@ func (s *TweetService) Update(ctx context.Context, req *dtos.TweetUpdate) (*dtos
 			 Model(&models.Tweet{}).Where("id = ? AND enabled is true", tweet_id).First(&tweet).Error
 	if err != nil {
 		tx.Rollback()
+		metrics.DbCalls.WithLabelValues(reflect.TypeOf(models.Tweet{}).String(), "Update", "Failed").Inc()
 		return nil, err
 	}
 	tx.Commit()
+	metrics.DbCalls.WithLabelValues(reflect.TypeOf(models.Tweet{}).String(), "Update", "Success").Inc()
 	return &tweet, nil
 } 
 
@@ -125,6 +137,7 @@ func (s *TweetService) Delete(ctx context.Context) error {
 	err := tx.Model(&models.Tweet{}).Where("id = ? AND enabled is true", tweet_id).Updates(data).Error
 	if err != nil {
 		tx.Rollback()
+		metrics.DbCalls.WithLabelValues(reflect.TypeOf(models.Tweet{}).String(), "Delete", "Failed").Inc()
 		return fmt.Errorf("tweet couldnt delete")
 	}
 	data_comments := map[string]interface{}{}
@@ -134,9 +147,11 @@ func (s *TweetService) Delete(ctx context.Context) error {
 	err = tx.Model(&models.Comment{}).Where("tweet_id = ? AND enabled is true", tweet_id).Updates(data_comments).Error
 	if err != nil {
 		tx.Rollback()
+		metrics.DbCalls.WithLabelValues(reflect.TypeOf(models.Tweet{}).String(), "Delete", "Failed").Inc()
 		return fmt.Errorf("comments couldnt delete")
 	}
 	tx.Commit()
+	metrics.DbCalls.WithLabelValues(reflect.TypeOf(models.Tweet{}).String(), "Delete", "Success").Inc()
 	return nil
 }
 
@@ -149,6 +164,7 @@ func (s *TweetService) GetFollowingsTweets(ctx context.Context) ([]dtos.TweetRes
 			  Preload("Followings.Tweets.Likes").Preload("Followings.Tweets.Dislikes").Model(&models.User{}).
 			  Where("id = ? AND enabled is true", user_id).First(&user).Error
 	if err != nil {
+		metrics.DbCalls.WithLabelValues(reflect.TypeOf(models.Tweet{}).String(), "GetFollowingsTweet", "Failed").Inc()
 		return nil, err
 	}
 	followings := user.Followings
@@ -159,9 +175,10 @@ func (s *TweetService) GetFollowingsTweets(ctx context.Context) ([]dtos.TweetRes
 	tx.Commit()
 	res := []dtos.TweetResponse{}
 	for _, tweet := range followings_tweets {
-		res_tweet, _:= TypeComverter[dtos.TweetResponse](tweet)
+		res_tweet, _:= TypeConverter[dtos.TweetResponse](tweet)
 		res = append(res, *res_tweet)
 	}
+	metrics.DbCalls.WithLabelValues(reflect.TypeOf(models.Tweet{}).String(), "GetFollowingsTweet", "Success").Inc()
 	return res, nil
 }
 
@@ -179,27 +196,30 @@ func (s *TweetService) TweetExplore(ctx context.Context) (*[]dtos.TweetResponse,
 	err := tx.Model(&models.Tweet{}).Where("enabled is true").Find(&tweets).Error
 	if err != nil {
 		tx.Rollback()
+		metrics.DbCalls.WithLabelValues(reflect.TypeOf(models.Tweet{}).String(), "TweetExplore", "Failed").Inc()
 		return nil, err
 	}
 	five_tweets := selectRandomTweets(tweets, 5)
 	tweets_res := []dtos.TweetResponse{}
 	for _, tweet := range five_tweets {
-		res, _:= TypeComverter[dtos.TweetResponse](tweet)
+		res, _:= TypeConverter[dtos.TweetResponse](tweet)
 		comments := []models.Comment{}
 		err = tx.Model(&models.Comment{}).Where("tweet_id = ? AND enabled is true", res.Id).Find(&comments).Error
 		if err != nil {
 			tx.Rollback()
+			metrics.DbCalls.WithLabelValues(reflect.TypeOf(models.Tweet{}).String(), "TweetExplore", "Failed").Inc()
 			return nil, err
 		}
 		comments_res := []dtos.CommentResponse{}
 		for _, comment := range comments {
-			res, _:= TypeComverter[dtos.CommentResponse](comment)
+			res, _:= TypeConverter[dtos.CommentResponse](comment)
 			comments_res = append(comments_res, *res)
 		}
 		res.Comments = comments_res
 		tweets_res = append(tweets_res, *res)
 	}
 	tx.Commit()
+	metrics.DbCalls.WithLabelValues(reflect.TypeOf(models.Tweet{}).String(), "TweetExplore", "Success").Inc()
 	return &tweets_res, nil
 }
 
@@ -210,18 +230,22 @@ func (s *TweetService) LikeTweet(ctx context.Context) error {
 	user := models.User{}
 	err := tx.Model(&models.User{}).Where("id = ? AND enabled is true", user_id).First(&user).Error
 	if err != nil {
+		metrics.DbCalls.WithLabelValues(reflect.TypeOf(models.Tweet{}).String(), "LikeTweet", "Failed").Inc()
 		return err
 	}
 	tweet := models.Tweet{}
 	err = tx.Model(&models.Tweet{}).Where("id = ? AND enabled is true", tweet_id).First(&tweet).Error
 	if err != nil {
+		metrics.DbCalls.WithLabelValues(reflect.TypeOf(models.Tweet{}).String(), "LikeTweet", "Failed").Inc()
 		return err
 	}
 	err = tx.Model(&user).Association("TweetLikes").Append(&tweet)
 	if err != nil {
+		metrics.DbCalls.WithLabelValues(reflect.TypeOf(models.Tweet{}).String(), "LikeTweet", "Failed").Inc()
 		return err
 	}
 	tx.Commit()
+	metrics.DbCalls.WithLabelValues(reflect.TypeOf(models.Tweet{}).String(), "LikeTweet", "Success").Inc()
 	return nil
 }
 
@@ -232,23 +256,28 @@ func (s *TweetService) DislikeTweet(ctx context.Context) error {
 	user := models.User{}
 	err := tx.Model(&models.User{}).Where("id = ? AND enabled is true", user_id).First(&user).Error
 	if err != nil {
+		metrics.DbCalls.WithLabelValues(reflect.TypeOf(models.Tweet{}).String(), "DislikeTweet", "Failed").Inc()
 		return err
 	}
 	tweet := models.Tweet{}
 	err = tx.Model(&models.Tweet{}).Where("id = ? AND enabled is true", tweet_id).First(&tweet).Error
 	if err != nil {
+		metrics.DbCalls.WithLabelValues(reflect.TypeOf(models.Tweet{}).String(), "DislikeTweet", "Failed").Inc()
 		return err
 	}
 	err = tx.Model(&user).Association("TweetLikes").Delete(&tweet)
 	if err != nil {
+		metrics.DbCalls.WithLabelValues(reflect.TypeOf(models.Tweet{}).String(), "DislikeTweet", "Failed").Inc()
 		tx.Rollback()
 		return err
 	}
 	err = tx.Model(&user).Association("TweetDislikes").Append(&tweet)
 	if err != nil {
+		metrics.DbCalls.WithLabelValues(reflect.TypeOf(models.Tweet{}).String(), "DislikeTweet", "Failed").Inc()
 		tx.Rollback()
 		return err
 	}
 	tx.Commit()
+	metrics.DbCalls.WithLabelValues(reflect.TypeOf(models.Tweet{}).String(), "DislikeTweet", "Success").Inc()
 	return nil
 }
