@@ -1,3 +1,52 @@
 {"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Postgres","SubCategory":"Start","time":"2025-06-11T17:04:57+03:30","message":"started successfuly"}
 {"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Redis","SubCategory":"Start","time":"2025-06-11T17:04:57+03:30","message":"started successfuly"}
 {"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Server","SubCategory":"Start","time":"2025-06-11T17:04:58+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Postgres","SubCategory":"Start","time":"2025-06-11T19:11:15+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Redis","SubCategory":"Start","time":"2025-06-11T19:11:15+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Server","SubCategory":"Start","time":"2025-06-11T19:11:16+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"File","Fileid":"1","SubCategory":"Get","time":"2025-06-11T19:17:21+03:30","message":"get file"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Category":"Error","Err":"record not found","StatusCode":500,"SubCategory":"SimpleError","time":"2025-06-11T19:17:29+03:30","message":"error in get file from database"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Tweet","SubCategory":"Like","Tweetid":"1","Userid":1,"time":"2025-06-11T19:17:58+03:30","message":"tweet liked"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Tweet","SubCategory":"Like","Tweetid":"1","Userid":1,"time":"2025-06-11T19:18:02+03:30","message":"tweet liked"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Tweet","SubCategory":"Get","Userid":1,"time":"2025-06-11T19:18:25+03:30","message":"tweets got"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Postgres","SubCategory":"Start","time":"2025-06-11T22:53:18+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Redis","SubCategory":"Start","time":"2025-06-11T22:53:18+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Server","SubCategory":"Start","time":"2025-06-11T22:53:18+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Tweet","SubCategory":"Get","Tweetid":"1","time":"2025-06-11T22:53:25+03:30","message":"tweet got"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Tweet","SubCategory":"Get","Tweetid":"1","time":"2025-06-11T22:53:26+03:30","message":"tweet got"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Tweet","SubCategory":"Get","Tweetid":"1","time":"2025-06-11T22:53:29+03:30","message":"tweet got"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Tweet","SubCategory":"Get","Tweetid":"1","time":"2025-06-11T22:59:09+03:30","message":"tweet got"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Tweet","SubCategory":"Get","Tweetid":"1","time":"2025-06-11T22:59:10+03:30","message":"tweet got"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Tweet","SubCategory":"Get","Tweetid":"1","time":"2025-06-11T22:59:11+03:30","message":"tweet got"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Postgres","SubCategory":"Start","time":"2025-06-11T23:01:30+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Redis","SubCategory":"Start","time":"2025-06-11T23:01:30+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Server","SubCategory":"Start","time":"2025-06-11T23:01:30+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Tweet","SubCategory":"Get","Tweetid":"1","time":"2025-06-11T23:01:44+03:30","message":"tweet got"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Tweet","SubCategory":"Get","Tweetid":"1","time":"2025-06-11T23:01:45+03:30","message":"tweet got"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Tweet","SubCategory":"Get","Tweetid":"1","time":"2025-06-11T23:01:45+03:30","message":"tweet got"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Tweet","SubCategory":"Get","Tweetid":"1","time":"2025-06-11T23:01:46+03:30","message":"tweet got"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Tweet","SubCategory":"Get","Tweetid":"1","time":"2025-06-11T23:07:34+03:30","message":"tweet got"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Tweet","SubCategory":"Get","Tweetid":"1","time":"2025-06-11T23:07:34+03:30","message":"tweet got"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Tweet","SubCategory":"Get","Tweetid":"1","time":"2025-06-11T23:07:34+03:30","message":"tweet got"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Category":"Error","Err":"record not found","StatusCode":500,"SubCategory":"SimpleError","time":"2025-06-11T23:12:39+03:30","message":"error in get tweet"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Tweet","SubCategory":"Get","Userid":1,"time":"2025-06-11T23:13:41+03:30","message":"tweets got"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Tweet","SubCategory":"Get","Userid":1,"time":"2025-06-11T23:13:42+03:30","message":"tweets got"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Tweet","SubCategory":"Get","Userid":1,"time":"2025-06-11T23:13:43+03:30","message":"tweets got"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Category":"Error","Err":"invalid username","StatusCode":404,"SubCategory":"SimpleError","time":"2025-06-11T23:13:45+03:30","message":"invalid username"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Category":"Error","Err":"invalid username","StatusCode":404,"SubCategory":"SimpleError","time":"2025-06-11T23:13:46+03:30","message":"invalid username"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Category":"Error","Err":"invalid username","StatusCode":404,"SubCategory":"SimpleError","time":"2025-06-11T23:13:46+03:30","message":"invalid username"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Category":"Error","Err":"record not found","StatusCode":500,"SubCategory":"SimpleError","time":"2025-06-11T23:13:54+03:30","message":"error in get file from database"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"File","Fileid":"1","SubCategory":"Get","time":"2025-06-11T23:13:57+03:30","message":"get file"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Postgres","SubCategory":"Start","time":"2025-06-11T23:19:42+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Redis","SubCategory":"Start","time":"2025-06-11T23:19:42+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Server","SubCategory":"Start","time":"2025-06-11T23:19:42+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"File","Fileid":"1","SubCategory":"Get","time":"2025-06-11T23:19:55+03:30","message":"get file"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"File","Fileid":"1","SubCategory":"Get","time":"2025-06-11T23:20:08+03:30","message":"get file"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"File","Fileid":"1","SubCategory":"Get","time":"2025-06-11T23:20:09+03:30","message":"get file"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"File","Fileid":"1","SubCategory":"Get","time":"2025-06-11T23:20:10+03:30","message":"get file"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"File","SubCategory":"New","Tweetid":"1","time":"2025-06-11T23:20:44+03:30","message":"new file for tweet"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"File","SubCategory":"New","Tweetid":"1","time":"2025-06-11T23:20:47+03:30","message":"new file for tweet"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Admin","SubCategory":"Enter","Username":"arash2007mahdavi","time":"2025-06-11T23:21:12+03:30","message":"admin entered"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Admin":"arash2007mahdavi","Category":"Admin","SubCategory":"See","time":"2025-06-11T23:21:12+03:30","message":"admin saw users"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Admin","SubCategory":"Enter","Username":"arash2007mahdavi","time":"2025-06-11T23:21:13+03:30","message":"admin entered"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Admin":"arash2007mahdavi","Category":"Admin","SubCategory":"See","time":"2025-06-11T23:21:13+03:30","message":"admin saw users"}

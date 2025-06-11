@@ -17,5 +17,5 @@ func Prometheus(ctx *gin.Context) {
 	status := ctx.Writer.Status()
 
 	metrics.HttpDuration.WithLabelValues(path,method,strconv.Itoa(status)).
-	Observe(float64(time.Since(start) / time.Second))
+	Observe(float64(time.Since(start) / time.Millisecond))
 }

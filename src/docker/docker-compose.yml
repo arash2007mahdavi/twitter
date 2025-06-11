@@ -40,12 +40,20 @@ services:
       - "6379:6379"
     networks:
       - twitter_network
+  prometheus:
+    image: prom/prometheus
+    container_name: twitter_prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
 
 
 volumes:
   postgres:
   pgadmin:
   redis:
+  prometheus:
 
 networks:
   twitter_network:
