@@ -56,13 +56,13 @@ func Init_Server(cfg *configs.Config) {
 		twitter.GET("/metrics", gin.WrapH(promhttp.Handler()))
 	}
 
-	RegisterSwagger(engine)
+	RegisterSwagger(twitter)
 
 	log.Info(logger.Server, logger.Start, "started successfuly", nil)
 	engine.Run(fmt.Sprintf("%v:%v", cfg.Server.Host, cfg.Server.Port))
 }
 
-func RegisterSwagger(r *gin.Engine) {
+func RegisterSwagger(r *gin.RouterGroup) {
 	docs.SwaggerInfo.Title = "twitter"
 	docs.SwaggerInfo.Description = "twitter"
 	docs.SwaggerInfo.Version = "1.0"

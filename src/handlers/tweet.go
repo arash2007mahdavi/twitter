@@ -79,7 +79,7 @@ func (h *TweetHelper) GetTweet(ctx *gin.Context) {
 		return
 	}
 	h.Logger.Info(logger.Tweet, logger.Get, "tweet got", map[logger.ExtraCategory]interface{}{logger.Tweetid: tweet_id})
-	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, tweet, "tweet retrieved"))
+	ctx.JSON(http.StatusOK, responses.GenerateNormalResponse(http.StatusOK, tweet, "tweet recived"))
 }
 
 // GetTweets godoc
