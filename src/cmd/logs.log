@@ -1,0 +1,3 @@
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Postgres","SubCategory":"Start","time":"2025-06-11T17:04:57+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Redis","SubCategory":"Start","time":"2025-06-11T17:04:57+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Server","SubCategory":"Start","time":"2025-06-11T17:04:58+03:30","message":"started successfuly"}

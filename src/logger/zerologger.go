@@ -52,16 +52,18 @@ func (z *Zerologger) Init() {
 	z.logger = &logger
 }
 
-func transformExtra(extra map[ExtraCategory]interface{}) map[string]interface{} {
+func transformExtra(cat Category, sub SubCategory, extra map[ExtraCategory]interface{}) map[string]interface{} {
 	result := map[string]interface{}{}
 	for key, value := range extra {
 		result[string(key)] = value
 	}
+	result["Category"] = cat
+	result["SubCategory"] = sub
 	return result
 }
 
 func (z *Zerologger) Debug(cat Category, sub SubCategory, msg string, extra map[ExtraCategory]interface{}) {
-	transformed_extra := transformExtra(extra)
+	transformed_extra := transformExtra(cat, sub, extra)
 	z.logger.Debug().Fields(transformed_extra).Msg(msg)
 }
 func (z *Zerologger) Debugf(template string, args ...interface{}) {
@@ -69,7 +71,7 @@ func (z *Zerologger) Debugf(template string, args ...interface{}) {
 }
 
 func (z *Zerologger) Info(cat Category, sub SubCategory, msg string, extra map[ExtraCategory]interface{}) {
-	transformed_extra := transformExtra(extra)
+	transformed_extra := transformExtra(cat, sub, extra)
 	z.logger.Info().Fields(transformed_extra).Msg(msg)
 }
 func (z *Zerologger) Infof(template string, args ...interface{}) {
@@ -77,7 +79,7 @@ func (z *Zerologger) Infof(template string, args ...interface{}) {
 }
 
 func (z *Zerologger) Warn(cat Category, sub SubCategory, msg string, extra map[ExtraCategory]interface{}) {
-	transformed_extra := transformExtra(extra)
+	transformed_extra := transformExtra(cat, sub, extra)
 	z.logger.Warn().Fields(transformed_extra).Msg(msg)
 }
 func (z *Zerologger) Warnf(template string, args ...interface{}) {
@@ -85,7 +87,7 @@ func (z *Zerologger) Warnf(template string, args ...interface{}) {
 }
 
 func (z *Zerologger) Error(cat Category, sub SubCategory, msg string, extra map[ExtraCategory]interface{}) {
-	transformed_extra := transformExtra(extra)
+	transformed_extra := transformExtra(cat, sub, extra)
 	z.logger.Error().Fields(transformed_extra).Msg(msg)
 }
 func (z *Zerologger) Errorf(template string, args ...interface{}) {
@@ -93,7 +95,7 @@ func (z *Zerologger) Errorf(template string, args ...interface{}) {
 }
 
 func (z *Zerologger) Fatal(cat Category, sub SubCategory, msg string, extra map[ExtraCategory]interface{}) {
-	transformed_extra := transformExtra(extra)
+	transformed_extra := transformExtra(cat, sub, extra)
 	z.logger.Fatal().Fields(transformed_extra).Msg(msg)
 }
 func (z *Zerologger) Fatalf(template string, args ...interface{}) {

@@ -8,12 +8,12 @@ import (
 
 func GetConfig() *Config {
 	path := getPath(os.Getenv("APP_ENV"))
-	v := loadConfig(path, "yml")
-	config := parseConfig(v)
+	v := parseConfig(path, "yml")
+	config := loadConfig(v)
 	return config
 }
 
-func parseConfig(v *viper.Viper) *Config {
+func loadConfig(v *viper.Viper) *Config {
 	var cfg Config
 	err := v.Unmarshal(&cfg)
 	if err != nil {
@@ -22,7 +22,7 @@ func parseConfig(v *viper.Viper) *Config {
 	return &cfg
 }
 
-func loadConfig(filename string, filetype string) *viper.Viper {
+func parseConfig(filename string, filetype string) *viper.Viper {
 	v := viper.New()
 	v.SetConfigName(filename)
 	v.SetConfigType(filetype)
