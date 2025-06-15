@@ -159,7 +159,7 @@ func (s *TweetService) GetFollowingsTweets(ctx context.Context) ([]dtos.TweetRes
 	user_id := ctx.Value("user_id")
 	tx := s.Database.WithContext(ctx).Begin()
 	user := models.User{}
-	err := tx.Preload("Followings").Preload("Followings.Tweets", "enabled = ?", true).Preload("Followings.Files").
+	err := tx.Preload("Followings").Preload("Followings.Tweets", "enabled = ?", true).Preload("Followings.Tweets.Files").
 			  Preload("Followings.Tweets.Comments", "enabled = ?", true).Preload("Followings.Tweets.User", "enabled = ?", true).
 			  Preload("Followings.Tweets.Likes").Preload("Followings.Tweets.Dislikes").Model(&models.User{}).
 			  Where("id = ? AND enabled is true", user_id).First(&user).Error
@@ -193,7 +193,8 @@ func selectRandomTweets(slice []models.Tweet, count int) []models.Tweet {
 func (s *TweetService) TweetExplore(ctx context.Context) (*[]dtos.TweetResponse, error) {
 	tx := s.Database.WithContext(ctx).Begin()
 	tweets := []models.Tweet{}
-	err := tx.Model(&models.Tweet{}).Where("enabled is true").Find(&tweets).Error
+	err := tx.Model(&models.Tweet{}).Preload("User").Preload("Comments", "enabled = ?", true).Preload("Files").
+			  Preload("Comments.User").Preload("Likes").Preload("Dislikes").Where("enabled is true").Find(&tweets).Error
 	if err != nil {
 		tx.Rollback()
 		metrics.DbCalls.WithLabelValues(reflect.TypeOf(models.Tweet{}).String(), "TweetExplore", "Failed").Inc()

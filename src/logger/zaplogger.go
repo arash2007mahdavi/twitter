@@ -39,9 +39,9 @@ func getLogLevelzap(cfg *configs.Config) zapcore.Level {
 func (z *Zaplogger) Init() {
 	w := zapcore.AddSync(&lumberjack.Logger{
 		Filename: "./logs.log",
-		MaxSize: 5,
-		MaxAge: 30,
-		MaxBackups: 10,
+		MaxSize: 50,
+		MaxAge: 300,
+		MaxBackups: 100,
 		Compress: true,
 		LocalTime: true,
 	})

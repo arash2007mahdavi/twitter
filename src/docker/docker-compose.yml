@@ -9,7 +9,7 @@ services:
       - POSTGRES_PASSWORD=@rash2007
       - POSTGRES_DB=twitterDB
     volumes:
-      - postgres:/data/postgres
+      - postgres:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     networks:
@@ -40,6 +40,7 @@ services:
       - "6379:6379"
     networks:
       - twitter_network
+    restart: always
   prometheus:
     image: prom/prometheus
     container_name: twitter_prometheus
@@ -47,6 +48,22 @@ services:
       - "9090:9090"
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - twitter_network
+    restart: always
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana:/var/lib/grafana
+    environment:
+      GF_SECURITY_ADMIN_USER: arashmahdavi2007@gmail.com
+      GF_SECURITY_ADMIN_PASSWORD: arash2007
+    networks:
+      - twitter_network
+    restart: always  
 
 
 volumes:
@@ -54,6 +71,7 @@ volumes:
   pgadmin:
   redis:
   prometheus:
+  grafana:
 
 networks:
   twitter_network:

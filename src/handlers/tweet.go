@@ -178,8 +178,6 @@ func (h *TweetHelper) GetFollowingsTweets(ctx *gin.Context) {
 // @Description delete tweet by id and its owner information
 // @Tags Tweet
 // @Produce json
-// @Param username query string true "owner's username"
-// @Param password query string true "owner's password"
 // @Success 200 {object} responses.Response{result=[]dtos.TweetResponse} "Success"
 // @Failure 500 {object} responses.Response{} "Internal Server Error"
 // @Router /tweet/explore [get]

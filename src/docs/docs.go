@@ -904,22 +904,6 @@ const docTemplate = `{
                     "Tweet"
                 ],
                 "summary": "Get Followings Tweets",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "owner's username",
-                        "name": "username",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "owner's password",
-                        "name": "password",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "Success",
@@ -1930,6 +1914,12 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/dtos.UserResponse"
+                    }
+                },
+                "files": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dtos.FileResponse"
                     }
                 },
                 "id": {

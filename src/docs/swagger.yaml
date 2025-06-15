@@ -14,6 +14,10 @@ definitions:
         items:
           $ref: '#/definitions/dtos.UserResponse'
         type: array
+      files:
+        items:
+          $ref: '#/definitions/dtos.FileResponse'
+        type: array
       id:
         type: integer
       likes:
@@ -918,17 +922,6 @@ paths:
   /tweet/explore:
     get:
       description: delete tweet by id and its owner information
-      parameters:
-      - description: owner's username
-        in: query
-        name: username
-        required: true
-        type: string
-      - description: owner's password
-        in: query
-        name: password
-        required: true
-        type: string
       produces:
       - application/json
       responses:
