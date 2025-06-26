@@ -7,6 +7,7 @@ type Config struct {
 	Logger   ConfigLogger
 	Postgres ConfigPostgres
 	Redis    ConfigRedis
+	Jwt      ConfigJWT
 }
 
 type ConfigServer struct {
@@ -41,4 +42,11 @@ type ConfigRedis struct {
 	Password     string
 	Poolsize     int
 	PoolTimeOut  time.Duration
+}
+
+type ConfigJWT struct {
+	Secret                     string
+	RefreshSecret              string
+	AccessTokenExpireDuration  time.Duration
+	RefreshTokenExpireDuration time.Duration
 }

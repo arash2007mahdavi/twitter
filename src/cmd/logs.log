@@ -331,3 +331,38 @@
 {"level":"error","AppName":"Twitter","Logger":"Zerologger","Category":"Error","Err":"this key exists","StatusCode":503,"SubCategory":"SimpleError","time":"2025-06-13T23:51:33+03:30","message":"error in seting otp"}
 {"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Otp","MobileNumber":"09107288663","SubCategory":"Validate","time":"2025-06-13T23:52:43+03:30","message":"otp validated successfuly"}
 {"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"User","SubCategory":"New","Username":"arash2007mahdavi","time":"2025-06-13T23:52:43+03:30","message":"new user added"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Postgres","SubCategory":"Start","time":"2025-06-24T20:38:31+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Redis","SubCategory":"Start","time":"2025-06-24T20:38:31+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Server","SubCategory":"Start","time":"2025-06-24T20:38:31+03:30","message":"started successfuly"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Category":"Error","Err":"record not found","StatusCode":406,"SubCategory":"SimpleError","time":"2025-06-24T20:38:50+03:30","message":"invalid user"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Category":"Error","Err":"record not found","StatusCode":406,"SubCategory":"SimpleError","time":"2025-06-24T20:38:52+03:30","message":"invalid user"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Category":"Error","Err":"record not found","StatusCode":406,"SubCategory":"SimpleError","time":"2025-06-24T20:38:52+03:30","message":"invalid user"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Category":"Error","Err":"record not found","StatusCode":406,"SubCategory":"SimpleError","time":"2025-06-24T20:38:53+03:30","message":"invalid user"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Category":"Error","Err":"record not found","StatusCode":406,"SubCategory":"SimpleError","time":"2025-06-24T20:38:53+03:30","message":"invalid user"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Category":"Error","Err":"record not found","StatusCode":406,"SubCategory":"SimpleError","time":"2025-06-24T20:38:53+03:30","message":"invalid user"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Category":"Error","Err":"record not found","StatusCode":406,"SubCategory":"SimpleError","time":"2025-06-24T20:38:53+03:30","message":"invalid user"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Category":"Error","Err":"record not found","StatusCode":406,"SubCategory":"SimpleError","time":"2025-06-24T20:38:53+03:30","message":"invalid user"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Category":"Error","Err":"record not found","StatusCode":406,"SubCategory":"SimpleError","time":"2025-06-24T20:40:06+03:30","message":"invalid user"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Category":"Error","Err":"record not found","StatusCode":406,"SubCategory":"SimpleError","time":"2025-06-24T20:40:06+03:30","message":"invalid user"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Category":"Error","Err":"record not found","StatusCode":406,"SubCategory":"SimpleError","time":"2025-06-24T20:40:06+03:30","message":"invalid user"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Category":"Error","Err":"record not found","StatusCode":406,"SubCategory":"SimpleError","time":"2025-06-24T20:40:06+03:30","message":"invalid user"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Category":"Error","Err":"record not found","StatusCode":406,"SubCategory":"SimpleError","time":"2025-06-24T20:40:06+03:30","message":"invalid user"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Category":"Error","Err":"record not found","StatusCode":406,"SubCategory":"SimpleError","time":"2025-06-24T20:40:06+03:30","message":"invalid user"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Otp","MobileNumber":"09107288663","SubCategory":"Set","time":"2025-06-24T20:41:19+03:30","message":"new otp set"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Otp","MobileNumber":"09157288663","SubCategory":"Set","time":"2025-06-24T20:41:26+03:30","message":"new otp set"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Category":"Error","Err":"this key exists","StatusCode":503,"SubCategory":"SimpleError","time":"2025-06-24T20:43:13+03:30","message":"error in seting otp"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Category":"Error","Err":"this key exists","StatusCode":503,"SubCategory":"SimpleError","time":"2025-06-24T20:43:13+03:30","message":"error in seting otp"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Category":"Error","Err":"this key exists","StatusCode":503,"SubCategory":"SimpleError","time":"2025-06-24T20:43:13+03:30","message":"error in seting otp"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Category":"Error","Err":"this key exists","StatusCode":503,"SubCategory":"SimpleError","time":"2025-06-24T20:43:13+03:30","message":"error in seting otp"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Category":"Error","Err":"this key exists","StatusCode":503,"SubCategory":"SimpleError","time":"2025-06-24T20:43:13+03:30","message":"error in seting otp"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Category":"Error","Err":"this key exists","StatusCode":503,"SubCategory":"SimpleError","time":"2025-06-24T20:43:13+03:30","message":"error in seting otp"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Category":"Error","Err":"this key exists","StatusCode":503,"SubCategory":"SimpleError","time":"2025-06-24T20:43:13+03:30","message":"error in seting otp"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Category":"Error","Err":"this key exists","StatusCode":503,"SubCategory":"SimpleError","time":"2025-06-24T20:43:14+03:30","message":"error in seting otp"}
+{"level":"error","AppName":"Twitter","Logger":"Zerologger","Category":"Error","Err":"this key exists","StatusCode":503,"SubCategory":"SimpleError","time":"2025-06-24T20:43:14+03:30","message":"error in seting otp"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Otp","MobileNumber":"09157268663","SubCategory":"Set","time":"2025-06-24T20:43:20+03:30","message":"new otp set"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Otp","MobileNumber":"09157968663","SubCategory":"Set","time":"2025-06-24T20:43:26+03:30","message":"new otp set"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Otp","MobileNumber":"09157965163","SubCategory":"Set","time":"2025-06-24T20:43:31+03:30","message":"new otp set"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Otp","MobileNumber":"09157165163","SubCategory":"Set","time":"2025-06-24T20:43:37+03:30","message":"new otp set"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Postgres","SubCategory":"Start","time":"2025-06-26T11:41:17+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Redis","SubCategory":"Start","time":"2025-06-26T11:41:17+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Server","SubCategory":"Start","time":"2025-06-26T11:41:17+03:30","message":"started successfuly"}

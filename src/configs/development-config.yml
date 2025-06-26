@@ -24,3 +24,8 @@ Redis:
   Password: "@rash2007"
   Poolsize: 10
   PoolTimeOut: 500
+Jwt:
+  Secret: "mySecretKey"
+  RefreshSecret: "mySecretKey"
+  AccessTokenExpireDuration: 60
+  RefreshTokenExpireDuration: 60000
