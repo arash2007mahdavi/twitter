@@ -51,7 +51,7 @@ type File struct {
 	Description string   `gorm:"size:500;type:string;not null"`
 	MimeType    string   `json:"mime_type" gorm:"size:20;type:string;not null"`
 	Tweet       *Tweet   `json:"tweet,omitempty" gorm:"foreignKey:TweetId"`
-	TweetId     *int      `json:"tweet_id,omitempty" gorm:"omitempty;null"`
+	TweetId     *int     `json:"tweet_id,omitempty" gorm:"omitempty;null"`
 	Comment     *Comment `json:"comment,omitempty" gorm:"foreignKey:CommentId"`
-	CommentId   *int      `json:"comment_id,omitempty" gorm:"omitempty;null"`
+	CommentId   *int     `json:"comment_id,omitempty" gorm:"omitempty;null"`
 }

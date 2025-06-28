@@ -366,3 +366,6 @@
 {"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Postgres","SubCategory":"Start","time":"2025-06-26T11:41:17+03:30","message":"started successfuly"}
 {"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Redis","SubCategory":"Start","time":"2025-06-26T11:41:17+03:30","message":"started successfuly"}
 {"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Server","SubCategory":"Start","time":"2025-06-26T11:41:17+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Postgres","SubCategory":"Start","time":"2025-06-26T21:42:04+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Redis","SubCategory":"Start","time":"2025-06-26T21:42:04+03:30","message":"started successfuly"}
+{"level":"info","AppName":"Twitter","Logger":"Zerologger","Category":"Server","SubCategory":"Start","time":"2025-06-26T21:42:04+03:30","message":"started successfuly"}
